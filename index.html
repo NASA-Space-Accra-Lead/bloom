@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BLOOM & Wellness Studio | Healthy Smiles. Luxury Looks.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:       #09070A;
+      --surface:     #110D12;
+      --surface-2:   #1A141C;
+      --surface-3:   #231B25;
+      --bloom:       #D4007A;
+      --bloom-lt:    #F0339A;
+      --bloom-glow:  rgba(212,0,122,0.18);
+      --bloom-dim:   rgba(212,0,122,0.08);
+      --white:       #FFFFFF;
+      --muted:       rgba(255,255,255,0.45);
+      --muted-2:     rgba(255,255,255,0.22);
+      --border:      rgba(255,255,255,0.08);
+      --border-pink: rgba(212,0,122,0.28);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 35 6%; height: 100px;
+      background: rgba(9,7,10,0.85); backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border); transition: border-color .3s;
+    }
+    nav.scrolled { border-color: var(--border-pink); }
+    .nav-logo img { height: 5px; }
+    .nav-links { display: flex; align-items: center; gap: 0; list-style: none; }
+    .nav-links a { display: block; padding: .45rem 1.3rem; font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-book { display: inline-flex; align-items: center; gap: .4rem; background: var(--bloom); color: #fff !important; padding: .6rem 1.5rem; border-radius: 2rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; box-shadow: 0 0 20px var(--bloom-glow); transition: background .2s, box-shadow .2s, transform .2s; }
+    .nav-book:hover { background: var(--bloom-lt); box-shadow: 0 0 36px rgba(212,0,122,.4); transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: var(--muted); display: block; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 0;
+      padding: 7rem 0 0; position: relative; overflow: hidden;
+    }
+    .hero-glow { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); }
+    .hero-glow-1 { width: 600px; height: 600px; top: -150px; right: -100px; background: radial-gradient(circle, rgba(212,0,122,.20) 0%, transparent 70%); animation: gPulse 7s ease-in-out infinite; }
+    .hero-glow-2 { width: 350px; height: 350px; bottom: 0; left: -60px; background: radial-gradient(circle, rgba(212,0,122,.10) 0%, transparent 70%); animation: gPulse 9s 2s ease-in-out infinite; }
+    @keyframes gPulse { 0%,100%{opacity:.8;transform:scale(1);} 50%{opacity:1;transform:scale(1.08);} }
+
+    .hero-left { padding: 0 6%; display: flex; flex-direction: column; justify-content: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: .6rem; font-size: .72rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--bloom-lt); margin-bottom: 2rem; animation: fadeUp .8s ease both; }
+    .hero-badge::before { content: ''; width: 32px; height: 1px; background: var(--bloom-lt); display: inline-block; }
+    .hero-headline { font-family: 'Fraunces', serif; font-size: clamp(3.5rem, 6vw, 7rem); font-weight: 300; line-height: .93; letter-spacing: -.02em; animation: fadeUp .8s .08s ease both; }
+    .hero-headline em { font-style: italic; color: var(--bloom-lt); }
+    .hero-tagline { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.05rem; color: var(--muted); margin-top: 1rem; animation: fadeUp .8s .14s ease both; }
+    .hero-sub { font-size: .97rem; color: var(--muted); line-height: 1.85; max-width: 420px; font-weight: 300; margin-top: 1.4rem; animation: fadeUp .8s .2s ease both; }
+    .hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; margin-top: 2.5rem; animation: fadeUp .8s .28s ease both; }
+    .btn-primary { display: inline-flex; align-items: center; gap: .5rem; background: var(--bloom); color: #fff; padding: 1rem 2.2rem; border-radius: 3rem; font-size: .88rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; box-shadow: 0 0 32px var(--bloom-glow); transition: background .2s, box-shadow .2s, transform .2s; }
+    .btn-primary:hover { background: var(--bloom-lt); box-shadow: 0 0 48px rgba(212,0,122,.45); transform: translateY(-2px); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid var(--border); color: var(--muted); padding: 1rem 2.2rem; border-radius: 3rem; font-size: .88rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; transition: border-color .2s, color .2s; }
+    .btn-ghost:hover { border-color: var(--bloom-lt); color: var(--white); }
+    .hero-stats { display: flex; gap: 2.5rem; margin-top: 3rem; animation: fadeUp .8s .35s ease both; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 300; line-height: 1; color: var(--white); }
+    .stat-num span { color: var(--bloom-lt); }
+    .stat-label { font-size: .72rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .25rem; }
+
+    /* Hero image collage */
+    .hero-right { position: relative; height: 100vh; overflow: hidden; animation: fadeUp .9s .15s ease both; }
+    .hero-img-main {
+      position: absolute; inset: 0;
+      background: var(--surface-2);
+    }
+    .hero-img-main img { width: 100%; height: 100%; object-fit: cover; object-position: center top; opacity: .85; }
+    .hero-img-main::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, var(--black) 0%, transparent 30%), linear-gradient(to top, var(--black) 0%, transparent 35%); }
+
+    /* Floating info cards over hero image */
+    .hero-float {
+      position: absolute; z-index: 2;
+      background: rgba(17,13,18,0.88); backdrop-filter: blur(16px);
+      border: 1px solid var(--border-pink); border-radius: 1.2rem;
+      padding: 1rem 1.4rem;
+      animation: fc-float 5s ease-in-out infinite;
+    }
+    .hero-float.hf1 { top: 8rem; right: 2rem; animation-delay: -1s; }
+    .hero-float.hf2 { bottom: 6rem; right: 2rem; animation-delay: -2.5s; }
+    @keyframes fc-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+    .hf-label { font-size: .68rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+    .hf-val { font-family: 'Fraunces', serif; font-size: 1.25rem; color: var(--bloom-lt); margin-top: .15rem; }
+
+    /* ── MARQUEE ── */
+    .marquee-band { background: var(--bloom); padding: 1rem 0; overflow: hidden; }
+    .marquee-track { display: flex; white-space: nowrap; animation: mScroll 22s linear infinite; }
+    .marquee-item { display: inline-flex; align-items: center; gap: 1.5rem; padding: 0 2rem; font-family: 'Fraunces', serif; font-size: 1rem; font-style: italic; color: rgba(255,255,255,.9); }
+    .marquee-dot { width: 5px; height: 5px; background: rgba(255,255,255,.5); border-radius: 50%; }
+    @keyframes mScroll { to { transform: translateX(-50%); } }
+
+    /* ── SHARED ── */
+    section { padding: 9rem 6%; position: relative; }
+    .pill-label { display: inline-flex; align-items: center; gap: .6rem; font-size: .72rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--bloom-lt); margin-bottom: 1.4rem; }
+    .pill-label::before { content: ''; width: 28px; height: 1px; background: var(--bloom-lt); display: inline-block; }
+    .section-heading { font-family: 'Fraunces', serif; font-size: clamp(2.4rem, 4.5vw, 4.2rem); font-weight: 300; line-height: 1.05; letter-spacing: -.01em; color: var(--white); }
+    .section-heading em { font-style: italic; color: var(--bloom-lt); }
+
+    /* ── PHOTO STRIP ── */
+    #photo-strip { padding: 0; overflow: hidden; }
+    .strip-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; height: 420px; }
+    .strip-item { overflow: hidden; position: relative; }
+    .strip-item img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform .6s ease; filter: brightness(.8); }
+    .strip-item:hover img { transform: scale(1.05); filter: brightness(1); }
+    .strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.5) 0%, transparent 60%); }
+    .strip-caption { position: absolute; bottom: 1.2rem; left: 1.2rem; z-index: 2; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+
+    /* ── SERVICES ── */
+    #services { background: var(--surface); }
+    .services-top { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4.5rem; gap: 3rem; flex-wrap: wrap; }
+    .services-intro { font-size: .97rem; color: var(--muted); line-height: 1.9; max-width: 380px; font-weight: 300; }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 1.5rem; overflow: hidden; }
+    .service-card { background: var(--surface); padding: 2.8rem 2.4rem; position: relative; overflow: hidden; transition: background .3s; }
+    .service-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--bloom-dim), transparent); opacity: 0; transition: opacity .3s; }
+    .service-card:hover { background: var(--surface-2); }
+    .service-card:hover::after { opacity: 1; }
+    .service-num { font-family: 'Fraunces', serif; font-size: 3.2rem; font-weight: 300; color: var(--bloom-lt); opacity: .2; line-height: 1; margin-bottom: 1.5rem; transition: opacity .3s; }
+    .service-card:hover .service-num { opacity: .5; }
+    .service-icon-wrap { width: 50px; height: 50px; border: 1px solid var(--border-pink); border-radius: .9rem; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.4rem; transition: border-color .3s, box-shadow .3s; }
+    .service-card:hover .service-icon-wrap { border-color: var(--bloom-lt); box-shadow: 0 0 18px var(--bloom-glow); }
+    .service-name { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 400; color: var(--white); margin-bottom: .7rem; }
+    .service-desc { font-size: .87rem; color: var(--muted); line-height: 1.8; font-weight: 300; }
+    .service-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
+    .service-card:hover .service-link { opacity: 1; transform: translateY(0); }
+
+    /* ── STUDIO SECTION ── */
+    #studio {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; min-height: 620px;
+    }
+    .studio-img { position: relative; overflow: hidden; }
+    .studio-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.75); transition: filter .4s; }
+    .studio-img:hover img { filter: brightness(.9); }
+    .studio-img::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, transparent 60%, var(--black) 100%); }
+    .studio-content { background: var(--surface); padding: 6rem 5rem; display: flex; flex-direction: column; justify-content: center; }
+    .why-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0; }
+    .why-item { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+    .why-item:first-child { border-top: 1px solid var(--border); }
+    .why-check { width: 30px; height: 30px; min-width: 30px; border: 1px solid var(--bloom-lt); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bloom-lt); font-size: .78rem; }
+    .why-title { font-weight: 600; font-size: .95rem; color: var(--white); }
+    .why-desc { font-size: .85rem; color: var(--muted); margin-top: .2rem; line-height: 1.7; font-weight: 300; }
+    .studio-badge { display: inline-flex; align-items: center; gap: .8rem; background: var(--bloom); padding: 1rem 1.6rem; border-radius: 1rem; margin-top: 2.5rem; align-self: flex-start; box-shadow: 0 0 30px var(--bloom-glow); }
+    .studio-badge-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: #fff; line-height: 1; }
+    .studio-badge-txt { font-size: .78rem; color: rgba(255,255,255,.8); line-height: 1.4; }
+
+    /* ── GALLERY ROW ── */
+    #gallery { padding: 6rem 6%; }
+    .gallery-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .gallery-item { border-radius: 1.2rem; overflow: hidden; position: relative; }
+    .gallery-item img { width: 100%; height: 320px; object-fit: cover; object-position: center top; filter: brightness(.8) saturate(.9); transition: transform .5s ease, filter .4s; display: block; }
+    .gallery-item:hover img { transform: scale(1.04); filter: brightness(1) saturate(1); }
+    .gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.6) 0%, transparent 50%); pointer-events: none; }
+    .gallery-item.tall img { height: 420px; }
+
+    /* ── APPOINTMENT ── */
+    #appointment { background: var(--surface); }
+    .appt-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4.5rem; gap: 2rem; flex-wrap: wrap; }
+    .appt-sub { font-size: .95rem; color: var(--muted); line-height: 1.85; max-width: 360px; font-weight: 300; }
+    .appt-grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 2.5rem; }
+    .appt-panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: 1.8rem; padding: 2.8rem; display: flex; flex-direction: column; gap: 2.5rem; }
+    .block-title { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--bloom-lt); margin-bottom: 1.2rem; }
+    .hours-row { display: flex; justify-content: space-between; padding: .75rem 0; border-bottom: 1px solid var(--border); font-size: .9rem; color: var(--muted); font-weight: 300; }
+    .hours-row:last-child { border: none; }
+    .hours-row .t { color: var(--white); font-weight: 500; }
+    .contact-row { display: flex; align-items: center; gap: .9rem; padding: .65rem 0; font-size: .9rem; color: var(--muted); font-weight: 300; border-bottom: 1px solid var(--border); }
+    .contact-row:last-child { border: none; }
+    .contact-icon { width: 32px; height: 32px; min-width: 32px; background: var(--bloom-dim); border: 1px solid var(--border-pink); border-radius: .55rem; display: flex; align-items: center; justify-content: center; font-size: .9rem; }
+    .quote-block { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border); font-family: 'Fraunces', serif; font-style: italic; font-size: 1.45rem; font-weight: 300; color: var(--muted); line-height: 1.3; }
+    .quote-block span { color: var(--bloom-lt); }
+
+    /* Form */
+    .booking-form { background: var(--surface-2); border: 1px solid var(--border); border-radius: 1.8rem; padding: 2.8rem; }
+    .form-logo { height: 38px; margin-bottom: 1.5rem; display: block; filter: brightness(0) invert(1); opacity: .8; }
+    .form-heading { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: var(--white); line-height: 1.1; margin-bottom: .4rem; }
+    .form-heading em { font-style: italic; color: var(--bloom-lt); }
+    .form-sub { font-size: .86rem; color: var(--muted); margin-bottom: 2rem; font-weight: 300; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: .88rem 1.1rem; background: var(--surface-3); border: 1px solid var(--border); border-radius: .75rem; font-family: 'Jost', sans-serif; font-size: .92rem; color: var(--white); outline: none; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: var(--muted-2); }
+    .form-group select option { background: var(--surface-3); }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--bloom-lt); box-shadow: 0 0 0 3px rgba(212,0,122,.12); }
+    .form-group textarea { resize: vertical; min-height: 82px; }
+    .slots-label { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .7rem; display: block; }
+    .time-slots { display: grid; grid-template-columns: repeat(5,1fr); gap: .4rem; margin-bottom: 1.2rem; }
+    .time-slot { border: 1px solid var(--border); border-radius: .5rem; padding: .55rem .2rem; font-size: .74rem; font-weight: 500; text-align: center; cursor: pointer; color: var(--muted); background: var(--surface-3); transition: all .18s; user-select: none; }
+    .time-slot:hover { border-color: var(--bloom-lt); color: var(--white); }
+    .time-slot.selected { background: var(--bloom); color: #fff; border-color: var(--bloom); box-shadow: 0 0 14px var(--bloom-glow); }
+    .time-slot.unavailable { opacity: .22; cursor: not-allowed; }
+    .btn-book { width: 100%; padding: 1.1rem; background: var(--bloom); color: #fff; border: none; border-radius: .75rem; font-family: 'Jost', sans-serif; font-size: .9rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; box-shadow: 0 0 28px var(--bloom-glow); transition: background .2s, box-shadow .2s, transform .2s; display: flex; align-items: center; justify-content: center; gap: .5rem; }
+    .btn-book:hover { background: var(--bloom-lt); box-shadow: 0 0 40px rgba(212,0,122,.4); transform: translateY(-1px); }
+
+    /* ── SUCCESS ── */
+    .success-overlay { position: fixed; inset: 0; background: rgba(9,7,10,.88); backdrop-filter: blur(10px); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .success-overlay.show { opacity: 1; pointer-events: all; }
+    .success-modal { background: var(--surface-2); border: 1px solid var(--border-pink); border-radius: 2rem; padding: 3.5rem 3rem; max-width: 440px; width: 92%; text-align: center; transform: translateY(20px); transition: transform .4s; box-shadow: 0 0 80px var(--bloom-glow); }
+    .success-overlay.show .success-modal { transform: translateY(0); }
+    .success-icon { font-size: 3.5rem; margin-bottom: .8rem; }
+    .success-title { font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 300; color: var(--white); margin-bottom: .8rem; }
+    .success-title em { font-style: italic; color: var(--bloom-lt); }
+    .success-msg { font-size: .92rem; color: var(--muted); line-height: 1.8; font-weight: 300; }
+    .success-close { margin-top: 2rem; padding: .9rem 2.5rem; background: var(--bloom); color: #fff; border: none; border-radius: 2rem; font-family: 'Jost', sans-serif; font-size: .88rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; box-shadow: 0 0 24px var(--bloom-glow); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 5rem 6% 2.5rem; }
+    .footer-top { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
+    .footer-logo { height: 50px; margin-bottom: 1.2rem; display: block; filter: brightness(0) invert(1); opacity: .7; }
+    .footer-tagline { font-family: 'Fraunces', serif; font-style: italic; font-size: .95rem; color: var(--muted); margin-bottom: .8rem; }
+    .footer-desc { font-size: .87rem; color: var(--muted-2); line-height: 1.8; font-weight: 300; max-width: 250px; }
+    .footer-col h5 { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--bloom-lt); margin-bottom: 1.4rem; }
+    .footer-col a { display: block; color: var(--muted-2); text-decoration: none; font-size: .9rem; margin-bottom: .7rem; font-weight: 300; transition: color .2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--muted-2); flex-wrap: wrap; gap: .5rem; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: .12s; }
+    .reveal-d2 { transition-delay: .24s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 2rem 6%; }
+      .services-grid { grid-template-columns: repeat(2,1fr); }
+      #studio { grid-template-columns: 1fr; }
+      .studio-img { height: 360px; }
+      .studio-content { padding: 4rem 6%; }
+      .gallery-grid { grid-template-columns: repeat(2,1fr); }
+      .appt-grid { grid-template-columns: 1fr; }
+      .appt-header { flex-direction: column; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .strip-grid { grid-template-columns: 1fr 1fr; height: auto; }
+      .strip-item:nth-child(3), .strip-item:nth-child(4) { display: none; }
+      .strip-item { height: 280px; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .services-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .time-slots { grid-template-columns: repeat(3,1fr); }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#"><img src="BLOOM PINK.png" alt="BLOOM & Wellness Studio"/></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#studio">About</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#appointment">Appointments</a></li>
+  </ul>
+  <a href="#appointment" class="nav-book">Book Now →</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile nav -->
+<div id="mobile-menu" style="display:none;position:fixed;top:76px;left:0;right:0;z-index:99;background:var(--surface);border-bottom:1px solid var(--border);padding:1.5rem 6%;">
+  <a href="#services" onclick="toggleMenu()" style="display:block;padding:.9rem 0;color:var(--muted);text-decoration:none;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);">Services</a>
+  <a href="#studio" onclick="toggleMenu()" style="display:block;padding:.9rem 0;color:var(--muted);text-decoration:none;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);">About</a>
+  <a href="#gallery" onclick="toggleMenu()" style="display:block;padding:.9rem 0;color:var(--muted);text-decoration:none;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);">Gallery</a>
+  <a href="#appointment" onclick="toggleMenu()" style="display:block;padding:.9rem 0;color:var(--muted);text-decoration:none;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);">Appointments</a>
+  <a href="#appointment" onclick="toggleMenu()" style="display:block;margin-top:1.2rem;padding:1rem;background:var(--bloom);color:#fff;text-decoration:none;border-radius:2rem;text-align:center;font-size:.88rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;">Book Now →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+
+  <div class="hero-left">
+    <div class="hero-badge">BLOOM & Wellness Studio — Accra, Ghana</div>
+    <h1 class="hero-headline">Healthy<br><em>Smiles.</em><br>Luxury<br>Looks.</h1>
+    <p class="hero-tagline">...where beauty meets dental excellence.</p>
+    <p class="hero-sub">Ghana's premier destination for exceptional dental care and luxury wellness treatments — because you deserve to bloom in every sense.</p>
+    <div class="hero-actions">
+      <a href="#appointment" class="btn-primary">Book a Consultation</a>
+      <a href="#services" class="btn-ghost">Our Services</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">5K<span>+</span></div><div class="stat-label">Happy Patients</div></div>
+      <div><div class="stat-num">4.9<span>★</span></div><div class="stat-label">Rating</div></div>
+      <div><div class="stat-num">12<span>yrs</span></div><div class="stat-label">Experience</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-main">
+      <img src="medium-shot-smiley-woman-posing.webp" alt="Happy patient at BLOOM"/>
+    </div>
+    <div class="hero-float hf1">
+      <div class="hf-label">Next Available</div>
+      <div class="hf-val">Today, 2:00 PM</div>
+    </div>
+    <div class="hero-float hf2">
+      <div class="hf-label">Certified by</div>
+      <div class="hf-val">Ghana Medical Council</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-band">
+  <div class="marquee-track">
+    <span class="marquee-item">Teeth Cleaning <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Teeth Whitening <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Cosmetic Dentistry <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Orthodontics <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Luxury Wellness <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Broken Teeth Filling <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Smile Makeovers <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Teeth Whitening <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Broken Teeth Filling  <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Cosmetic Dentistry <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Orthodontics <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Luxury Wellness <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Emergency Care <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Smile Makeovers <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- PHOTO STRIP -->
+<div id="photo-strip">
+  <div class="strip-grid">
+    <div class="strip-item">
+      <img src="closeup-portrait-black-woman-preparing-clean-her-teeth.webp" alt="Dental care"/>
+      <div class="strip-caption">Expert Care</div>
+    </div>
+    <div class="strip-item">
+      <img src="Office.jpg" alt="Happy patients" style="object-position:center center;background:#111;"/>
+      <div class="strip-caption">Happy Smiles</div>
+    </div>
+    <div class="strip-item">
+      <img src="Happy_Curly_Young_Woman_Brushes_Teeth_with_Tooth_Floss__Cares_about_Oral_Hygiene__Surrounded_with_Toothpaste__Electric_Toothbrush_and_Tongue_Cleaner__Wears_Red_Pyjama__Isolated_on_Pink_Wall_.webp" alt="Oral hygiene"/>
+      <div class="strip-caption">Oral Wellness</div>
+    </div>
+    <div class="strip-item">
+      <img src="Office.webp" alt="BLOOM Studio"/>
+      <div class="strip-caption">Our Studio</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-top">
+    <div class="reveal">
+      <div class="pill-label">What We Offer</div>
+      <h2 class="section-heading">Our <em>Services</em></h2>
+    </div>
+    <p class="services-intro reveal reveal-d1">A complete spectrum of dental and wellness care — delivered with the precision and warmth you deserve.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <div class="service-icon-wrap">🔬</div>
+      <div class="service-name">Dental Check-up & Cleaning</div>
+      <p class="service-desc">Comprehensive exams, digital X-rays, and deep professional cleanings to keep your smile in perfect health.</p>
+      <a href="#appointment" class="service-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal reveal-d1">
+      <div class="service-num">02</div>
+      <div class="service-icon-wrap">✨</div>
+      <div class="service-name">Teeth Whitening</div>
+      <p class="service-desc">Professional-grade in-office whitening that delivers a dramatically brighter smile — in just one visit.</p>
+      <a href="#appointment" class="service-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal reveal-d2">
+      <div class="service-num">03</div>
+      <div class="service-icon-wrap">💎</div>
+      <div class="service-name">Cosmetic Dentistry</div>
+      <p class="service-desc">Veneers, bonding, and full smile makeovers — crafted to give you the confident, picture-perfect look you deserve.</p>
+      <a href="#appointment" class="service-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">04</div>
+      <div class="service-icon-wrap">😬</div>
+      <div class="service-name">Orthodontics</div>
+      <p class="service-desc">Braces and clear aligners to straighten teeth, improve bite, and transform your smile alignment.</p>
+      <a href="#appointment" class="service-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal reveal-d1">
+      <div class="service-num">05</div>
+      <div class="service-icon-wrap">🌿</div>
+      <div class="service-name">Wellness Treatments</div>
+      <p class="service-desc">Luxury skin and body wellness services that complement your dental care for a head-to-toe glow-up.</p>
+      <a href="#appointment" class="service-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal reveal-d2">
+      <div class="service-num">06</div>
+      <div class="service-icon-wrap">🏥</div>
+      <div class="service-name">Broken Teeth Filling </div>
+      <p class="service-desc">Rapid same-day care for toothaches, fractures, and dental emergencies — we're always here for you.</p>
+      <a href="#appointment" class="service-link">Book Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STUDIO / ABOUT -->
+<section id="studio" style="padding:0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;min-height:620px;">
+    <div class="studio-img">
+      <img src="Office.webp" alt="Inside BLOOM Studio"/>
+    </div>
+    <div class="studio-content reveal">
+      <div class="pill-label">Our Studio</div>
+      <h2 class="section-heading">Where <em>Luxury</em><br>Meets Care</h2>
+      <p style="margin-top:1.2rem;font-size:.97rem;color:var(--muted);line-height:1.9;font-weight:300;">We believe every patient deserves more than treatment — you deserve an experience that leaves you radiant, confident, and cared for from the moment you walk in.</p>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div><div class="why-title">Ghana Medical Council Certified</div><div class="why-desc">All dentists fully licensed and trained to the highest international standards.</div></div>
+        </div>
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div><div class="why-title">A True Luxury Studio Experience</div><div class="why-desc">A beautifully designed, calming space that makes every visit feel like a treat.</div></div>
+        </div>
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div><div class="why-title">Mobile Money & Insurance Accepted</div><div class="why-desc">MTN, Vodafone Cash, major health insurance, and flexible payment plans.</div></div>
+        </div>
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div><div class="why-title">Dental + Wellness Under One Roof</div><div class="why-desc">The only studio combining premium dental care with luxury wellness services.</div></div>
+        </div>
+      </div>
+      <div class="studio-badge">
+        <div class="studio-badge-num">15+</div>
+        <div class="studio-badge-txt">Specialist staff<br>serving Ghana</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header reveal">
+    <div>
+      <div class="pill-label">Our People</div>
+      <h2 class="section-heading">Smiles We've <em>Created</em></h2>
+    </div>
+    <a href="#appointment" class="btn-ghost" style="white-space:nowrap;">Book Your Visit →</a>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item tall reveal">
+      <img src="Positive_Dark_Skinned_Woman_and_Man_Hold_Toothbrushes_Clean_Teeth_Undergo_Beauty_Procedures_Apply_Patches_under_Eyes_Feel_Happy_Enjoys_Morning_Daily_Routines_Isolated_over_White_Studio_Wall.-removebg-.webp" alt="Happy patient"/>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      
+      <div class="gallery-item reveal reveal-d1" style="flex:1;">
+        <img src="front-view-siblings-taking-selfie-home.webp" alt="Happy kids"/>
+      </div>
+    </div>
+    <div class="gallery-item tall reveal reveal-d2">
+      <img src="happy-curly-young-woman-brushes-teeth-with-tooth-floss-cares-about-oral-hygiene-surrounded-with-toothpaste-electric-toothbrush-tongue-cleaner.webp" alt="Oral care"/>
+    </div>
+  </div>
+  <!-- Family friendly callout -->
+  <div style="margin-top:3rem;background:var(--surface-2);border:1px solid var(--border);border-radius:1.5rem;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;" class="reveal">
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+      <img src="front-view-siblings-taking-selfie-home.jpg" alt="Kids" style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--bloom);"/>
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:400;color:var(--white);">We Love Families 🌸</div>
+        <div style="font-size:.88rem;color:var(--muted);margin-top:.2rem;font-weight:300;">From toddlers to grandparents — BLOOM is a safe, welcoming space for the whole family.</div>
+      </div>
+    </div>
+    <a href="#appointment" class="btn-primary">Book for Your Family</a>
+  </div>
+</section>
+
+<!-- APPOINTMENT -->
+<section id="appointment">
+  <div class="appt-header reveal">
+    <div>
+      <div class="pill-label">Schedule a Visit</div>
+      <h2 class="section-heading">Book Your<br><em>Appointment</em></h2>
+    </div>
+    <p class="appt-sub">Open every day, 8 AM to 5 PM. Choose your time and we'll confirm within 2 hours via phone or WhatsApp.</p>
+  </div>
+  <div class="appt-grid">
+    <div class="appt-panel reveal">
+      <div>
+        <div class="block-title">Studio Hours</div>
+        <div class="hours-row"><span>Monday – Friday</span><span class="t">8:00 AM – 5:00 PM</span></div>
+        <div class="hours-row"><span>Saturday</span><span class="t">8:00 AM – 5:00 PM</span></div>
+        <div class="hours-row"><span>Sunday</span><span class="t">8:00 AM – 5:00 PM</span></div>
+        <div class="hours-row"><span>Public Holidays</span><span class="t">Emergency Only</span></div>
+      </div>
+      <div>
+        <div class="block-title">Contact Us</div>
+        <div class="contact-row"><span class="contact-icon">📞</span><span>+233 25 754 6530</span></div>
+        <div class="contact-row"><span class="contact-icon">💬</span><span>WhatsApp: +233 25 754 6530</span></div>
+        <div class="contact-row"><span class="contact-icon">📍</span><span>Accra, Ghana</span></div>
+        <div class="contact-row"><span class="contact-icon">✉️</span><span>bloomandwellness.studio@gmail.com</span></div>
+      </div>
+      <div class="quote-block">"Ready to <span>bloom?</span>"</div>
+    </div>
+    <div class="booking-form reveal reveal-d1">
+      <img src="BLOOM PINK.png" alt="BLOOM" class="form-logo"/>
+      <div class="form-heading">Request an<br><em>Appointment</em></div>
+      <p class="form-sub">Fill in your details — we'll take care of the rest. 🌸</p>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" id="fname" placeholder="Ama"/></div>
+        <div class="form-group"><label>Last Name</label><input type="text" id="lname" placeholder="Asante"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="phone" placeholder="+233 25 754 6530"/></div>
+        <div class="form-group"><label>Email (Optional)</label><input type="email" id="email" placeholder="you@example.com"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Service</label>
+          <select id="service">
+            <option value="">Select a service…</option>
+            <option>Dental Check-up & Cleaning</option>
+            <option>Teeth Whitening</option>
+            <option>Cosmetic Dentistry</option>
+            <option>Orthodontics (Braces)</option>
+            <option>Wellness Treatment</option>
+            <option>Emergency Dental Care</option>
+            <option>Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Preferred Date</label><input type="date" id="date"/></div>
+      </div>
+      <span class="slots-label">Preferred Time</span>
+      <div class="time-slots" id="time-slots"></div>
+      <div class="form-group"><label>Additional Notes</label><textarea id="notes" placeholder="Any symptoms, concerns, or special requests…"></textarea></div>
+      <button class="btn-book" onclick="submitBooking()">Confirm Appointment →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <img src="BLOOM PINK.png" alt="BLOOM" class="footer-logo"/>
+      <p class="footer-tagline">...Healthy Smiles. Luxury Looks!</p>
+      <p class="footer-desc">Ghana's premier dental and wellness studio — dedicated to giving every client a confident, radiant glow.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <a href="#services">Dental Check-up</a>
+      <a href="#services">Teeth Whitening</a>
+      <a href="#services">Cosmetic Dentistry</a>
+      <a href="#services">Orthodontics</a>
+      <a href="#services">Wellness Treatments</a>
+    </div>
+    <div class="footer-col">
+      <h5>Studio</h5>
+      <a href="#studio">About BLOOM</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#appointment">Book Appointment</a>
+      <a href="#">Our Team</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="tel:+233257546530">+233 25 754 6530</a>
+      <a href="https://wa.me/233257546530">WhatsApp Us</a>
+      <a href="mailto:bloomandwellness.studio@gmail.com">bloomandwellness.studio@gmail.com</a>
+      <a href="#">Accra, Ghana</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 BLOOM & Wellness Studio, Ghana. All rights reserved.</span>
+  </div>
+</footer>
+
+<!-- SUCCESS POPUP -->
+<div class="success-overlay" id="success-overlay" onclick="closeSuccess(event)">
+  <div class="success-modal">
+    <div class="success-title">You're all <em>set!</em></div>
+    <p class="success-msg" id="success-msg"></p>
+    <button class="success-close" onclick="document.getElementById('success-overlay').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+  function toggleMenu() {
+    const m = document.getElementById('mobile-menu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 70); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const dateEl = document.getElementById('date');
+  dateEl.min = new Date().toISOString().split('T')[0];
+  dateEl.value = new Date().toISOString().split('T')[0];
+
+  const slots = ['8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM'];
+  const unavailable = [1, 5, 9, 13];
+  let selectedSlot = null;
+  const container = document.getElementById('time-slots');
+  slots.forEach((slot, i) => {
+    const el = document.createElement('div');
+    el.className = 'time-slot' + (unavailable.includes(i) ? ' unavailable' : '');
+    el.textContent = slot;
+    if (!unavailable.includes(i)) {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected'); selectedSlot = slot;
+      });
+    }
+    container.appendChild(el);
+  });
+
+  // ── PASTE YOUR GOOGLE APPS SCRIPT URL HERE AFTER DEPLOYMENT ──
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec";
+
+  async function submitBooking() {
+    const fname   = document.getElementById('fname').value.trim();
+    const lname   = document.getElementById('lname').value.trim();
+    const phone   = document.getElementById('phone').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const service = document.getElementById('service').value;
+    const date    = document.getElementById('date').value;
+    const notes   = document.getElementById('notes').value.trim();
+
+    if (!fname)        { alert('Please enter your first name.'); return; }
+    if (!phone)        { alert('Please enter your phone number.'); return; }
+    if (!service)      { alert('Please select a service.'); return; }
+    if (!date)         { alert('Please choose a preferred date.'); return; }
+    if (!selectedSlot) { alert('Please select a preferred time slot.'); return; }
+
+    const btn = document.querySelector('.btn-book');
+    btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
+
+    try {
+      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec") {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ fname, lname, phone, email, service, date, time: selectedSlot, notes })
+        });
+      }
+    } catch(e) { console.log('Submit:', e); }
+
+    const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    document.getElementById('success-msg').innerHTML =
+      `Thank you, <strong>${fname}</strong>!<br><br>Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong> at <strong>${selectedSlot}</strong> has been received.<br><br>We'll confirm via <strong>${phone}</strong> within 2 hours. See you soon! 🌸`;
+    document.getElementById('success-overlay').classList.add('show');
+
+    ['fname','lname','phone','email','notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('service').value = '';
+    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+    selectedSlot = null;
+    btn.innerHTML = 'Confirm Appointment →'; btn.disabled = false;
+  }
+
+  function closeSuccess(e) {
+    if (e.target === document.getElementById('success-overlay')) document.getElementById('success-overlay').classList.remove('show');
+  }
+</script>
+</body>
+</html>

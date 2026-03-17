@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BLOOM Admin — Bookings Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --black:#09070A; --surface:#110D12; --surface-2:#1A141C; --surface-3:#231B25;
+      --bloom:#D4007A; --bloom-lt:#F0339A; --bloom-glow:rgba(212,0,122,0.18);
+      --white:#fff; --muted:rgba(255,255,255,0.45); --muted-2:rgba(255,255,255,0.22);
+      --border:rgba(255,255,255,0.08); --border-pink:rgba(212,0,122,0.28);
+      --green:#22c55e; --yellow:#f59e0b; --red:#ef4444;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Jost',sans-serif;background:var(--black);color:var(--white);min-height:100vh}
+
+    /* LOGIN */
+    #login-screen{
+      display:flex;align-items:center;justify-content:center;
+      min-height:100vh;padding:2rem;
+    }
+    .login-box{
+      background:var(--surface-2);border:1px solid var(--border-pink);
+      border-radius:2rem;padding:3rem 2.5rem;max-width:400px;width:100%;
+      text-align:center;box-shadow:0 0 60px var(--bloom-glow);
+    }
+    .login-logo{height:50px;margin-bottom:1.5rem;filter:brightness(0) invert(1);opacity:.8}
+    .login-title{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:300;margin-bottom:.3rem}
+    .login-title em{font-style:italic;color:var(--bloom-lt)}
+    .login-sub{font-size:.85rem;color:var(--muted);margin-bottom:2rem}
+    .login-input{
+      width:100%;padding:.9rem 1.1rem;background:var(--surface-3);
+      border:1px solid var(--border);border-radius:.75rem;
+      font-family:'Jost',sans-serif;font-size:.95rem;color:var(--white);
+      outline:none;text-align:center;letter-spacing:.2em;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .login-input:focus{border-color:var(--bloom-lt);box-shadow:0 0 0 3px rgba(212,0,122,.12)}
+    .login-btn{
+      width:100%;margin-top:1rem;padding:1rem;background:var(--bloom);color:#fff;
+      border:none;border-radius:.75rem;font-family:'Jost',sans-serif;
+      font-size:.95rem;font-weight:600;cursor:pointer;
+      box-shadow:0 0 24px var(--bloom-glow);transition:background .2s,transform .2s;
+    }
+    .login-btn:hover{background:var(--bloom-lt);transform:translateY(-1px)}
+    .login-error{color:var(--red);font-size:.85rem;margin-top:.8rem;display:none}
+
+    /* DASHBOARD */
+    #dashboard{display:none}
+
+    /* Top bar */
+    .topbar{
+      position:sticky;top:0;z-index:100;
+      background:rgba(9,7,10,.92);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border-pink);
+      padding:0 2.5rem;height:68px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .topbar-left{display:flex;align-items:center;gap:1rem}
+    .topbar-logo{height:36px;filter:brightness(0) invert(1);opacity:.8}
+    .topbar-title{font-size:.8rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+    .topbar-right{display:flex;align-items:center;gap:1rem}
+    .logout-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.4rem 1rem;border-radius:2rem;font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s}
+    .logout-btn:hover{border-color:var(--bloom-lt);color:var(--white)}
+    .refresh-btn{background:var(--bloom);border:none;color:#fff;padding:.45rem 1.1rem;border-radius:2rem;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 14px var(--bloom-glow);transition:background .2s}
+    .refresh-btn:hover{background:var(--bloom-lt)}
+
+    /* Main content */
+    .main{padding:2.5rem}
+
+    /* Stats */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2.5rem}
+    .stat-card{background:var(--surface-2);border:1px solid var(--border);border-radius:1.2rem;padding:1.5rem 1.8rem}
+    .stat-card-label{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+    .stat-card-num{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:300;line-height:1;color:var(--white)}
+    .stat-card-num.bloom{color:var(--bloom-lt)}
+    .stat-card-num.green{color:var(--green)}
+    .stat-card-num.yellow{color:var(--yellow)}
+    .stat-card-num.red{color:var(--red)}
+
+    /* Filters */
+    .filters{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .filter-btn{background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:.45rem 1.1rem;border-radius:2rem;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .2s}
+    .filter-btn.active,.filter-btn:hover{background:var(--bloom);border-color:var(--bloom);color:#fff}
+    .search-input{
+      background:var(--surface-2);border:1px solid var(--border);
+      border-radius:2rem;padding:.45rem 1.2rem;
+      font-family:'Jost',sans-serif;font-size:.85rem;color:var(--white);
+      outline:none;width:220px;margin-left:auto;
+      transition:border-color .2s;
+    }
+    .search-input:focus{border-color:var(--bloom-lt)}
+    .search-input::placeholder{color:var(--muted-2)}
+
+    /* Table */
+    .table-wrap{background:var(--surface-2);border:1px solid var(--border);border-radius:1.5rem;overflow:hidden}
+    .table-header{padding:1.2rem 1.8rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .table-title{font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bloom-lt)}
+    .count-badge{background:var(--bloom-dim, rgba(212,0,122,0.08));border:1px solid var(--border-pink);color:var(--bloom-lt);font-size:.75rem;font-weight:600;padding:.25rem .8rem;border-radius:2rem}
+
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:1rem 1.4rem;text-align:left;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+    tbody tr{border-bottom:1px solid var(--border);transition:background .2s}
+    tbody tr:last-child{border:none}
+    tbody tr:hover{background:rgba(255,255,255,.03)}
+    td{padding:1.1rem 1.4rem;font-size:.88rem;color:var(--white);vertical-align:middle}
+    td.muted{color:var(--muted)}
+    .td-name{font-weight:600}
+    .td-service{font-size:.82rem;color:var(--muted)}
+    .td-datetime{font-size:.82rem}
+    .td-date{color:var(--white);font-weight:500}
+    .td-time{color:var(--muted);font-size:.78rem;margin-top:.15rem}
+
+    .status-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .85rem;border-radius:2rem;font-size:.75rem;font-weight:600}
+    .status-pill.pending{background:rgba(245,158,11,.12);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
+    .status-pill.confirmed{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+    .status-pill.cancelled{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+
+    .action-btns{display:flex;gap:.5rem;align-items:center}
+    .action-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.32rem .75rem;border-radius:.5rem;font-size:.74rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
+    .action-btn.confirm:hover{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
+    .action-btn.cancel:hover{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
+    .action-btn.pending-btn:hover{background:rgba(245,158,11,.15);border-color:var(--yellow);color:var(--yellow)}
+
+    /* Empty state */
+    .empty{padding:4rem;text-align:center;color:var(--muted)}
+    .empty-icon{font-size:3rem;margin-bottom:1rem}
+    .empty-text{font-family:'Fraunces',serif;font-style:italic;font-size:1.3rem;color:var(--muted)}
+
+    /* Loading */
+    .loading{padding:3rem;text-align:center;color:var(--muted)}
+    .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--bloom-lt);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Toast */
+    .toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface-2);border:1px solid var(--border-pink);border-radius:1rem;padding:1rem 1.5rem;font-size:.88rem;box-shadow:0 0 40px var(--bloom-glow);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast.success{border-color:rgba(34,197,94,.4);color:var(--green)}
+    .toast.error{border-color:rgba(239,68,68,.4);color:var(--red)}
+
+    /* Config banner */
+    .config-banner{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:1rem;padding:1rem 1.5rem;margin-bottom:2rem;font-size:.88rem;color:var(--yellow);display:none;align-items:center;gap:.8rem}
+    .config-banner.show{display:flex}
+
+    @media(max-width:900px){
+      .stats-row{grid-template-columns:repeat(2,1fr)}
+      table thead th:nth-child(4),table td:nth-child(4){display:none}
+    }
+    @media(max-width:600px){
+      .main{padding:1.2rem}
+      .stats-row{grid-template-columns:1fr 1fr}
+      table thead th:nth-child(3),table td:nth-child(3),
+      table thead th:nth-child(5),table td:nth-child(5){display:none}
+      .topbar{padding:0 1.2rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="BLOOM PINK.png" alt="BLOOM" class="login-logo"/>
+    <div class="login-title">Admin <em>Dashboard</em></div>
+    <p class="login-sub">Enter your admin password to continue</p>
+    <input type="password" class="login-input" id="password-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <p class="login-error" id="login-error">❌ Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="BLOOM PINK.png" alt="BLOOM" class="topbar-logo"/>
+      <span class="topbar-title">Bookings Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <button class="refresh-btn" onclick="loadBookings()">↻ Refresh</button>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- Config warning -->
+    <div class="config-banner" id="config-banner">
+      ⚠️ <span>You're viewing demo data. Paste your Google Apps Script URL into this file's <code>SCRIPT_URL</code> variable to connect live data.</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-card-label">Total Bookings</div><div class="stat-card-num bloom" id="stat-total">—</div></div>
+      <div class="stat-card"><div class="stat-card-label">Pending</div><div class="stat-card-num yellow" id="stat-pending">—</div></div>
+      <div class="stat-card"><div class="stat-card-label">Confirmed</div><div class="stat-card-num green" id="stat-confirmed">—</div></div>
+      <div class="stat-card"><div class="stat-card-label">Cancelled</div><div class="stat-card-num red" id="stat-cancelled">—</div></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('All',this)">All</button>
+      <button class="filter-btn" onclick="setFilter('Pending',this)">Pending</button>
+      <button class="filter-btn" onclick="setFilter('Confirmed',this)">Confirmed</button>
+      <button class="filter-btn" onclick="setFilter('Cancelled',this)">Cancelled</button>
+      <input type="text" class="search-input" id="search-input" placeholder="Search name or service…" oninput="renderTable()"/>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <span class="table-title">Appointments</span>
+        <span class="count-badge" id="showing-count">0 bookings</span>
+      </div>
+      <div id="table-body">
+        <div class="loading"><div class="spinner"></div>Loading bookings…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIGURATION ──────────────────────────────────────────────
+  // After deploying your Apps Script, paste your Web App URL here:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec";
+  const ADMIN_PASSWORD = "bloom@2025"; // Must match code.gs
+  // ──────────────────────────────────────────────────────────────
+
+  let allBookings = [];
+  let currentFilter = "All";
+
+  // ── AUTH ──────────────────────────────────────────────────────
+  function doLogin() {
+    const pwd = document.getElementById("password-input").value;
+    if (pwd === ADMIN_PASSWORD) {
+      sessionStorage.setItem("bloom_auth", pwd);
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+      loadBookings();
+    } else {
+      document.getElementById("login-error").style.display = "block";
+      document.getElementById("password-input").value = "";
+    }
+  }
+
+  function doLogout() {
+    sessionStorage.removeItem("bloom_auth");
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("login-screen").style.display = "flex";
+  }
+
+  // Auto-login if session exists
+  window.onload = () => {
+    if (sessionStorage.getItem("bloom_auth") === ADMIN_PASSWORD) {
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+      loadBookings();
+    }
+  };
+
+  // ── LOAD BOOKINGS ─────────────────────────────────────────────
+  async function loadBookings() {
+    document.getElementById("table-body").innerHTML =
+      '<div class="loading"><div class="spinner"></div>Loading bookings…</div>';
+
+    if (SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
+      document.getElementById("config-banner").classList.add("show");
+      loadDemoData();
+      return;
+    }
+
+    try {
+      const url = `${SCRIPT_URL}?action=getBookings&password=${ADMIN_PASSWORD}`;
+      const res  = await fetch(url);
+      const data = await res.json();
+      if (data.success) {
+        allBookings = data.bookings;
+        updateStats();
+        renderTable();
+      } else {
+        showError("Failed to load bookings: " + data.message);
+      }
+    } catch (err) {
+      showError("Connection error. Check your Script URL.");
+      loadDemoData();
+    }
+  }
+
+  function loadDemoData() {
+    allBookings = [
+      { _row:2, "Full Name":"Ama Asante",    "Phone":"+233241234567", "Email":"ama@email.com",  "Service":"Teeth Whitening",         "Date":"2025-08-15", "Time":"10:00 AM", "Notes":"First visit",     "Status":"Pending",   "Timestamp":"08/15/2025, 09:12 AM" },
+      { _row:3, "Full Name":"Kofi Mensah",   "Phone":"+233201234567", "Email":"—",              "Service":"Dental Check-up",         "Date":"2025-08-15", "Time":"2:30 PM",  "Notes":"—",              "Status":"Confirmed", "Timestamp":"08/14/2025, 04:30 PM" },
+      { _row:4, "Full Name":"Efua Boateng",  "Phone":"+233271234567", "Email":"efua@email.com", "Service":"Cosmetic Dentistry",      "Date":"2025-08-16", "Time":"9:00 AM",  "Notes":"Interested in veneers", "Status":"Pending","Timestamp":"08/14/2025, 02:15 PM" },
+      { _row:5, "Full Name":"Yaw Darko",     "Phone":"+233551234567", "Email":"—",              "Service":"Orthodontics (Braces)",   "Date":"2025-08-17", "Time":"11:00 AM", "Notes":"—",              "Status":"Confirmed","Timestamp":"08/13/2025, 10:00 AM" },
+      { _row:6, "Full Name":"Akua Acheampong","Phone":"+233261234567","Email":"akua@email.com", "Service":"Wellness Treatment",      "Date":"2025-08-14", "Time":"3:00 PM",  "Notes":"Back pain relief", "Status":"Cancelled","Timestamp":"08/12/2025, 08:45 AM" },
+    ];
+    updateStats();
+    renderTable();
+  }
+
+  // ── STATS ─────────────────────────────────────────────────────
+  function updateStats() {
+    document.getElementById("stat-total").textContent     = allBookings.length;
+    document.getElementById("stat-pending").textContent   = allBookings.filter(b => b.Status === "Pending").length;
+    document.getElementById("stat-confirmed").textContent = allBookings.filter(b => b.Status === "Confirmed").length;
+    document.getElementById("stat-cancelled").textContent = allBookings.filter(b => b.Status === "Cancelled").length;
+  }
+
+  // ── FILTER & RENDER ───────────────────────────────────────────
+  function setFilter(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderTable();
+  }
+
+  function renderTable() {
+    const search  = (document.getElementById("search-input").value || "").toLowerCase();
+    let filtered  = allBookings.filter(b => {
+      const matchFilter = currentFilter === "All" || b.Status === currentFilter;
+      const matchSearch = !search ||
+        (b["Full Name"] || "").toLowerCase().includes(search) ||
+        (b.Service     || "").toLowerCase().includes(search) ||
+        (b.Phone       || "").toLowerCase().includes(search);
+      return matchFilter && matchSearch;
+    });
+
+    document.getElementById("showing-count").textContent =
+      filtered.length + " booking" + (filtered.length !== 1 ? "s" : "");
+
+    if (filtered.length === 0) {
+      document.getElementById("table-body").innerHTML =
+        '<div class="empty"><div class="empty-icon"></div><div class="empty-text">No bookings found</div></div>';
+      return;
+    }
+
+    const rows = filtered.map(b => {
+      const statusClass = (b.Status || "Pending").toLowerCase();
+      const statusDot   = b.Status === "Confirmed" ? "✓" : b.Status === "Cancelled" ? "✕" : "●";
+      return `
+        <tr>
+          <td>
+            <div class="td-name">${b["Full Name"] || "—"}</div>
+            <div class="td-service">${b.Phone || "—"}</div>
+          </td>
+          <td>${b.Service || "—"}</td>
+          <td>
+            <div class="td-date">${formatDate(b.Date)}</div>
+            <div class="td-time">${b.Time || "—"}</div>
+          </td>
+          <td class="muted">${b.Notes !== "—" ? b.Notes : "<em style='opacity:.4'>No notes</em>"}</td>
+          <td><span class="status-pill ${statusClass}">${statusDot} ${b.Status || "Pending"}</span></td>
+          <td>
+            <div class="action-btns">
+              ${b.Status !== "Confirmed"  ? `<button class="action-btn confirm"    onclick="updateStatus(${b._row},'Confirmed')">✓ Confirm</button>` : ""}
+              ${b.Status !== "Cancelled"  ? `<button class="action-btn cancel"     onclick="updateStatus(${b._row},'Cancelled')">✕ Cancel</button>` : ""}
+              ${b.Status !== "Pending"    ? `<button class="action-btn pending-btn" onclick="updateStatus(${b._row},'Pending')">↺ Pending</button>` : ""}
+            </div>
+          </td>
+        </tr>`;
+    }).join("");
+
+    document.getElementById("table-body").innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Service</th>
+            <th>Date & Time</th>
+            <th>Notes</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  // ── UPDATE STATUS ─────────────────────────────────────────────
+  async function updateStatus(row, status) {
+    // Optimistic update
+    const booking = allBookings.find(b => b._row === row);
+    if (booking) booking.Status = status;
+    updateStats();
+    renderTable();
+
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec") {
+      showToast("Demo mode — status updated locally only", "success");
+      return;
+    }
+
+    try {
+      const url = `${SCRIPT_URL}?action=updateStatus&password=${ADMIN_PASSWORD}&row=${row}&status=${status}`;
+      const res  = await fetch(url);
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Booking marked as ${status} ✓`, "success");
+      } else {
+        showToast("Update failed: " + data.message, "error");
+      }
+    } catch (err) {
+      showToast("Connection error", "error");
+    }
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────
+  function formatDate(dateStr) {
+    if (!dateStr) return "—";
+    try {
+      return new Date(dateStr + "T12:00:00").toLocaleDateString("en-GH", {
+        weekday:"short", month:"short", day:"numeric"
+      });
+    } catch { return dateStr; }
+  }
+
+  function showToast(msg, type = "success") {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove("show"), 3500);
+  }
+
+  function showError(msg) {
+    document.getElementById("table-body").innerHTML =
+      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${msg}</div></div>`;
+  }
+</script>
+</body>
+</html>
