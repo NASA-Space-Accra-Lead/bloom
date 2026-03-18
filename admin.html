@@ -229,7 +229,7 @@
 <script>
   // ── CONFIGURATION ──────────────────────────────────────────────
   // After deploying your Apps Script, paste your Web App URL here:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzATo0ztJneTk7jcJCBwXQdIOC9jn805hqX1F_TlqLzCb704jgHC1MBwZZ-ot5edvfzCA/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec";
   const ADMIN_PASSWORD = "bloom@2025"; // Must match code.gs
   // ──────────────────────────────────────────────────────────────
 
@@ -270,7 +270,7 @@
     document.getElementById("table-body").innerHTML =
       '<div class="loading"><div class="spinner"></div>Loading bookings…</div>';
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbzATo0ztJneTk7jcJCBwXQdIOC9jn805hqX1F_TlqLzCb704jgHC1MBwZZ-ot5edvfzCA/exec") {
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
       document.getElementById("config-banner").classList.add("show");
       loadDemoData();
       return;
@@ -391,7 +391,7 @@
     updateStats();
     renderTable();
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbzATo0ztJneTk7jcJCBwXQdIOC9jn805hqX1F_TlqLzCb704jgHC1MBwZZ-ot5edvfzCA/exec") {
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
       showToast("Demo mode — status updated locally only", "success");
       return;
     }
