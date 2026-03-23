@@ -642,7 +642,7 @@
   });
 
   // GOOGLE APPS SCRIPT URL HERE AFTER DEPLOYMENT ──
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrICk5EQir3-UlRwF58gwnDpeZtRgoNtpLe-84FTqP8D-1v3cHXkLmmkhH4KvcblZw2Q/exec";
 
   async function submitBooking() {
     const fname   = document.getElementById('fname').value.trim();
@@ -663,7 +663,7 @@
     btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
 
     try {
-      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
+      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbyrICk5EQir3-UlRwF58gwnDpeZtRgoNtpLe-84FTqP8D-1v3cHXkLmmkhH4KvcblZw2Q/exec") {
         await fetch(SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({ fname, lname, phone, email, service, date, time: selectedSlot, notes })
