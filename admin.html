@@ -272,8 +272,8 @@
 
     if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
       document.getElementById("config-banner").classList.add("show");
-      loadBookings();
-     // loadDemoData();
+      //loadBookings();
+     loadDemoData();
       return;
     }
 
@@ -290,7 +290,7 @@
       }
     } catch (err) {
       showError("Connection error. Check your Script URL.");
-      loadDemoData();
+      loadBookings();
     }
   }
 
