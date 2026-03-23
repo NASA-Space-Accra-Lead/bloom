@@ -189,7 +189,7 @@
 
     <!-- Config warning -->
     <div class="config-banner" id="config-banner">
-      ⚠️ <span>You're viewing demo data. Paste your Google Apps Script URL into this file's <code>SCRIPT_URL</code> variable to connect live data.</span>
+      <!--⚠️ <span>You're viewing demo data. Paste your Google Apps Script URL into this file's <code>SCRIPT_URL</code> variable to connect live data.</span>
     </div>
 
     <!-- Stats -->
@@ -216,7 +216,7 @@
         <span class="count-badge" id="showing-count">0 bookings</span>
       </div>
       <div id="table-body">
-        <div class="loading"><div class="spinner"></div>Loading bookings…</div>
+        <div class="loading"><div class="spinner"></div>Loading Bookings…</div>
       </div>
     </div>
 
@@ -272,8 +272,8 @@
 
     if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbyrICk5EQir3-UlRwF58gwnDpeZtRgoNtpLe-84FTqP8D-1v3cHXkLmmkhH4KvcblZw2Q/exec") {
       document.getElementById("config-banner").classList.add("show");
-      //loadBookings();
-     loadDemoData();
+      loadBookings();
+     //loadDemoData();
       return;
     }
 
