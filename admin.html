@@ -168,7 +168,7 @@
     <p class="login-sub">Enter your admin password to continue</p>
     <input type="password" class="login-input" id="password-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()"/>
     <button class="login-btn" onclick="doLogin()">Sign In →</button>
-    <p class="login-error" id="login-error">❌ Incorrect password. Try again.</p>
+    <p class="login-error" id="login-error">Incorrect password. Try again.</p>
   </div>
 </div>
 
@@ -229,7 +229,7 @@
 <script>
   // ── CONFIGURATION ──────────────────────────────────────────────
   // After deploying your Apps Script, paste your Web App URL here:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrICk5EQir3-UlRwF58gwnDpeZtRgoNtpLe-84FTqP8D-1v3cHXkLmmkhH4KvcblZw2Q/exec";
   const ADMIN_PASSWORD = "bloom@2025"; // Must match code.gs
   // ──────────────────────────────────────────────────────────────
 
@@ -270,7 +270,7 @@
     document.getElementById("table-body").innerHTML =
       '<div class="loading"><div class="spinner"></div>Loading bookings…</div>';
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbyrICk5EQir3-UlRwF58gwnDpeZtRgoNtpLe-84FTqP8D-1v3cHXkLmmkhH4KvcblZw2Q/exec") {
       document.getElementById("config-banner").classList.add("show");
       //loadBookings();
      loadDemoData();
@@ -392,7 +392,7 @@
     updateStats();
     renderTable();
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbyrICk5EQir3-UlRwF58gwnDpeZtRgoNtpLe-84FTqP8D-1v3cHXkLmmkhH4KvcblZw2Q/exec") {
       showToast("Demo mode — status updated locally only", "success");
       return;
     }
