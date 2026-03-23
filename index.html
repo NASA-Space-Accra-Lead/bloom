@@ -663,7 +663,7 @@
     btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
 
     try {
-      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbzATo0ztJneTk7jcJCBwXQdIOC9jn805hqX1F_TlqLzCb704jgHC1MBwZZ-ot5edvfzCA/exec") {
+      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbxGJG7WnxVCQ0CWTbXJCNBP8iXD-pGr225npzBcOsvTFiElPpQsGGx0i5OvU2wbBYsG/exec") {
         await fetch(SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({ fname, lname, phone, email, service, date, time: selectedSlot, notes })
