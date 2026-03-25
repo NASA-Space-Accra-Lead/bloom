@@ -661,7 +661,7 @@
     const btn = document.querySelector('.btn-book');
     btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
 
-    try {
+    //try {
       if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwGjAkZYITQhx2VzRF8vjj0wFVFSir0I6Q9omTaojjYg8e9DYJNajItsLX6P8bb-MtE/exec") {
         await fetch(SCRIPT_URL, {
           method: 'POST',
@@ -669,10 +669,10 @@
         });
       }
     } catch(e) { console.log('Submit:', e); }
-
+//Confirmation message after submitting booking
     const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
     document.getElementById('success-msg').innerHTML =
-      `Thank you, <strong>${fname}</strong>!<br><br>Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong> at <strong>${selectedSlot}</strong> has been received.<br><br>We'll confirm via <strong>${phone}</strong> within 2 hours. See you soon! 🌸`;
+      `Thank you, <strong>${fname}</strong>!<br><br>Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong> at <strong>${selectedSlot}</strong> has been received.<br><br>We'll confirm via <strong>${phone}</strong> within 5 minutes. See you soon! 🌸`;
     document.getElementById('success-overlay').classList.add('show');
 
     ['fname','lname','phone','email','notes'].forEach(id => document.getElementById(id).value = '');
