@@ -189,7 +189,7 @@
 
     <!-- Config warning -->
     <div class="config-banner" id="config-banner">
-      <!--⚠️ <span>You're viewing demo data. Paste your Google Apps Script URL into this file's <code>SCRIPT_URL</code> variable to connect live data.</span>
+      ⚠️ <span>You're viewing demo data. Paste your Google Apps Script URL into this file's <code>SCRIPT_URL</code> variable to connect live data.</span>
     </div>
 
     <!-- Stats -->
@@ -216,7 +216,7 @@
         <span class="count-badge" id="showing-count">0 bookings</span>
       </div>
       <div id="table-body">
-        <div class="loading"><div class="spinner"></div>Loading Bookings…</div>
+        <div class="loading"><div class="spinner"></div>Loading bookings…</div>
       </div>
     </div>
 
@@ -229,7 +229,7 @@
 <script>
   // ── CONFIGURATION ──────────────────────────────────────────────
   // After deploying your Apps Script, paste your Web App URL here:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec";
   const ADMIN_PASSWORD = "blm@2025"; // Must match code.gs
   // ──────────────────────────────────────────────────────────────
 
@@ -270,9 +270,8 @@
     document.getElementById("table-body").innerHTML =
       '<div class="loading"><div class="spinner"></div>Loading bookings…</div>';
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec") {
+    if (SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
       document.getElementById("config-banner").classList.add("show");
-      loadBookings();
       loadDemoData();
       return;
     }
@@ -290,11 +289,11 @@
       }
     } catch (err) {
       showError("Connection error. Check your Script URL.");
-      loadBookings();
+      loadDemoData();
     }
   }
 
-   function loadDemoData() { 
+  function loadDemoData() {
     allBookings = [
       { _row:2, "Full Name":"Ama Asante",    "Phone":"+233241234567", "Email":"ama@email.com",  "Service":"Teeth Whitening",         "Date":"2025-08-15", "Time":"10:00 AM", "Notes":"First visit",     "Status":"Pending",   "Timestamp":"08/15/2025, 09:12 AM" },
       { _row:3, "Full Name":"Kofi Mensah",   "Phone":"+233201234567", "Email":"—",              "Service":"Dental Check-up",         "Date":"2025-08-15", "Time":"2:30 PM",  "Notes":"—",              "Status":"Confirmed", "Timestamp":"08/14/2025, 04:30 PM" },
@@ -392,7 +391,7 @@
     updateStats();
     renderTable();
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec") {
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec") {
       showToast("Demo mode — status updated locally only", "success");
       return;
     }
@@ -430,7 +429,7 @@
 
   function showError(msg) {
     document.getElementById("table-body").innerHTML =
-      `<div class="empty"><div class="empty-icon"></div><div class="empty-text">${msg}</div></div>`;
+      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${msg}</div></div>`;
   }
 </script>
 </body>
