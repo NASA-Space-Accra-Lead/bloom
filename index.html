@@ -449,7 +449,7 @@
         </div>
         <div class="why-item">
           <div class="why-check">✓</div>
-          <div><div class="why-title">Mobile Money & Insurance Accepted</div><div class="why-desc">MTN, Vodafone Cash, major health insurance, and flexible payment plans.</div></div>
+          <div><div class="why-title">Mobile Money & Insurance Accepted</div><div class="why-desc">MTN, Vodafone Cash, and lexible payment plans.</div></div>
         </div>
         <div class="why-item">
           <div class="why-check">✓</div>
@@ -493,7 +493,7 @@
       <img src="front-view-siblings-taking-selfie-home.webp" alt="Kids" style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--bloom);"/>
       <div>
         <div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:400;color:var(--white);">We Love Families</div>
-        <div style="font-size:.88rem;color:var(--muted);margin-top:.2rem;font-weight:300;">From toddlers to grandparents — BLOOM is a safe, welcoming space for the whole family.</div>
+        <div style="font-size:.88rem;color:var(--muted);margin-top:.2rem;font-weight:300;">From toddlers to grandparents, our studio is a safe, welcoming space for the whole family.</div>
       </div>
     </div>
     <a href="#appointment" class="btn-primary">Book for Your Family</a>
@@ -507,7 +507,7 @@
       <div class="pill-label">Schedule a Visit</div>
       <h2 class="section-heading">Book Your<br><em>Appointment</em></h2>
     </div>
-    <p class="appt-sub">Open every day, 8 AM to 5 PM. Choose your time and we'll confirm within 2 hours via phone or WhatsApp.</p>
+    <p class="appt-sub">Open every day, 8 AM to 5 PM. Choose your time and we'll confirm within 5 minutes via phone or WhatsApp.</p>
   </div>
   <div class="appt-grid">
     <div class="appt-panel reveal">
@@ -643,7 +643,7 @@
   });
 
   // ── PASTE YOUR GOOGLE APPS SCRIPT URL HERE AFTER DEPLOYMENT ──
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGjAkZYITQhx2VzRF8vjj0wFVFSir0I6Q9omTaojjYg8e9DYJNajItsLX6P8bb-MtE/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp_ereknPcez6Uz11fMshRQlxrIs8bB-uDJfV3mKIi/dev";
 
   async function submitBooking() {
     const fname   = document.getElementById('fname').value.trim();
@@ -664,7 +664,7 @@
     btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
 
     try {
-      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwGjAkZYITQhx2VzRF8vjj0wFVFSir0I6Q9omTaojjYg8e9DYJNajItsLX6P8bb-MtE/exec") {
+      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbzp_ereknPcez6Uz11fMshRQlxrIs8bB-uDJfV3mKIi/dev") {
         await fetch(SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({ fname, lname, phone, email, service, date, time: selectedSlot, notes })
