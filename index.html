@@ -422,7 +422,7 @@
       <div class="service-num">06</div>
       
       <div class="service-name">Broken Teeth Filling </div>
-      <p class="service-desc">Rapid same-day care for toothaches, fractures, and dental emergencies — we're always here for you.</p>
+      <p class="service-desc">Rapid same-day care for toothaches, fractures, and dental emergencies. We're always here for you.</p>
       <a href="#appointment" class="service-link">Book Now →</a>
     </div>
   </div>
@@ -643,7 +643,7 @@
   });
 
   // ── PASTE YOUR GOOGLE APPS SCRIPT URL HERE AFTER DEPLOYMENT ──
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzp_ereknPcez6Uz11fMshRQlxrIs8bB-uDJfV3mKIi/dev";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec";
 
   async function submitBooking() {
     const fname   = document.getElementById('fname').value.trim();
@@ -664,7 +664,7 @@
     btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
 
     try {
-      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbzp_ereknPcez6Uz11fMshRQlxrIs8bB-uDJfV3mKIi/dev") {
+      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec") {
         await fetch(SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({ fname, lname, phone, email, service, date, time: selectedSlot, notes })
