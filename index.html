@@ -143,9 +143,8 @@
 
     /* ── STUDIO SECTION ── */
     #studio {
-      /*display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; min-height: 620px;*/
-      display: grid; grid-template-columns: 5fr 5fr; gap: 0; padding: 0; min-height: 620px;margin: 10;
-    }
+      *display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; min-height: 620px;
+         }
     .studio-img { position: relative; overflow: hidden; }
     .studio-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.75); transition: filter .4s; }
     .studio-img:hover img { filter: brightness(.9); }
@@ -155,7 +154,7 @@
     .why-item { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
     .why-item:first-child { border-top: 1px solid var(--border); }
     .why-check { width: 50px; height: 30px; min-width: 30px; border: 1px solid var(--bloom-lt); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bloom-lt); font-size: .78rem; }
-    .why-title { font-weight: 900; font-size: 1rem; color: var(--white); }
+    .why-title { font-weight: 600; font-size: 1rem; color: var(--white); }
     .why-desc { font-size: .85rem; color: var(--muted); margin-top: .2rem; line-height: 1.7; font-weight: 300; }
     .studio-badge { display: inline-flex; align-items: center; gap: .8rem; background: var(--bloom); padding: 1rem 1.6rem; border-radius: 1rem; margin-top: 2.5rem; align-self: flex-start; box-shadow: 0 0 30px var(--bloom-glow); }
     .studio-badge-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: #fff; line-height: 1; }
