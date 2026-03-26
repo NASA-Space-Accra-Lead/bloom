@@ -229,7 +229,7 @@
 <script>
   // ── CONFIGURATION ──────────────────────────────────────────────
   // After deploying your Apps Script, paste your Web App URL here:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec";
   const ADMIN_PASSWORD = "blm@2025"; // Must match code.gs
   // ──────────────────────────────────────────────────────────────
 
@@ -391,7 +391,7 @@
     updateStats();
     renderTable();
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbyjTWh4wPNTcMd9vUnJaYsezdRCfJtvCDnKQNVu-14w_dA7orXMebcbUimRjXTs86zEQQ/exec") {
+    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec") {
       showToast("Demo mode — status updated locally only", "success");
       return;
     }
@@ -429,7 +429,7 @@
 
   function showError(msg) {
     document.getElementById("table-body").innerHTML =
-      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${msg}</div></div>`;
+      `<div class="empty"><div class="empty-icon"></div><div class="empty-text">${msg}</div></div>`;
   }
 </script>
 </body>
