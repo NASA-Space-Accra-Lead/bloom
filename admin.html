@@ -227,13 +227,15 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── CONFIGURATION ──────────────────────────────────────────────
-  // After deploying your Apps Script, paste your Web App URL here:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec";
-  const ADMIN_PASSWORD = "blm@2025"; // Must match code.gs
+ 
+  // ── SUPABASE CONFIG ────────────────────────────────────────────
+  // Paste your values from: Supabase → Project Settings → API
+  const SUPABASE_URL   = "https://lcuzljzltifrpeoszjiu.supabase.co";       // e.g. https://xxxx.supabase.co
+  const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE";  // the long eyJ... string
+  const ADMIN_PASSWORD = "blm@2025";
   // ──────────────────────────────────────────────────────────────
 
-  let allBookings = [];
+  let allBookings   = [];
   let currentFilter = "All";
 
   // ── AUTH ──────────────────────────────────────────────────────
@@ -242,7 +244,7 @@
     if (pwd === ADMIN_PASSWORD) {
       sessionStorage.setItem("bloom_auth", pwd);
       document.getElementById("login-screen").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
+      document.getElementById("dashboard").style.display    = "block";
       loadBookings();
     } else {
       document.getElementById("login-error").style.display = "block";
@@ -252,65 +254,55 @@
 
   function doLogout() {
     sessionStorage.removeItem("bloom_auth");
-    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("dashboard").style.display    = "none";
     document.getElementById("login-screen").style.display = "flex";
   }
 
-  // Auto-login if session exists
+  // Auto-login if session still active
   window.onload = () => {
     if (sessionStorage.getItem("bloom_auth") === ADMIN_PASSWORD) {
       document.getElementById("login-screen").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
+      document.getElementById("dashboard").style.display    = "block";
       loadBookings();
     }
   };
 
-  // ── LOAD BOOKINGS ─────────────────────────────────────────────
+  // ── LOAD BOOKINGS FROM SUPABASE ───────────────────────────────
   async function loadBookings() {
     document.getElementById("table-body").innerHTML =
       '<div class="loading"><div class="spinner"></div>Loading bookings…</div>';
 
-    if (SCRIPT_URL === "YOUR_APPS_SCRIPT_URL_HERE") {
-      document.getElementById("config-banner").classList.add("show");
-      loadDemoData();
-      return;
-    }
-
     try {
-      const url = `${SCRIPT_URL}?action=getBookings&password=${ADMIN_PASSWORD}`;
-      const res  = await fetch(url);
-      const data = await res.json();
-      if (data.success) {
-        allBookings = data.bookings;
-        updateStats();
-        renderTable();
-      } else {
-        showError("Failed to load bookings: " + data.message);
-      }
-    } catch (err) {
-      showError("Connection error. Check your Script URL.");
-      loadDemoData();
-    }
-  }
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/bookings?order=created_at.desc`,
+        {
+          headers: {
+            'apikey':        SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
 
-  function loadDemoData() {
-    allBookings = [
-      { _row:2, "Full Name":"Ama Asante",    "Phone":"+233241234567", "Email":"ama@email.com",  "Service":"Teeth Whitening",         "Date":"2025-08-15", "Time":"10:00 AM", "Notes":"First visit",     "Status":"Pending",   "Timestamp":"08/15/2025, 09:12 AM" },
-      { _row:3, "Full Name":"Kofi Mensah",   "Phone":"+233201234567", "Email":"—",              "Service":"Dental Check-up",         "Date":"2025-08-15", "Time":"2:30 PM",  "Notes":"—",              "Status":"Confirmed", "Timestamp":"08/14/2025, 04:30 PM" },
-      { _row:4, "Full Name":"Efua Boateng",  "Phone":"+233271234567", "Email":"efua@email.com", "Service":"Cosmetic Dentistry",      "Date":"2025-08-16", "Time":"9:00 AM",  "Notes":"Interested in veneers", "Status":"Pending","Timestamp":"08/14/2025, 02:15 PM" },
-      { _row:5, "Full Name":"Yaw Darko",     "Phone":"+233551234567", "Email":"—",              "Service":"Orthodontics (Braces)",   "Date":"2025-08-17", "Time":"11:00 AM", "Notes":"—",              "Status":"Confirmed","Timestamp":"08/13/2025, 10:00 AM" },
-      { _row:6, "Full Name":"Akua Acheampong","Phone":"+233261234567","Email":"akua@email.com", "Service":"Wellness Treatment",      "Date":"2025-08-14", "Time":"3:00 PM",  "Notes":"Back pain relief", "Status":"Cancelled","Timestamp":"08/12/2025, 08:45 AM" },
-    ];
-    updateStats();
-    renderTable();
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Error ${res.status}`);
+      }
+
+      allBookings = await res.json();
+      updateStats();
+      renderTable();
+
+    } catch (err) {
+      showError("Could not load bookings: " + err.message);
+    }
   }
 
   // ── STATS ─────────────────────────────────────────────────────
   function updateStats() {
     document.getElementById("stat-total").textContent     = allBookings.length;
-    document.getElementById("stat-pending").textContent   = allBookings.filter(b => b.Status === "Pending").length;
-    document.getElementById("stat-confirmed").textContent = allBookings.filter(b => b.Status === "Confirmed").length;
-    document.getElementById("stat-cancelled").textContent = allBookings.filter(b => b.Status === "Cancelled").length;
+    document.getElementById("stat-pending").textContent   = allBookings.filter(b => b.status === "Pending").length;
+    document.getElementById("stat-confirmed").textContent = allBookings.filter(b => b.status === "Confirmed").length;
+    document.getElementById("stat-cancelled").textContent = allBookings.filter(b => b.status === "Cancelled").length;
   }
 
   // ── FILTER & RENDER ───────────────────────────────────────────
@@ -322,13 +314,13 @@
   }
 
   function renderTable() {
-    const search  = (document.getElementById("search-input").value || "").toLowerCase();
-    let filtered  = allBookings.filter(b => {
-      const matchFilter = currentFilter === "All" || b.Status === currentFilter;
+    const search   = (document.getElementById("search-input").value || "").toLowerCase();
+    const filtered = allBookings.filter(b => {
+      const matchFilter = currentFilter === "All" || b.status === currentFilter;
       const matchSearch = !search ||
-        (b["Full Name"] || "").toLowerCase().includes(search) ||
-        (b.Service     || "").toLowerCase().includes(search) ||
-        (b.Phone       || "").toLowerCase().includes(search);
+        (b.full_name || "").toLowerCase().includes(search) ||
+        (b.service   || "").toLowerCase().includes(search) ||
+        (b.phone     || "").toLowerCase().includes(search);
       return matchFilter && matchSearch;
     });
 
@@ -342,26 +334,28 @@
     }
 
     const rows = filtered.map(b => {
-      const statusClass = (b.Status || "Pending").toLowerCase();
-      const statusDot   = b.Status === "Confirmed" ? "✓" : b.Status === "Cancelled" ? "✕" : "●";
+      const status      = b.status || "Pending";
+      const statusClass = status.toLowerCase();
+      const statusDot   = status === "Confirmed" ? "✓" : status === "Cancelled" ? "✕" : "●";
+      const notes       = b.notes || "";
       return `
         <tr>
           <td>
-            <div class="td-name">${b["Full Name"] || "—"}</div>
-            <div class="td-service">${b.Phone || "—"}</div>
+            <div class="td-name">${b.full_name || "—"}</div>
+            <div class="td-service">${b.phone || "—"}</div>
           </td>
-          <td>${b.Service || "—"}</td>
+          <td>${b.service || "—"}</td>
           <td>
-            <div class="td-date">${formatDate(b.Date)}</div>
-            <div class="td-time">${b.Time || "—"}</div>
+            <div class="td-date">${formatDate(b.date)}</div>
+            <div class="td-time">${b.time || "—"}</div>
           </td>
-          <td class="muted">${b.Notes !== "—" ? b.Notes : "<em style='opacity:.4'>No notes</em>"}</td>
-          <td><span class="status-pill ${statusClass}">${statusDot} ${b.Status || "Pending"}</span></td>
+          <td class="muted">${notes ? notes : "<em style='opacity:.4'>No notes</em>"}</td>
+          <td><span class="status-pill ${statusClass}">${statusDot} ${status}</span></td>
           <td>
             <div class="action-btns">
-              ${b.Status !== "Confirmed"  ? `<button class="action-btn confirm"    onclick="updateStatus(${b._row},'Confirmed')">✓ Confirm</button>` : ""}
-              ${b.Status !== "Cancelled"  ? `<button class="action-btn cancel"     onclick="updateStatus(${b._row},'Cancelled')">✕ Cancel</button>` : ""}
-              ${b.Status !== "Pending"    ? `<button class="action-btn pending-btn" onclick="updateStatus(${b._row},'Pending')">↺ Pending</button>` : ""}
+              ${status !== "Confirmed"  ? `<button class="action-btn confirm"     onclick="updateStatus('${b.id}','Confirmed')">✓ Confirm</button>` : ""}
+              ${status !== "Cancelled"  ? `<button class="action-btn cancel"      onclick="updateStatus('${b.id}','Cancelled')">✕ Cancel</button>`  : ""}
+              ${status !== "Pending"    ? `<button class="action-btn pending-btn" onclick="updateStatus('${b.id}','Pending')">↺ Pending</button>`   : ""}
             </div>
           </td>
         </tr>`;
@@ -383,30 +377,43 @@
       </table>`;
   }
 
-  // ── UPDATE STATUS ─────────────────────────────────────────────
-  async function updateStatus(row, status) {
-    // Optimistic update
-    const booking = allBookings.find(b => b._row === row);
-    if (booking) booking.Status = status;
+  // ── UPDATE STATUS IN SUPABASE ─────────────────────────────────
+  async function updateStatus(id, status) {
+    // Optimistic UI update first
+    const booking = allBookings.find(b => b.id === id);
+    const prevStatus = booking ? booking.status : null;
+    if (booking) booking.status = status;
     updateStats();
     renderTable();
 
-    if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec") {
-      showToast("Demo mode — status updated locally only", "success");
-      return;
-    }
-
     try {
-      const url = `${SCRIPT_URL}?action=updateStatus&password=${ADMIN_PASSWORD}&row=${row}&status=${status}`;
-      const res  = await fetch(url);
-      const data = await res.json();
-      if (data.success) {
-        showToast(`Booking marked as ${status} ✓`, "success");
-      } else {
-        showToast("Update failed: " + data.message, "error");
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/bookings?id=eq.${id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type':  'application/json',
+            'apikey':        SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Prefer':        'return=minimal'
+          },
+          body: JSON.stringify({ status })
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Error ${res.status}`);
       }
+
+      showToast(`Booking marked as ${status} ✓`, "success");
+
     } catch (err) {
-      showToast("Connection error", "error");
+      // Revert optimistic update on failure
+      if (booking && prevStatus) booking.status = prevStatus;
+      updateStats();
+      renderTable();
+      showToast("Update failed: " + err.message, "error");
     }
   }
 
@@ -415,7 +422,7 @@
     if (!dateStr) return "—";
     try {
       return new Date(dateStr + "T12:00:00").toLocaleDateString("en-GH", {
-        weekday:"short", month:"short", day:"numeric"
+        weekday: "short", month: "short", day: "numeric"
       });
     } catch { return dateStr; }
   }
@@ -423,7 +430,7 @@
   function showToast(msg, type = "success") {
     const t = document.getElementById("toast");
     t.textContent = msg;
-    t.className = `toast ${type} show`;
+    t.className   = `toast ${type} show`;
     setTimeout(() => t.classList.remove("show"), 3500);
   }
 
