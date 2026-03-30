@@ -607,26 +607,44 @@
 </div>
 
 <script>
+  
+<script>
+  // ── SUPABASE CONFIG ────────────────────────────────────────────
+  // Paste your values from: Supabase → Project Settings → API
+  const SUPABASE_URL = "https://lcuzljzltifrpeoszjiu.supabase.co";        // e.g. https://xxxx.supabase.co
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE";   // the long eyJ... string
+  // ──────────────────────────────────────────────────────────────
+
+  // ── NAV SCROLL ────────────────────────────────────────────────
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   });
+
+  // ── MOBILE MENU ───────────────────────────────────────────────
   function toggleMenu() {
     const m = document.getElementById('mobile-menu');
     m.style.display = m.style.display === 'none' ? 'block' : 'none';
   }
+
+  // ── SCROLL REVEAL ─────────────────────────────────────────────
   const io = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 70); });
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 70);
+    });
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
+  // ── DATE PICKER ───────────────────────────────────────────────
   const dateEl = document.getElementById('date');
-  dateEl.min = new Date().toISOString().split('T')[0];
+  dateEl.min   = new Date().toISOString().split('T')[0];
   dateEl.value = new Date().toISOString().split('T')[0];
 
-  const slots = ['8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM'];
+  // ── TIME SLOTS ────────────────────────────────────────────────
+  const slots      = ['8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM'];
   const unavailable = [1, 5, 9, 13];
-  let selectedSlot = null;
-  const container = document.getElementById('time-slots');
+  let selectedSlot  = null;
+  const container   = document.getElementById('time-slots');
+
   slots.forEach((slot, i) => {
     const el = document.createElement('div');
     el.className = 'time-slot' + (unavailable.includes(i) ? ' unavailable' : '');
@@ -634,86 +652,96 @@
     if (!unavailable.includes(i)) {
       el.addEventListener('click', () => {
         document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-        el.classList.add('selected'); selectedSlot = slot;
+        el.classList.add('selected');
+        selectedSlot = slot;
       });
     }
     container.appendChild(el);
   });
 
- // ── SUPABASE CONFIG ──────────────────────────────────────
-const SUPABASE_URL = "https://lcuzljzltifrpeoszjiu.supabase.co";  // ← paste yours
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE" ;                    // ← paste yours
-// ─────────────────────────────────────────────────────────
+  // ── SUBMIT BOOKING → SUPABASE ─────────────────────────────────
+  async function submitBooking() {
+    const fname   = document.getElementById('fname').value.trim();
+    const lname   = document.getElementById('lname').value.trim();
+    const phone   = document.getElementById('phone').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const service = document.getElementById('service').value;
+    const date    = document.getElementById('date').value;
+    const notes   = document.getElementById('notes').value.trim();
 
-async function submitBooking() {
-  const fname   = document.getElementById('fname').value.trim();
-  const lname   = document.getElementById('lname').value.trim();
-  const phone   = document.getElementById('phone').value.trim();
-  const email   = document.getElementById('email').value.trim();
-  const service = document.getElementById('service').value;
-  const date    = document.getElementById('date').value;
-  const notes   = document.getElementById('notes').value.trim();
+    // Validation
+    if (!fname)        { alert('Please enter your first name.'); return; }
+    if (!phone)        { alert('Please enter your phone number.'); return; }
+    if (!service)      { alert('Please select a service.'); return; }
+    if (!date)         { alert('Please choose a preferred date.'); return; }
+    if (!selectedSlot) { alert('Please select a preferred time slot.'); return; }
 
-  if (!fname)        { alert('Please enter your first name.'); return; }
-  if (!phone)        { alert('Please enter your phone number.'); return; }
-  if (!service)      { alert('Please select a service.'); return; }
-  if (!date)         { alert('Please choose a preferred date.'); return; }
-  if (!selectedSlot) { alert('Please select a preferred time slot.'); return; }
+    const btn = document.querySelector('.btn-book');
+    btn.innerHTML = '⏳ Submitting…';
+    btn.disabled  = true;
 
-  const btn = document.querySelector('.btn-book');
-  btn.innerHTML = '⏳ Submitting…';
-  btn.disabled = true;
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'apikey':        SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer':        'return=minimal'
+        },
+        body: JSON.stringify({
+          full_name: `${fname} ${lname}`.trim(),
+          phone,
+          email:   email  || null,
+          service,
+          date,
+          time:    selectedSlot,
+          notes:   notes  || null,
+          status:  'Pending'
+        })
+      });
 
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        full_name: `${fname} ${lname}`.trim(),
-        phone,
-        email:   email || null,
-        service,
-        date,
-        time:    selectedSlot,
-        notes:   notes || null,
-        status:  'Pending'
-      })
-    });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || `Server error: ${res.status}`);
+      }
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.message || 'Submission failed');
+      // Show success popup
+      const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+      document.getElementById('success-msg').innerHTML =
+        `Thank you, <strong>${fname}</strong>!<br><br>
+         Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong>
+         at <strong>${selectedSlot}</strong> has been received.<br><br>
+         We'll confirm via <strong>${phone}</strong> within 5 minutes. See you soon!`;
+      document.getElementById('success-overlay').classList.add('show');
+
+      // Reset form
+      ['fname', 'lname', 'phone', 'email', 'notes'].forEach(id =>
+        document.getElementById(id).value = '');
+      document.getElementById('service').value = '';
+      document.getElementById('date').value    = new Date().toISOString().split('T')[0];
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      selectedSlot = null;
+
+    } catch (err) {
+      alert('Booking failed — please try again.\n\nError: ' + err.message);
+    } finally {
+      btn.innerHTML = 'Confirm Appointment →';
+      btn.disabled  = false;
     }
-
-    // Show success popup
-    const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
-    document.getElementById('success-msg').innerHTML =
-      `Thank you, <strong>${fname}</strong>!<br><br>
-       Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong>
-       at <strong>${selectedSlot}</strong> has been received.<br><br>
-       We'll confirm via <strong>${phone}</strong> within 5 minutes. See you soon!`;
-    document.getElementById('success-overlay').classList.add('show');
-
-    // Reset form
-    ['fname','lname','phone','email','notes'].forEach(id =>
-      document.getElementById(id).value = '');
-    document.getElementById('service').value = '';
-    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-    selectedSlot = null;
-
-  } catch (err) {
-    alert('Booking failed: ' + err.message);
-  } finally {
-    btn.innerHTML = 'Confirm Appointment →';
-    btn.disabled = false;
   }
-}
+
+  // ── CLOSE SUCCESS POPUP ───────────────────────────────────────
+  function closeSuccess(event) {
+    if (event.target === document.getElementById('success-overlay')) {
+      document.getElementById('success-overlay').classList.remove('show');
+    }
+  }
+
+</script>
+</body>
+</html>
 </body>
 </html>
