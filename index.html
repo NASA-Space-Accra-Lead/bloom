@@ -640,51 +640,80 @@
     container.appendChild(el);
   });
 
-  // ── PASTE YOUR GOOGLE APPS SCRIPT URL HERE AFTER DEPLOYMENT ──
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec";
+ // ── SUPABASE CONFIG ──────────────────────────────────────
+const SUPABASE_URL = "https://lcuzljzltifrpeoszjiu.supabase.co";  // ← paste yours
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE" ;                    // ← paste yours
+// ─────────────────────────────────────────────────────────
 
-  async function submitBooking() {
-    const fname   = document.getElementById('fname').value.trim();
-    const lname   = document.getElementById('lname').value.trim();
-    const phone   = document.getElementById('phone').value.trim();
-    const email   = document.getElementById('email').value.trim();
-    const service = document.getElementById('service').value;
-    const date    = document.getElementById('date').value;
-    const notes   = document.getElementById('notes').value.trim();
+async function submitBooking() {
+  const fname   = document.getElementById('fname').value.trim();
+  const lname   = document.getElementById('lname').value.trim();
+  const phone   = document.getElementById('phone').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const service = document.getElementById('service').value;
+  const date    = document.getElementById('date').value;
+  const notes   = document.getElementById('notes').value.trim();
 
-    if (!fname)        { alert('Please enter your first name.'); return; }
-    if (!phone)        { alert('Please enter your phone number.'); return; }
-    if (!service)      { alert('Please select a service.'); return; }
-    if (!date)         { alert('Please choose a preferred date.'); return; }
-    if (!selectedSlot) { alert('Please select a preferred time slot.'); return; }
+  if (!fname)        { alert('Please enter your first name.'); return; }
+  if (!phone)        { alert('Please enter your phone number.'); return; }
+  if (!service)      { alert('Please select a service.'); return; }
+  if (!date)         { alert('Please choose a preferred date.'); return; }
+  if (!selectedSlot) { alert('Please select a preferred time slot.'); return; }
 
-    const btn = document.querySelector('.btn-book');
-    btn.innerHTML = '⏳ Submitting…'; btn.disabled = true;
+  const btn = document.querySelector('.btn-book');
+  btn.innerHTML = '⏳ Submitting…';
+  btn.disabled = true;
 
-    try {
-      if (SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbw5Cg-R3GvNX0uyYzEX6M8fJ5wabJWQawQqyi1XsMilZVUCknNd5J7J6hzb1AFQZoQIsQ/exec") {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ fname, lname, phone, email, service, date, time: selectedSlot, notes })
-        });
-      }
-    } catch(e) { console.log('Submit:', e); }
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        full_name: `${fname} ${lname}`.trim(),
+        phone,
+        email:   email || null,
+        service,
+        date,
+        time:    selectedSlot,
+        notes:   notes || null,
+        status:  'Pending'
+      })
+    });
 
-    const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'Submission failed');
+    }
+
+    // Show success popup
+    const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
     document.getElementById('success-msg').innerHTML =
-      `Thank you, <strong>${fname}</strong>!<br><br>Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong> at <strong>${selectedSlot}</strong> has been received.<br><br>We'll confirm via <strong>${phone}</strong> within 5 mins. See you soon!`;
+      `Thank you, <strong>${fname}</strong>!<br><br>
+       Your appointment for <strong>${service}</strong> on <strong>${fmt}</strong>
+       at <strong>${selectedSlot}</strong> has been received.<br><br>
+       We'll confirm via <strong>${phone}</strong> within 5 minutes. See you soon!`;
     document.getElementById('success-overlay').classList.add('show');
 
-    ['fname','lname','phone','email','notes'].forEach(id => document.getElementById(id).value = '');
+    // Reset form
+    ['fname','lname','phone','email','notes'].forEach(id =>
+      document.getElementById(id).value = '');
     document.getElementById('service').value = '';
     document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
     selectedSlot = null;
-    btn.innerHTML = 'Confirm Appointment →'; btn.disabled = false;
-  }
 
-  function closeSuccess(e) {
-    if (e.target === document.getElementById('success-overlay')) document.getElementById('success-overlay').classList.remove('show');
+  } catch (err) {
+    alert('Booking failed: ' + err.message);
+  } finally {
+    btn.innerHTML = 'Confirm Appointment →';
+    btn.disabled = false;
   }
-</script>
+}
 </body>
 </html>
