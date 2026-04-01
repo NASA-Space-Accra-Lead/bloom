@@ -169,6 +169,16 @@
     .gallery-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.6) 0%, transparent 50%); pointer-events: none; }
     .gallery-item.tall img { height: 420px; }
 
+ /* ── STRIP ROW ── */
+    #strip { padding: 6rem 6%; }
+    .strip-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+    .strip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .strip-item { border-radius: 1.2rem; overflow: hidden; position: relative; }
+    .strip-item img { width: 50%; height: 200px; object-fit: cover; object-position: center top; filter: brightness(.8) saturate(.9); transition: transform .5s ease, filter .4s; display: block; }
+    .strip-item:hover img { transform: scale(1.04); filter: brightness(1) saturate(1); }
+    .strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.6) 0%, transparent 50%); pointer-events: none; }
+    .strip-item.tall img { height: 420px; }
+    
     /* ── APPOINTMENT ── */
     #appointment { background: var(--surface); }
     .appt-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4.5rem; gap: 2rem; flex-wrap: wrap; }
@@ -350,11 +360,12 @@
   </div>
 </div>
 
-  <!-- GALLERY -->
-<section id="gallery">
+  <!-- PHOTO STRIP -->
+<section id="strip">
   <div class="gallery-header reveal">
     <div>
       <h2 class="section-heading">We Offer Professional <em>Care</em></h2>
+      <div></div>div>
   <div class="gallery-grid">
     <div class="gallery-item tall reveal">
       <img src="IMG_3940.jpeg" alt="Happy patient"/>
@@ -369,10 +380,10 @@
       <img src="IMG_3934.jpeg" alt="Oral care"/>
     </div>
      <div class="gallery-item tall reveal reveal-d2">
-      <img src="JH.png" alt="Oral care"/>
+      <img src="JI.jpg" alt="Oral care"/>
     </div>
      <div class="gallery-item tall reveal reveal-d2">
-      <img src="IMG_4041.jpeg" alt="Oral care"/>
+      <img src="IMG_4132.jpeg" alt="Oral care"/>
     </div>
   </div>
 <!-- PHOTO STRIP 
