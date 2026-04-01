@@ -174,7 +174,7 @@
     .strip-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
     .strip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .strip-item { border-radius: 1.2rem; overflow: hidden; position: relative; }
-    .strip-item img { width: 50%; height: 200px; object-fit: cover; object-position: center top; filter: brightness(.8) saturate(.9); transition: transform .5s ease, filter .4s; display: block; }
+    .strip-item img { width: 50%; height: 100px; object-fit: cover; object-position: center top; filter: brightness(.8) saturate(.9); transition: transform .5s ease, filter .4s; display: block; }
     .strip-item:hover img { transform: scale(1.04); filter: brightness(1) saturate(1); }
     .strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.6) 0%, transparent 50%); pointer-events: none; }
     .strip-item.tall img { height: 420px; }
@@ -362,7 +362,7 @@
 
   <!-- PHOTO STRIP -->
 <section id="strip">
-  <div class="gallery-header reveal">
+  <div class="strip-header reveal">
     <div>
       <h2 class="section-heading">We Offer Professional <em>Care</em></h2>
       <div></div>
