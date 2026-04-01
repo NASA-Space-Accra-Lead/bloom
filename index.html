@@ -138,7 +138,8 @@
     .service-card:hover .service-icon-wrap { border-color: var(--bloom-lt); box-shadow: 0 0 18px var(--bloom-glow); }
     .service-name { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 400; color: var(--white); margin-bottom: .7rem; }
     .service-desc { font-size: .87rem; color: var(--muted); line-height: 1.8; font-weight: 300; }
-    .service-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
+    .service-link { align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
+    /*.service-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }*/
     .service-card:hover .service-link { opacity: 1; transform: translateY(0); }
   /* ── STUDIO SECTION ── */
     #studio {
@@ -170,11 +171,11 @@
     .gallery-item.tall img { height: 420px; }
 
  /* ── STRIP ROW ── */
-    #strip { padding: 0rem 6%; }
+    #strip { padding: 0rem 2%; }
     .strip-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 0.5rem; }
     .strip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.1rem; }
-    .strip-item { border-radius: 1.2rem; overflow: hidden; position: relative; }
-    .strip-item img { width: 70%; height: 100px; object-fit: cover; object-position: center top; filter: brightness(.8) saturate(.9); transition: transform .5s ease, filter .4s; display: block; }
+    .strip-item { border-radius: 1.1rem; overflow: hidden; position: relative; }
+    .strip-item img { width: 80%; height: 100px; object-fit: cover; object-position: center top; filter: brightness(.8) saturate(.9); transition: transform .5s ease, filter .4s; display: block; }
     .strip-item:hover img { transform: scale(1.04); filter: brightness(1) saturate(1); }
     .strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.6) 0%, transparent 50%); pointer-events: none; }
     .strip-item.tall img { height: 220px; }
