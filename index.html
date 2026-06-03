@@ -133,18 +133,19 @@
     .section-heading { font-family: 'Fraunces', serif; font-size: clamp(2.4rem, 4.5vw, 4.2rem); font-weight: 300; line-height: 1.05; letter-spacing: -.01em; color: var(--white); }
     .section-heading em { font-style: italic; color: var(--bloom-lt); }
 
-   /* ── PHOTO STRIP ── */ -->
+   /* ── PHOTO STRIP ── */
     /*#photo-strip { padding: 0; overflow: hidden; }
-    .strip-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; height: 420px; }
-    .strip-item { overflow: hidden; position: relative; }
-    .strip-item img { width: 50%; height: 50%; object-fit: cover; object-position: center top; transition: transform .6s ease; filter: brightness(.8); }
-    .strip-item:hover img { transform: scale(1.05); filter: brightness(1); }
-    .strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.5) 0%, transparent 60%); }
+    .strip-grid-old { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1.2fr; height: 420px; }
+    .strip-item-old { overflow: hidden; position: relative; }
+    .strip-item-old img { width: 50%; height: 50%; object-fit: cover; object-position: center top; transition: transform .6s ease; filter: brightness(.8); }
+    .strip-item-old:hover img { transform: scale(1.05); filter: brightness(1); }
+    .strip-item-old::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,7,10,.5) 0%, transparent 60%); }
     .strip-caption { position: absolute; bottom: 1.2rem; left: 1.2rem; z-index: 2; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7); }
-   
+    */
+
     /* ── SERVICES ── */
     #services { background: var(--surface); }
-    .services-top { display: none; align-items: flex-end; justify-content: space-between; margin-bottom: 4.5rem; gap: 3rem; flex-wrap: wrap; }
+    .services-top { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4.5rem; gap: 3rem; flex-wrap: wrap; }
     .services-intro { font-size: .97rem; color: var(--muted); line-height: 1.9; max-width: 380px; font-weight: 300; }
     .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 1.5rem; overflow: hidden; }
     .service-card { background: var(--surface); padding: 2.8rem 2.4rem; position: relative; overflow: hidden; transition: background .3s; }
@@ -157,8 +158,7 @@
     .service-card:hover .service-icon-wrap { border-color: var(--bloom-lt); box-shadow: 0 0 18px var(--bloom-glow); }
     .service-name { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 400; color: var(--white); margin-bottom: .7rem; }
     .service-desc { font-size: .87rem; color: var(--muted); line-height: 1.8; font-weight: 300; }
-    .service-link { align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
-    /*.service-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }*/
+    .service-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.4rem; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bloom-lt); text-decoration: none; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
     .service-card:hover .service-link { opacity: 1; transform: translateY(0); }
   /* ── STUDIO SECTION ── */
     #studio {
@@ -175,7 +175,7 @@
     .why-check { width: 30px; height: 30px; min-width: 30px; border: 1px solid var(--bloom-lt); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bloom-lt); font-size: .78rem; }
     .why-title { font-weight: 600; font-size: .95rem; color: var(--white); padding: 15; }
     .why-desc { font-size: .85rem; color: var(--muted); margin-top: .2rem; line-height: 1.7; font-weight: 300; }
-    .studio-badge { display: none; align-items: center; gap: .8rem; background: var(--bloom); padding: 1rem 1.6rem; border-radius: 1rem; margin-top: 2.5rem; align-self: flex-start; box-shadow: 0 0 30px var(--bloom-glow); }
+    .studio-badge { display: flex; align-items: center; gap: .8rem; background: var(--bloom); padding: 1rem 1.6rem; border-radius: 1rem; margin-top: 2.5rem; align-self: flex-start; box-shadow: 0 0 30px var(--bloom-glow); }
     .studio-badge-num { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: #fff; line-height: 1; }
     .studio-badge-txt { font-size: .78rem; color: rgba(255,255,255,.8); line-height: 1.4; }
 
@@ -217,9 +217,8 @@
     .quote-block span { color: var(--bloom-lt); }*/
 
     #appointment { background: var(--surface); border-top: 1px solid var(--border); padding: 5rem 6% 2.5rem; }
-    .appt-header { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 4rem;  }
-    /*.appt-header { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 4rem;  } */
-    .appt-sub { font-size: .95rem; grid-template-columns: 1fr; color: var(--muted); line-height: 1.85; max-width: 360px; font-weight: 300; position: right; margin-left: 5rem;}*/
+    .appt-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4rem; gap: 2rem; flex-wrap: wrap; }
+    .appt-sub { font-size: .95rem; color: var(--muted); line-height: 1.85; max-width: 360px; font-weight: 300; }
     .appt-grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 2.5rem; }
     .appt-panel { background: var(--surface-2); border: 1px solid var(--border); border-radius: 1.8rem; padding: 2.8rem; display: flex; flex-direction: column; gap: 2.5rem; }
     /*.block-title { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--bloom-lt); margin-bottom: 1.2rem; }*/
@@ -275,7 +274,7 @@
     .footer-col h5 { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--bloom-lt); margin-bottom: 1.4rem; }
     .footer-col a { display: block; color: var(--muted-2); text-decoration: none; font-size: .9rem; margin-bottom: .7rem; font-weight: 300; transition: color .2s; }
     .footer-col a:hover { color: var(--white); }
-    .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem;padding-left: 30rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--muted-2); flex-wrap: wrap; gap: .5rem; }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--muted-2); flex-wrap: wrap; gap: .5rem; }
 
     /* ── ANIMATIONS ── */
     @keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
@@ -311,6 +310,14 @@
       .footer-bottom { flex-direction: column; text-align: center; }
       .gallery-grid { grid-template-columns: 1fr; }
       .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .strip-grid { grid-template-columns: 1fr 1fr; }
+      .strip-item:nth-child(n) { display: block; }
+      .appt-header { flex-direction: column; }
+      .appt-grid { grid-template-columns: 1fr; }
+      /* On touch devices, always show service Book Now links */
+      .service-link { opacity: 1; transform: translateY(0); }
+      section { padding: 5rem 5%; }
+      .studio-content { padding: 3rem 5%; }
     }
   </style>
 </head>
@@ -318,7 +325,7 @@
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#"><img src="BLOOM PINK.png" alt="BLOOM & Wellness Studio"/></a>
+  <a href="#"><img src="BLOOM%20PINK.png" alt="BLOOM & Wellness Studio"/></a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#studio">About</a></li>
@@ -403,9 +410,8 @@
   <div class="strip-header reveal">
     <div>
       <h2 class="section-heading">We Restore Your <em>Smile</em></h2>
-      <div>
-      </div>
-      </div>
+    </div>
+  </div>
   <div class="strip-grid">
     <div class="strip-item tall reveal">
       <img src="IMG_3940.jpeg" alt="Happy patient"/>
@@ -456,7 +462,7 @@
   </div>
 </div>
 
-<!-- SERVICES -->
+<!-- OUR SERVICES -->
 <section id="services">
   <div class="services-top">
     <div class="reveal">
@@ -615,7 +621,7 @@
       <div class="pill-label">Schedule a Visit</div>
       <h2 class="section-heading">Book Your<br><em>Appointment</em></h2>
     </div>
-    <p class="appt-sub">We are Open every weekday, 8 AM to 5 PM and every weekend from 10 AM to 3 PM. Choose your time and we'll confirm within 5 minutes via SMS or WhatsApp.</p>
+    <p class="appt-sub">We are Open every Weekday from 8 AM to 5 PM and every Weekend from 10 AM to 3 PM. Choose your time and we'll confirm within 2 minutes via SMS or WhatsApp.</p>
   </div>
   <div class="appt-grid">
     <div class="appt-panel reveal">
@@ -628,15 +634,15 @@
       </div>
       <div>
         <div class="block-title">Contact Us</div>
-        <div class="contact-row"><span class="contact-icon">📞</span><span>+233 25 754 6530</span></div>
-        <div class="contact-row"><span class="contact-icon">💬</span><span>WhatsApp: +233 25 754 6530</span></div>
-        <div class="contact-row"><span class="contact-icon">📍</span><span>Accra, Ghana</span></div>
-        <div class="contact-row"><span class="contact-icon">✉️</span><span>bloomandwellness.studio@gmail.com</span></div>
+        <div class="contact-row">Mobile:</span><span>+233 25 754 6530</span></div>
+        <div class="contact-row">WhatsApp:</span><span>+233 25 754 6530</span></div>
+        <div class="contact-row">Location:</span><span>Accra, Ghana</span></div>
+        <div class="contact-row">Email:</span><span>bloomandwellness.studio@gmail.com</span></div>
       </div>
       <div class="quote-block">"Ready to <span>bloom?</span>"</div>
     </div>
     <div class="booking-form reveal reveal-d1">
-      <img src="BLOOM PINK.png" alt="BLOOM" class="form-logo"/>
+      <img src="BLOOM%20PINK.png" alt="BLOOM" class="form-logo"/>
       <div class="form-heading">Request An<br><em>Appointment Here</em></div>
       <p class="form-sub">Fill in your details we'll take care of the rest.</p>
       <div class="form-row">
@@ -679,7 +685,7 @@
 <footer>
   <div class="footer-top">
     <div>
-      <img src="BLOOM PINK.png" alt="BLOOM" class="footer-logo"/>
+      <img src="BLOOM%20PINK.png" alt="BLOOM" class="footer-logo"/>
       <p class="footer-tagline">...Healthy Smiles. Luxury Looks!</p>
       <p class="footer-desc">Ghana's premier dental and wellness studio dedicated to giving every client a confident, radiant glow.</p>
     </div>
@@ -704,8 +710,8 @@
     </div>
     <div class="footer-col">
       <h5>Contact</h5>
-      <a href="tel:+233257546530">+233 25 754 6530</a>
-      <a href="https://wa.me/233257546530">WhatsApp Us</a>
+      <a href="tel:+233257546530">Call Us Now: +233 25 754 6530</a>
+      <a href="https://wa.me/233257546530">Click Here to WhatsApp Us</a>
       <a href="mailto:bloomandwellness.studio@gmail.com">bloomandwellness.studio@gmail.com</a>
       <a href="#">Accra, Ghana</a>
     </div>
