@@ -368,75 +368,8 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
     <details><summary>How Can I Pay?</summary><p>We accept MTN Mobile Money and Vodafone Cash, and offer flexible payment plans for larger treatments.</p></details>
   </div>
 </section>
-
-<!-- APPOINTMENT -->
-<section id="appointment">
-  <div class="appt-header reveal">
-    <div>
-      <div class="pill-label">Schedule a Visit</div>
-      <h2 class="section-heading">Book Your<br><em>Appointment</em></h2>
-    </div>
-    <p class="appt-sub">We are Open every Weekday from 8 AM to 5 PM and every Weekend from 10 AM to 3 PM. Choose your time and we'll confirm within 2 minutes via SMS or WhatsApp.</p>
-  </div>
-  <div class="appt-grid">
-    <div class="appt-panel reveal">
-      <div>
-        <div class="block-title">Studio Hours</div>
-        <div class="hours-row"><span>Monday – Friday</span><span class="t">8:00 AM – 5:00 PM</span></div>
-        <div class="hours-row"><span>Saturday</span><span class="t">10:00 AM – 3:00 PM</span></div>
-        <div class="hours-row"><span>Sunday</span><span class="t">10:00 AM – 3:00 PM</span></div>
-        <div class="hours-row"><span>Public Holidays</span><span class="t">Emergency & Referrals Only</span></div>
-      </div>
-      <div>
-        <div class="block-title">Contact Us</div>
-        <div class="contact-row">Mobile:</span><span>+233 25 754 6530</span></div>
-        <div class="contact-row">WhatsApp:</span><span>+233 25 754 6530</span></div>
-        <div class="contact-row">Location:</span><span>Accra, Ghana</span></div>
-        <div class="contact-row">Email:</span><span>bloomandwellness.studio@gmail.com</span></div>
-      </div>
-      <div class="quote-block">"Ready to <span>bloom?</span>"</div>
-    </div>
-    <div class="booking-form reveal reveal-d1">
-      <img src="BLOOM%20PINK.png" alt="BLOOM" class="form-logo"/>
-      <div class="form-heading">Request An<br><em>Appointment Here</em></div>
-      <p class="form-sub">Fill in your details we'll take care of the rest.</p>
-      <div class="form-row">
-        <div class="form-group"><label>First Name</label><input type="text" id="fname" placeholder="Ama"/></div>
-        <div class="form-group"><label>Last Name</label><input type="text" id="lname" placeholder="Asante"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="phone" placeholder="+233 25 754 6530"/></div>
-        <div class="form-group"><label>Email (Optional)</label><input type="email" id="email" placeholder="you@example.com"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Service</label>
-          <select id="service">
-            <option value="">Select a service…</option>
-            <option>Dental Check-up & Cleaning</option>
-            <option>Teeth Whitening</option>
-            <option>Cosmetic Dentistry</option>
-             <option>Foundational Cosmetic Dentistry Training</option>
-            <option>Orthodontics (Braces)</option>
-            <option>Wig Caps</option>
-            <option>Wellness Treatment</option>
-             <option>Manicure & Pedicure</option>
-             <option>Piercing</option>
-            <option>Emergency Dental Care Referral</option>
-            <option>Other / Not Sure</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Preferred Date</label><input type="date" id="date"/></div>
-      </div>
-      <span class="slots-label">Preferred Time</span>
-      <div class="time-slots" id="time-slots"></div>
-      <div class="form-group"><label>Additional Notes</label><textarea id="notes" placeholder="Any symptoms, concerns, or special requests…"></textarea></div>
-      <button class="btn-book" onclick="submitBooking()">Confirm Appointment →</button>
-    </div>
-  </div>
-</section>
   
-<!-- BOOKING 
+<!-- BOOKING-->
 <section id="appointment">
   <div class="wrap book-grid">
     <div class="book-info">
@@ -500,7 +433,7 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
     </div>
   </div>
 </section>
-</main>-->
+</main>
 
 <footer>
   <div class="wrap">
@@ -653,6 +586,9 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
       const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
+
+
+    
       // textContent (not innerHTML) so user input can never inject markup
       document.getElementById('success-msg').textContent =
         `Thank you, ${fname}. We’ve received your request for ${service} on ${fmt} at ${selectedSlot}. We’ll confirm by SMS or WhatsApp on ${phone}.`;
@@ -665,7 +601,7 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
       dateEl.value = today;
       document.querySelectorAll('.time-slot').forEach(s => { s.classList.remove('selected'); s.setAttribute('aria-pressed','false'); });
       selectedSlot = null;
-
+      
     } catch (err) {
       alert('Booking failed. Please try again.\n\nError: ' + err.message);
     } finally {
