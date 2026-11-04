@@ -1,442 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BLOOM Admin — Bookings Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --black:#09070A; --surface:#110D12; --surface-2:#1A141C; --surface-3:#231B25;
-      --bloom:#D4007A; --bloom-lt:#F0339A; --bloom-glow:rgba(212,0,122,0.18);
-      --white:#fff; --muted:rgba(255,255,255,0.45); --muted-2:rgba(255,255,255,0.22);
-      --border:rgba(255,255,255,0.08); --border-pink:rgba(212,0,122,0.28);
-      --green:#22c55e; --yellow:#f59e0b; --red:#ef4444;
-    }
-    html{scroll-behavior:smooth}
-    body{font-family:'Jost',sans-serif;background:var(--black);color:var(--white);min-height:100vh}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>BLOOM Admin | Bookings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1F1A1D; --ink-2:#5B5358; --ink-3:#8d8388;
+  --paper:#F6F3F1; --white:#fff; --blush:#F7ECF0; --line:#E7DEE2;
+  --brand:#B4155F; --brand-dark:#8F0F4A;
+  --green:#157347; --green-bg:#E4F4EB;
+  --amber:#9A6200; --amber-bg:#FDF1D8;
+  --red:#B42318; --red-bg:#FDE8E6;
+  --radius:12px;
+}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Figtree',system-ui,sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid rgba(180,21,95,.45);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-    /* LOGIN */
-    #login-screen{
-      display:flex;align-items:center;justify-content:center;
-      min-height:100vh;padding:2rem;
-    }
-    .login-box{
-      background:var(--surface-2);border:1px solid var(--border-pink);
-      border-radius:2rem;padding:3rem 2.5rem;max-width:400px;width:100%;
-      text-align:center;box-shadow:0 0 60px var(--bloom-glow);
-    }
-    .login-logo{height:50px;margin-bottom:1.5rem;filter:brightness(0) invert(1);opacity:.8}
-    .login-title{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:300;margin-bottom:.3rem}
-    .login-title em{font-style:italic;color:var(--bloom-lt)}
-    .login-sub{font-size:.85rem;color:var(--muted);margin-bottom:2rem}
-    .login-input{
-      width:100%;padding:.9rem 1.1rem;background:var(--surface-3);
-      border:1px solid var(--border);border-radius:.75rem;
-      font-family:'Jost',sans-serif;font-size:.95rem;color:var(--white);
-      outline:none;text-align:center;letter-spacing:.2em;
-      transition:border-color .2s,box-shadow .2s;
-    }
-    .login-input:focus{border-color:var(--bloom-lt);box-shadow:0 0 0 3px rgba(212,0,122,.12)}
-    .login-btn{
-      width:100%;margin-top:1rem;padding:1rem;background:var(--bloom);color:#fff;
-      border:none;border-radius:.75rem;font-family:'Jost',sans-serif;
-      font-size:.95rem;font-weight:600;cursor:pointer;
-      box-shadow:0 0 24px var(--bloom-glow);transition:background .2s,transform .2s;
-    }
-    .login-btn:hover{background:var(--bloom-lt);transform:translateY(-1px)}
-    .login-error{color:var(--red);font-size:.85rem;margin-top:.8rem;display:none}
+/* Login */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:100%;max-width:400px;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:40px 36px;box-shadow:0 24px 48px -32px rgba(31,26,29,.3)}
+.login-card img{height:40px;width:auto;margin-bottom:28px}
+.login-card h1{font:500 1.9rem 'Newsreader',Georgia,serif;letter-spacing:-.01em;line-height:1.1;margin-bottom:6px}
+.login-card p{color:var(--ink-2);font-size:.92rem;margin-bottom:24px}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px}
+.field input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:1rem;color:var(--ink);background:var(--white)}
+.field input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(180,21,95,.12)}
+.login-error{display:none;color:var(--red);font-size:.85rem;margin-top:10px}
+.login-card .btn{width:100%;margin-top:16px;padding:13px}
 
-    /* DASHBOARD */
-    #dashboard{display:none}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid transparent;font-weight:600;font-size:.875rem;transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+.btn svg{width:16px;height:16px;flex:none}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-dark)}
+.btn-ghost{background:var(--white);border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--ink-3)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#912018}
+.btn:disabled{opacity:.6;cursor:wait}
 
-    /* Top bar */
-    .topbar{
-      position:sticky;top:0;z-index:100;
-      background:rgba(9,7,10,.92);backdrop-filter:blur(20px);
-      border-bottom:1px solid var(--border-pink);
-      padding:0 2.5rem;height:68px;
-      display:flex;align-items:center;justify-content:space-between;
-    }
-    .topbar-left{display:flex;align-items:center;gap:1rem}
-    .topbar-logo{height:36px;filter:brightness(0) invert(1);opacity:.8}
-    .topbar-title{font-size:.8rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-    .topbar-right{display:flex;align-items:center;gap:1rem}
-    .logout-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.4rem 1rem;border-radius:2rem;font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s}
-    .logout-btn:hover{border-color:var(--bloom-lt);color:var(--white)}
-    .refresh-btn{background:var(--bloom);border:none;color:#fff;padding:.45rem 1.1rem;border-radius:2rem;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 14px var(--bloom-glow);transition:background .2s}
-    .refresh-btn:hover{background:var(--bloom-lt)}
+/* App shell */
+#dashboard{display:none}
+.topbar{position:sticky;top:0;z-index:40;background:var(--white);border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1320px;margin:0 auto;padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand img{height:32px;width:auto}
+.brand span{font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding-left:14px;border-left:1px solid var(--line);white-space:nowrap}
+.top-actions{display:flex;gap:8px}
+main{max-width:1320px;margin:0 auto;padding:32px 28px 64px}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.page-head h1{font:500 2rem 'Newsreader',Georgia,serif;letter-spacing:-.01em;line-height:1.1}
+.page-head p{color:var(--ink-2);font-size:.92rem;margin-top:4px}
+.head-actions{display:flex;gap:8px;position:relative}
 
-    /* Main content */
-    .main{padding:2.5rem}
+/* Export menu */
+.menu{position:absolute;right:0;top:calc(100% + 6px);min-width:260px;background:var(--white);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px -16px rgba(31,26,29,.35);padding:6px;display:none;z-index:30}
+.menu.open{display:block}
+.menu button{display:block;width:100%;text-align:left;background:none;border:none;border-radius:8px;padding:10px 12px;font-size:.88rem;color:var(--ink)}
+.menu button:hover{background:var(--blush)}
+.menu small{display:block;color:var(--ink-3);font-size:.76rem}
 
-    /* Stats */
-    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2.5rem}
-    .stat-card{background:var(--surface-2);border:1px solid var(--border);border-radius:1.2rem;padding:1.5rem 1.8rem}
-    .stat-card-label{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
-    .stat-card-num{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:300;line-height:1;color:var(--white)}
-    .stat-card-num.bloom{color:var(--bloom-lt)}
-    .stat-card-num.green{color:var(--green)}
-    .stat-card-num.yellow{color:var(--yellow)}
-    .stat-card-num.red{color:var(--red)}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;border-top:3px solid var(--line)}
+.stat.s-total{border-top-color:var(--brand)}
+.stat.s-pending{border-top-color:#E0A100}
+.stat.s-confirmed{border-top-color:var(--green)}
+.stat.s-cancelled{border-top-color:var(--red)}
+.stat-label{font-size:.76rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.stat-num{font:500 2.3rem 'Newsreader',Georgia,serif;line-height:1.1;margin-top:6px}
 
-    /* Filters */
-    .filters{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
-    .filter-btn{background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:.45rem 1.1rem;border-radius:2rem;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .2s}
-    .filter-btn.active,.filter-btn:hover{background:var(--bloom);border-color:var(--bloom);color:#fff}
-    .search-input{
-      background:var(--surface-2);border:1px solid var(--border);
-      border-radius:2rem;padding:.45rem 1.2rem;
-      font-family:'Jost',sans-serif;font-size:.85rem;color:var(--white);
-      outline:none;width:220px;margin-left:auto;
-      transition:border-color .2s;
-    }
-    .search-input:focus{border-color:var(--bloom-lt)}
-    .search-input::placeholder{color:var(--muted-2)}
+/* Panel */
+.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.seg{display:flex;background:var(--paper);border-radius:10px;padding:3px;gap:2px;max-width:100%;overflow-x:auto}
+.seg button{flex:none;white-space:nowrap}
+.seg button{background:none;border:none;padding:7px 14px;border-radius:8px;font-size:.84rem;font-weight:600;color:var(--ink-2)}
+.seg button.active{background:var(--white);color:var(--ink);box-shadow:0 1px 2px rgba(31,26,29,.12)}
+.seg button .n{color:var(--ink-3);font-weight:500;margin-left:4px}
+.search{position:relative;margin-left:auto;flex:1;max-width:320px;min-width:200px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3)}
+.search input{width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:.9rem}
+.search input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(180,21,95,.12)}
+.sort{padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:.86rem;background:var(--white);color:var(--ink)}
 
-    /* Table */
-    .table-wrap{background:var(--surface-2);border:1px solid var(--border);border-radius:1.5rem;overflow:hidden}
-    .table-header{padding:1.2rem 1.8rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .table-title{font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bloom-lt)}
-    .count-badge{background:var(--bloom-dim, rgba(212,0,122,0.08));border:1px solid var(--border-pink);color:var(--bloom-lt);font-size:.75rem;font-weight:600;padding:.25rem .8rem;border-radius:2rem}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);padding:12px 20px;background:#FBF9F8;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:16px 20px;border-bottom:1px solid var(--line);vertical-align:top;font-size:.9rem}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#FDFBFA}
+.who{font-weight:600}
+.sub{color:var(--ink-2);font-size:.82rem;margin-top:2px;word-break:break-word}
+.notes{max-width:260px;color:var(--ink-2);font-size:.86rem;word-break:break-word}
+.none{color:var(--ink-3)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.78rem;font-weight:600}
+.pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.pending{background:var(--amber-bg);color:var(--amber)}
+.pill.confirmed{background:var(--green-bg);color:var(--green)}
+.pill.cancelled{background:var(--red-bg);color:var(--red)}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.act{display:inline-flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--line);color:var(--ink-2);border-radius:8px;padding:6px 10px;font-size:.78rem;font-weight:600;transition:all .15s}
+.act svg{width:14px;height:14px}
+.act:hover{color:var(--ink);border-color:var(--ink-3)}
+.act.ok:hover{color:var(--green);border-color:var(--green);background:var(--green-bg)}
+.act.no:hover{color:var(--amber);border-color:#E0A100;background:var(--amber-bg)}
+.act.del:hover{color:var(--red);border-color:var(--red);background:var(--red-bg)}
 
-    table{width:100%;border-collapse:collapse}
-    thead th{padding:1rem 1.4rem;text-align:left;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
-    tbody tr{border-bottom:1px solid var(--border);transition:background .2s}
-    tbody tr:last-child{border:none}
-    tbody tr:hover{background:rgba(255,255,255,.03)}
-    td{padding:1.1rem 1.4rem;font-size:.88rem;color:var(--white);vertical-align:middle}
-    td.muted{color:var(--muted)}
-    .td-name{font-weight:600}
-    .td-service{font-size:.82rem;color:var(--muted)}
-    .td-datetime{font-size:.82rem}
-    .td-date{color:var(--white);font-weight:500}
-    .td-time{color:var(--muted);font-size:.78rem;margin-top:.15rem}
+.state{padding:64px 24px;text-align:center;color:var(--ink-2)}
+.state h2{font:500 1.4rem 'Newsreader',serif;color:var(--ink);margin-bottom:6px}
+.spinner{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-    .status-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .85rem;border-radius:2rem;font-size:.75rem;font-weight:600}
-    .status-pill.pending{background:rgba(245,158,11,.12);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
-    .status-pill.confirmed{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
-    .status-pill.cancelled{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid var(--line);font-size:.85rem;color:var(--ink-2);flex-wrap:wrap}
+.pager div{display:flex;gap:8px}
 
-    .action-btns{display:flex;gap:.5rem;align-items:center}
-    .action-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.32rem .75rem;border-radius:.5rem;font-size:.74rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
-    .action-btn.confirm:hover{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
-    .action-btn.cancel:hover{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
-    .action-btn.pending-btn:hover{background:rgba(245,158,11,.15);border-color:var(--yellow);color:var(--yellow)}
+/* Modal + toast */
+.overlay{position:fixed;inset:0;background:rgba(31,26,29,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
+.overlay.show{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:28px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(31,26,29,.5)}
+.modal h3{font:500 1.5rem 'Newsreader',serif;margin-bottom:8px}
+.modal p{color:var(--ink-2);font-size:.92rem}
+.modal .detail{margin:14px 0 0;padding:12px 14px;background:var(--paper);border-radius:10px;font-size:.88rem}
+.modal .row{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-size:.88rem;font-weight:500;opacity:0;pointer-events:none;transition:all .25s;z-index:200;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.error{background:var(--red)}
 
-    /* Empty state */
-    .empty{padding:4rem;text-align:center;color:var(--muted)}
-    .empty-icon{font-size:3rem;margin-bottom:1rem}
-    .empty-text{font-family:'Fraunces',serif;font-style:italic;font-size:1.3rem;color:var(--muted)}
-
-    /* Loading */
-    .loading{padding:3rem;text-align:center;color:var(--muted)}
-    .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--bloom-lt);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* Toast */
-    .toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface-2);border:1px solid var(--border-pink);border-radius:1rem;padding:1rem 1.5rem;font-size:.88rem;box-shadow:0 0 40px var(--bloom-glow);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999}
-    .toast.show{transform:translateY(0);opacity:1}
-    .toast.success{border-color:rgba(34,197,94,.4);color:var(--green)}
-    .toast.error{border-color:rgba(239,68,68,.4);color:var(--red)}
-
-    /* Config banner */
-    .config-banner{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:1rem;padding:1rem 1.5rem;margin-bottom:2rem;font-size:.88rem;color:var(--yellow);display:none;align-items:center;gap:.8rem}
-    .config-banner.show{display:flex}
-
-    @media(max-width:900px){
-      .stats-row{grid-template-columns:repeat(2,1fr)}
-      table thead th:nth-child(4),table td:nth-child(4){display:none}
-    }
-    @media(max-width:600px){
-      .main{padding:1.2rem}
-      .stats-row{grid-template-columns:1fr 1fr}
-      table thead th:nth-child(3),table td:nth-child(3),
-      table thead th:nth-child(5),table td:nth-child(5){display:none}
-      .topbar{padding:0 1.2rem}
-    }
-  </style>
+@media(max-width:980px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  th.h-notes,td.c-notes{display:none}
+}
+@media(max-width:720px){
+  .topbar .in,main{padding-left:16px;padding-right:16px}
+  .brand span{display:none}
+  .top-actions .btn span{display:none}
+  .search{max-width:none;margin-left:0;flex-basis:100%}
+  .seg button{padding:7px 10px;font-size:.8rem}
+  table,thead,tbody,tr,td{display:block}
+  thead{display:none}
+  tbody tr{padding:14px 16px;border-bottom:1px solid var(--line)}
+  tbody tr:last-child{border-bottom:none}
+  td{border:none!important;padding:4px 0;background:none!important}
+  td.c-notes{display:block}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
+  td.c-who::before,td.c-act::before{display:none}
+  td.c-act{margin-top:10px}
+  .notes{max-width:none}
+}
+@media print{
+  .topbar,.head-actions,.toolbar,.pager,.acts,.toast,.overlay,th.h-act,td.c-act{display:none!important}
+  body{background:#fff}
+  main{padding:0}
+  .panel,.stat{border-color:#ccc}
+  td{padding:8px 10px}
+  .print-title{display:block!important}
+}
+.print-title{display:none;font:500 1.2rem 'Newsreader',serif;margin-bottom:12px}
+</style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-box">
-    <img src="BLOOM PINK.png" alt="BLOOM" class="login-logo"/>
-    <div class="login-title">Admin <em>Dashboard</em></div>
-    <p class="login-sub">Enter your admin password to continue</p>
-    <input type="password" class="login-input" id="password-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()"/>
-    <button class="login-btn" onclick="doLogin()">Sign In →</button>
-    <p class="login-error" id="login-error">Incorrect password. Try again.</p>
-  </div>
+  <form class="login-card" onsubmit="doLogin();return false">
+    <img src="BLOOM%20PINK.png" alt="BLOOM & Wellness Studio"/>
+    <h1>Admin sign in</h1>
+    <p>Enter your admin password to manage bookings.</p>
+    <div class="field">
+      <label for="password-input">Password</label>
+      <input type="password" id="password-input" autocomplete="current-password" autofocus/>
+    </div>
+    <p class="login-error" id="login-error" role="alert">Incorrect password. Please try again.</p>
+    <button class="btn btn-primary" type="submit">Sign in</button>
+  </form>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard">
-  <div class="topbar">
-    <div class="topbar-left">
-      <img src="BLOOM PINK.png" alt="BLOOM" class="topbar-logo"/>
-      <span class="topbar-title">Bookings Dashboard</span>
-    </div>
-    <div class="topbar-right">
-      <button class="refresh-btn" onclick="loadBookings()">↻ Refresh</button>
-      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
-    </div>
-  </div>
-
-  <div class="main">
-
-    <!-- Config warning -->
-    <div class="config-banner" id="config-banner">
-      ⚠️ <span>You're viewing demo data. Paste your Google Apps Script URL into this file's <code>SCRIPT_URL</code> variable to connect live data.</span>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-card-label">Total Bookings</div><div class="stat-card-num bloom" id="stat-total">—</div></div>
-      <div class="stat-card"><div class="stat-card-label">Pending</div><div class="stat-card-num yellow" id="stat-pending">—</div></div>
-      <div class="stat-card"><div class="stat-card-label">Confirmed</div><div class="stat-card-num green" id="stat-confirmed">—</div></div>
-      <div class="stat-card"><div class="stat-card-label">Cancelled</div><div class="stat-card-num red" id="stat-cancelled">—</div></div>
-    </div>
-
-    <!-- Filters -->
-    <div class="filters">
-      <button class="filter-btn active" onclick="setFilter('All',this)">All</button>
-      <button class="filter-btn" onclick="setFilter('Pending',this)">Pending</button>
-      <button class="filter-btn" onclick="setFilter('Confirmed',this)">Confirmed</button>
-      <button class="filter-btn" onclick="setFilter('Cancelled',this)">Cancelled</button>
-      <input type="text" class="search-input" id="search-input" placeholder="Search name or service…" oninput="renderTable()"/>
-    </div>
-
-    <!-- Table -->
-    <div class="table-wrap">
-      <div class="table-header">
-        <span class="table-title">Appointments</span>
-        <span class="count-badge" id="showing-count">0 bookings</span>
+  <header class="topbar">
+    <div class="in">
+      <div class="brand"><img src="BLOOM%20PINK.png" alt="BLOOM"/><span>Admin</span></div>
+      <div class="top-actions">
+        <button class="btn btn-ghost" onclick="loadBookings()" aria-label="Refresh">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 10a6.5 6.5 0 1 1-2-4.7M16.5 3.5v3.3h-3.3"/></svg><span>Refresh</span>
+        </button>
+        <button class="btn btn-ghost" onclick="doLogout()" aria-label="Sign out">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5H5a1.5 1.5 0 0 0-1.5 1.5v10A1.5 1.5 0 0 0 5 16.5h3M12.5 6.5 16 10l-3.5 3.5M16 10H8"/></svg><span>Sign out</span>
+        </button>
       </div>
-      <div id="table-body">
-        <div class="loading"><div class="spinner"></div>Loading bookings…</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <div>
+        <h1>Bookings</h1>
+        <p>Review, confirm and manage appointment requests.</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn btn-primary" id="export-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleMenu(event)">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5M4 14.5v1A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5v-1"/></svg>
+          Export
+        </button>
+        <div class="menu" id="export-menu" role="menu">
+          <button role="menuitem" onclick="exportCSV('view')">Download CSV<small id="m-view">Current view</small></button>
+          <button role="menuitem" onclick="exportCSV('all')">Download CSV, all records<small id="m-all">Everything in the database</small></button>
+          <button role="menuitem" onclick="exportJSON()">Download JSON<small>All records, for backup</small></button>
+          <button role="menuitem" onclick="printView()">Print / save as PDF<small>Current view</small></button>
+        </div>
       </div>
     </div>
 
+    <div class="stats">
+      <div class="stat s-total"><div class="stat-label">Total</div><div class="stat-num" id="stat-total">–</div></div>
+      <div class="stat s-pending"><div class="stat-label">Pending</div><div class="stat-num" id="stat-pending">–</div></div>
+      <div class="stat s-confirmed"><div class="stat-label">Confirmed</div><div class="stat-num" id="stat-confirmed">–</div></div>
+      <div class="stat s-cancelled"><div class="stat-label">Cancelled</div><div class="stat-num" id="stat-cancelled">–</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="toolbar">
+        <div class="seg" id="filters" role="tablist" aria-label="Filter by status">
+          <button class="active" data-f="All" onclick="setFilter('All')">All<span class="n" id="n-All"></span></button>
+          <button data-f="Pending" onclick="setFilter('Pending')">Pending<span class="n" id="n-Pending"></span></button>
+          <button data-f="Confirmed" onclick="setFilter('Confirmed')">Confirmed<span class="n" id="n-Confirmed"></span></button>
+          <button data-f="Cancelled" onclick="setFilter('Cancelled')">Cancelled<span class="n" id="n-Cancelled"></span></button>
+        </div>
+        <select class="sort" id="sort" onchange="page=1;renderTable()" aria-label="Sort bookings">
+          <option value="created">Newest requests</option>
+          <option value="date-asc">Appointment date: soonest</option>
+          <option value="date-desc">Appointment date: latest</option>
+          <option value="name">Name A–Z</option>
+        </select>
+        <label class="search">
+          <span class="sr">Search bookings</span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="m13.5 13.5 3 3"/></svg>
+          <input type="search" id="search-input" placeholder="Search name, phone or service" oninput="page=1;renderTable()"/>
+        </label>
+      </div>
+      <div class="print-title">BLOOM bookings</div>
+      <div id="table-body"><div class="state"><div class="spinner"></div>Loading bookings…</div></div>
+      <div class="pager" id="pager" style="display:none"></div>
+    </div>
+  </main>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="overlay" id="del-overlay" role="dialog" aria-modal="true" aria-labelledby="del-title">
+  <div class="modal">
+    <h3 id="del-title">Delete this booking?</h3>
+    <p>This permanently removes the booking from the database. It cannot be undone.</p>
+    <div class="detail" id="del-detail"></div>
+    <div class="row">
+      <button class="btn btn-ghost" onclick="closeDelete()">Keep it</button>
+      <button class="btn btn-danger" id="del-confirm">Delete booking</button>
+    </div>
   </div>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
- 
-  // ── SUPABASE CONFIG ────────────────────────────────────────────
-  // Paste your values from: Supabase → Project Settings → API
-  const SUPABASE_URL   = "https://lcuzljzltifrpeoszjiu.supabase.co";       // e.g. https://xxxx.supabase.co
-  const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE";  // the long eyJ... string
+  // ── SUPABASE CONFIG (unchanged) ────────────────────────────────
+  const SUPABASE_URL   = "https://lcuzljzltifrpeoszjiu.supabase.co";
+  const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE";
   const ADMIN_PASSWORD = "blm@2025";
   // ──────────────────────────────────────────────────────────────
 
+  const PAGE_SIZE = 25;
   let allBookings   = [];
   let currentFilter = "All";
+  let page          = 1;
+  let pageSize      = PAGE_SIZE;
+  let pendingDelete = null;
 
-  // ── AUTH ──────────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const sameId = (a, b) => String(a) === String(b);
+
+  const authHeaders = (extra = {}) => ({
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    ...extra
+  });
+
+  // ── AUTH (same logic as before) ───────────────────────────────
+  function showDashboard() {
+    $("login-screen").style.display = "none";
+    $("dashboard").style.display = "block";
+    loadBookings();
+  }
   function doLogin() {
-    const pwd = document.getElementById("password-input").value;
+    const pwd = $("password-input").value;
     if (pwd === ADMIN_PASSWORD) {
       sessionStorage.setItem("bloom_auth", pwd);
-      document.getElementById("login-screen").style.display = "none";
-      document.getElementById("dashboard").style.display    = "block";
-      loadBookings();
+      showDashboard();
     } else {
-      document.getElementById("login-error").style.display = "block";
-      document.getElementById("password-input").value = "";
+      $("login-error").style.display = "block";
+      $("password-input").value = "";
+      $("password-input").focus();
     }
   }
-
   function doLogout() {
     sessionStorage.removeItem("bloom_auth");
-    document.getElementById("dashboard").style.display    = "none";
-    document.getElementById("login-screen").style.display = "flex";
+    $("dashboard").style.display = "none";
+    $("login-screen").style.display = "flex";
+    $("password-input").value = "";
+    $("login-error").style.display = "none";
+    allBookings = [];
   }
-
-  // Auto-login if session still active
   window.onload = () => {
-    if (sessionStorage.getItem("bloom_auth") === ADMIN_PASSWORD) {
-      document.getElementById("login-screen").style.display = "none";
-      document.getElementById("dashboard").style.display    = "block";
-      loadBookings();
-    }
+    if (sessionStorage.getItem("bloom_auth") === ADMIN_PASSWORD) showDashboard();
   };
 
-  // ── LOAD BOOKINGS FROM SUPABASE ───────────────────────────────
+  // ── LOAD BOOKINGS (same request as before) ────────────────────
   async function loadBookings() {
-    document.getElementById("table-body").innerHTML =
-      '<div class="loading"><div class="spinner"></div>Loading bookings…</div>';
-
+    $("table-body").innerHTML = '<div class="state"><div class="spinner"></div>Loading bookings…</div>';
+    $("pager").style.display = "none";
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/bookings?order=created_at.desc`,
-        {
-          headers: {
-            'apikey':        SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-          }
-        }
-      );
-
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?order=created_at.desc`, { headers: authHeaders() });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || `Error ${res.status}`);
       }
-
       allBookings = await res.json();
       updateStats();
       renderTable();
-
     } catch (err) {
-      showError("Could not load bookings: " + err.message);
+      $("table-body").innerHTML = `<div class="state"><h2>Could not load bookings</h2>${esc(err.message)}</div>`;
     }
   }
 
   // ── STATS ─────────────────────────────────────────────────────
+  const statusOf = b => b.status || "Pending";
   function updateStats() {
-    document.getElementById("stat-total").textContent     = allBookings.length;
-    document.getElementById("stat-pending").textContent   = allBookings.filter(b => b.status === "Pending").length;
-    document.getElementById("stat-confirmed").textContent = allBookings.filter(b => b.status === "Confirmed").length;
-    document.getElementById("stat-cancelled").textContent = allBookings.filter(b => b.status === "Cancelled").length;
+    const c = s => allBookings.filter(b => statusOf(b) === s).length;
+    $("stat-total").textContent     = allBookings.length;
+    $("stat-pending").textContent   = c("Pending");
+    $("stat-confirmed").textContent = c("Confirmed");
+    $("stat-cancelled").textContent = c("Cancelled");
+    $("n-All").textContent       = allBookings.length;
+    $("n-Pending").textContent   = c("Pending");
+    $("n-Confirmed").textContent = c("Confirmed");
+    $("n-Cancelled").textContent = c("Cancelled");
+    $("m-all").textContent = `${allBookings.length} record${allBookings.length !== 1 ? "s" : ""}`;
   }
 
-  // ── FILTER & RENDER ───────────────────────────────────────────
-  function setFilter(filter, btn) {
-    currentFilter = filter;
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+  // ── FILTER, SORT, RENDER ──────────────────────────────────────
+  function setFilter(f) {
+    currentFilter = f; page = 1;
+    document.querySelectorAll("#filters button").forEach(b => b.classList.toggle("active", b.dataset.f === f));
     renderTable();
   }
 
-  function renderTable() {
-    const search   = (document.getElementById("search-input").value || "").toLowerCase();
-    const filtered = allBookings.filter(b => {
-      const matchFilter = currentFilter === "All" || b.status === currentFilter;
-      const matchSearch = !search ||
-        (b.full_name || "").toLowerCase().includes(search) ||
-        (b.service   || "").toLowerCase().includes(search) ||
-        (b.phone     || "").toLowerCase().includes(search);
-      return matchFilter && matchSearch;
+  function getFiltered() {
+    const q = ($("search-input").value || "").trim().toLowerCase();
+    const list = allBookings.filter(b => {
+      const okFilter = currentFilter === "All" || statusOf(b) === currentFilter;
+      const okSearch = !q ||
+        (b.full_name || "").toLowerCase().includes(q) ||
+        (b.service   || "").toLowerCase().includes(q) ||
+        (b.phone     || "").toLowerCase().includes(q);
+      return okFilter && okSearch;
     });
+    const s = $("sort").value;
+    const key = b => (b.date || "") + " " + (b.time || "");
+    if (s === "date-asc")  list.sort((a, b) => key(a).localeCompare(key(b)));
+    if (s === "date-desc") list.sort((a, b) => key(b).localeCompare(key(a)));
+    if (s === "name")      list.sort((a, b) => (a.full_name || "").localeCompare(b.full_name || ""));
+    return list;
+  }
 
-    document.getElementById("showing-count").textContent =
-      filtered.length + " booking" + (filtered.length !== 1 ? "s" : "");
+  function formatDate(d) {
+    if (!d) return "–";
+    try { return new Date(d + "T12:00:00").toLocaleDateString("en-GH", { weekday: "short", day: "numeric", month: "short", year: "numeric" }); }
+    catch { return d; }
+  }
+  function formatStamp(t) {
+    if (!t) return "";
+    const d = new Date(t);
+    return isNaN(d) ? "" : d.toLocaleString("en-GH", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  }
 
-    if (filtered.length === 0) {
-      document.getElementById("table-body").innerHTML =
-        '<div class="empty"><div class="empty-icon"></div><div class="empty-text">No bookings found</div></div>';
+  const ICON = {
+    ok:  '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 10.5 3.5 3.5 7.5-8"/></svg>',
+    no:  '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m5 5 10 10M15 5 5 15"/></svg>',
+    back:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a6 6 0 1 1 1.8 4.3M4 4.5V9h4.5"/></svg>',
+    del: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4h4v2M6 6l.7 10h6.6L14 6"/></svg>'
+  };
+
+  function renderTable() {
+    const list = getFiltered();
+    $("m-view").textContent = `${list.length} record${list.length !== 1 ? "s" : ""} shown`;
+    const pages = Math.max(1, Math.ceil(list.length / pageSize));
+    if (page > pages) page = pages;
+
+    if (!list.length) {
+      $("table-body").innerHTML = '<div class="state"><h2>No bookings found</h2>Try a different filter or search.</div>';
+      $("pager").style.display = "none";
       return;
     }
 
-    const rows = filtered.map(b => {
-      const status      = b.status || "Pending";
-      const statusClass = status.toLowerCase();
-      const statusDot   = status === "Confirmed" ? "✓" : status === "Cancelled" ? "✕" : "●";
-      const notes       = b.notes || "";
+    const slice = list.slice((page - 1) * pageSize, page * pageSize);
+    const rows = slice.map(b => {
+      const st = statusOf(b);
+      const id = esc(b.id);
       return `
-        <tr>
-          <td>
-            <div class="td-name">${b.full_name || "—"}</div>
-            <div class="td-service">${b.phone || "—"}</div>
-          </td>
-          <td>${b.service || "—"}</td>
-          <td>
-            <div class="td-date">${formatDate(b.date)}</div>
-            <div class="td-time">${b.time || "—"}</div>
-          </td>
-          <td class="muted">${notes ? notes : "<em style='opacity:.4'>No notes</em>"}</td>
-          <td><span class="status-pill ${statusClass}">${statusDot} ${status}</span></td>
-          <td>
-            <div class="action-btns">
-              ${status !== "Confirmed"  ? `<button class="action-btn confirm"     onclick="updateStatus('${b.id}','Confirmed')">✓ Confirm</button>` : ""}
-              ${status !== "Cancelled"  ? `<button class="action-btn cancel"      onclick="updateStatus('${b.id}','Cancelled')">✕ Cancel</button>`  : ""}
-              ${status !== "Pending"    ? `<button class="action-btn pending-btn" onclick="updateStatus('${b.id}','Pending')">↺ Pending</button>`   : ""}
-            </div>
-          </td>
-        </tr>`;
+      <tr>
+        <td class="c-who">
+          <div class="who">${esc(b.full_name) || "–"}</div>
+          <div class="sub">${esc(b.phone) || "–"}${b.email ? "<br>" + esc(b.email) : ""}</div>
+        </td>
+        <td data-l="Service">${esc(b.service) || "–"}</td>
+        <td data-l="Appointment">
+          <div class="who">${esc(formatDate(b.date))}</div>
+          <div class="sub">${esc(b.time) || "–"}</div>
+        </td>
+        <td class="c-notes" data-l="Notes"><div class="notes">${b.notes ? esc(b.notes) : '<span class="none">No notes</span>'}</div></td>
+        <td data-l="Status">
+          <span class="pill ${esc(st.toLowerCase())}">${esc(st)}</span>
+          ${b.created_at ? `<div class="sub">Requested ${esc(formatStamp(b.created_at))}</div>` : ""}
+        </td>
+        <td class="c-act">
+          <div class="acts">
+            ${st !== "Confirmed" ? `<button class="act ok" data-id="${id}" data-s="Confirmed">${ICON.ok}Confirm</button>` : ""}
+            ${st !== "Cancelled" ? `<button class="act no" data-id="${id}" data-s="Cancelled">${ICON.no}Cancel</button>` : ""}
+            ${st !== "Pending"   ? `<button class="act"    data-id="${id}" data-s="Pending">${ICON.back}Pending</button>` : ""}
+            <button class="act del" data-id="${id}" data-del="1">${ICON.del}Delete</button>
+          </div>
+        </td>
+      </tr>`;
     }).join("");
 
-    document.getElementById("table-body").innerHTML = `
+    $("table-body").innerHTML = `
       <table>
-        <thead>
-          <tr>
-            <th>Patient</th>
-            <th>Service</th>
-            <th>Date & Time</th>
-            <th>Notes</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th>Patient</th><th>Service</th><th>Appointment</th><th class="h-notes">Notes</th><th>Status</th><th class="h-act">Actions</th>
+        </tr></thead>
         <tbody>${rows}</tbody>
       </table>`;
-  }
 
-  // ── UPDATE STATUS IN SUPABASE ─────────────────────────────────
+    const from = (page - 1) * pageSize + 1, to = Math.min(page * pageSize, list.length);
+    $("pager").style.display = "flex";
+    $("pager").innerHTML = `
+      <span>Showing ${from}–${to} of ${list.length}</span>
+      <div>
+        <button class="btn btn-ghost" onclick="goPage(-1)" ${page <= 1 ? "disabled" : ""}>Previous</button>
+        <button class="btn btn-ghost" onclick="goPage(1)" ${page >= pages ? "disabled" : ""}>Next</button>
+      </div>`;
+  }
+  function goPage(d) { page += d; renderTable(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+
+  // Row actions (event delegation; ids never inlined into JS)
+  $("table-body").addEventListener("click", e => {
+    const btn = e.target.closest("button.act");
+    if (!btn) return;
+    if (btn.dataset.del) openDelete(btn.dataset.id);
+    else updateStatus(btn.dataset.id, btn.dataset.s);
+  });
+
+  // ── UPDATE STATUS (same PATCH as before) ──────────────────────
   async function updateStatus(id, status) {
-    // Optimistic UI update first
-    const booking = allBookings.find(b => b.id === id);
-    const prevStatus = booking ? booking.status : null;
-    if (booking) booking.status = status;
-    updateStats();
-    renderTable();
+    const booking = allBookings.find(b => sameId(b.id, id));
+    const prev = booking ? booking.status : null;
+    if (booking) booking.status = status;           // optimistic
+    updateStats(); renderTable();
 
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/bookings?id=eq.${id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type':  'application/json',
-            'apikey':        SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Prefer':        'return=minimal'
-          },
-          body: JSON.stringify({ status })
-        }
-      );
-
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(id)}`, {
+        method: "PATCH",
+        headers: authHeaders({ "Content-Type": "application/json", "Prefer": "return=representation" }),
+        body: JSON.stringify({ status })
+      });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || `Error ${res.status}`);
       }
-
-      showToast(`Booking marked as ${status} ✓`, "success");
-
+      const rows = await res.json().catch(() => []);
+      if (!rows.length) throw new Error("Nothing was updated. Check your Supabase update policy for the bookings table.");
+      toast(`Marked as ${status}`);
     } catch (err) {
-      // Revert optimistic update on failure
-      if (booking && prevStatus) booking.status = prevStatus;
-      updateStats();
-      renderTable();
-      showToast("Update failed: " + err.message, "error");
+      if (booking && prev) booking.status = prev;   // revert
+      updateStats(); renderTable();
+      toast("Update failed: " + err.message, true);
     }
   }
 
-  // ── HELPERS ───────────────────────────────────────────────────
-  function formatDate(dateStr) {
-    if (!dateStr) return "—";
+  // ── DELETE ────────────────────────────────────────────────────
+  function openDelete(id) {
+    const b = allBookings.find(x => sameId(x.id, id));
+    if (!b) return;
+    pendingDelete = id;
+    $("del-detail").innerHTML =
+      `<strong>${esc(b.full_name) || "Unnamed"}</strong><br>${esc(b.service) || ""} · ${esc(formatDate(b.date))} ${esc(b.time) || ""}`;
+    $("del-overlay").classList.add("show");
+    $("del-confirm").focus();
+  }
+  function closeDelete() { pendingDelete = null; $("del-overlay").classList.remove("show"); }
+
+  $("del-confirm").addEventListener("click", async () => {
+    if (pendingDelete == null) return;
+    const id = pendingDelete;
+    const btn = $("del-confirm");
+    btn.disabled = true; btn.textContent = "Deleting…";
     try {
-      return new Date(dateStr + "T12:00:00").toLocaleDateString("en-GH", {
-        weekday: "short", month: "short", day: "numeric"
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(id)}`, {
+        method: "DELETE",
+        headers: authHeaders({ "Prefer": "return=representation" })
       });
-    } catch { return dateStr; }
-  }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Error ${res.status}`);
+      }
+      const rows = await res.json().catch(() => []);
+      if (!rows.length) throw new Error("Nothing was deleted. Add a DELETE policy for the bookings table in Supabase.");
+      allBookings = allBookings.filter(b => !sameId(b.id, id));
+      updateStats(); renderTable();
+      toast("Booking deleted");
+    } catch (err) {
+      toast("Delete failed: " + err.message, true);
+    } finally {
+      btn.disabled = false; btn.textContent = "Delete booking";
+      closeDelete();
+    }
+  });
+  $("del-overlay").addEventListener("click", e => { if (e.target === $("del-overlay")) closeDelete(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeDelete(); closeMenu(); } });
 
-  function showToast(msg, type = "success") {
-    const t = document.getElementById("toast");
+  // ── EXPORT ────────────────────────────────────────────────────
+  function toggleMenu(e) {
+    e.stopPropagation();
+    const m = $("export-menu"), open = !m.classList.contains("open");
+    m.classList.toggle("open", open);
+    $("export-btn").setAttribute("aria-expanded", open);
+  }
+  function closeMenu() { $("export-menu").classList.remove("open"); $("export-btn").setAttribute("aria-expanded", "false"); }
+  document.addEventListener("click", closeMenu);
+
+  // Prevents spreadsheet formula injection, but leaves normal phone numbers (+233 …) untouched
+  function csvCell(v) {
+    let s = String(v ?? "");
+    if (/^[=@\t\r]/.test(s) || (/^[+\-]/.test(s) && !/^[+\-]?[\d\s()\-]+$/.test(s))) s = "'" + s;
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function download(name, text, type) {
+    const blob = new Blob([text], { type });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+  const stamp = () => new Date().toISOString().slice(0, 10);
+
+  function exportCSV(scope) {
+    const list = scope === "all" ? allBookings : getFiltered();
+    if (!list.length) { toast("There are no records to export", true); return; }
+    const head = ["Name", "Phone", "Email", "Service", "Date", "Time", "Notes", "Status", "Requested at", "ID"];
+    const lines = [head.join(",")].concat(list.map(b => [
+      b.full_name, b.phone, b.email, b.service, b.date, b.time, b.notes, statusOf(b), b.created_at, b.id
+    ].map(csvCell).join(",")));
+    download(`bloom-bookings-${scope === "all" ? "all" : "view"}-${stamp()}.csv`, "﻿" + lines.join("\r\n"), "text/csv;charset=utf-8");
+    toast(`Exported ${list.length} record${list.length !== 1 ? "s" : ""}`);
+  }
+  function exportJSON() {
+    if (!allBookings.length) { toast("There are no records to export", true); return; }
+    download(`bloom-bookings-${stamp()}.json`, JSON.stringify(allBookings, null, 2), "application/json");
+    toast(`Exported ${allBookings.length} records`);
+  }
+  function printView() {
+    // Print every record in the current view, not just the visible page
+    pageSize = Infinity; page = 1; renderTable();
+    window.print();
+  }
+  window.addEventListener("afterprint", () => {
+    if (pageSize !== PAGE_SIZE) { pageSize = PAGE_SIZE; renderTable(); }
+  });
+
+  // ── TOAST ─────────────────────────────────────────────────────
+  let tt;
+  function toast(msg, isError = false) {
+    const t = $("toast");
     t.textContent = msg;
-    t.className   = `toast ${type} show`;
-    setTimeout(() => t.classList.remove("show"), 3500);
-  }
-
-  function showError(msg) {
-    document.getElementById("table-body").innerHTML =
-      `<div class="empty"><div class="empty-icon"></div><div class="empty-text">${msg}</div></div>`;
+    t.className = "toast show" + (isError ? " error" : "");
+    clearTimeout(tt);
+    tt = setTimeout(() => t.classList.remove("show"), 3800);
   }
 </script>
 </body>
