@@ -364,12 +364,15 @@ tbody tr:hover td{background:#FDFBFA}
 
   function getFiltered() {
     const q = ($("search-input").value || "").trim().toLowerCase();
+    // Phone numbers are stored as +233…; let staff search with 024… or 233… too
+    const qd = q.replace(/\D/g, "").replace(/^(233|0)/, "");
     const list = allBookings.filter(b => {
       const okFilter = currentFilter === "All" || statusOf(b) === currentFilter;
       const okSearch = !q ||
         (b.full_name || "").toLowerCase().includes(q) ||
         (b.service   || "").toLowerCase().includes(q) ||
-        (b.phone     || "").toLowerCase().includes(q);
+        (b.phone     || "").toLowerCase().includes(q) ||
+        (qd.length >= 3 && (b.phone || "").replace(/\D/g, "").includes(qd));
       return okFilter && okSearch;
     });
     const s = $("sort").value;

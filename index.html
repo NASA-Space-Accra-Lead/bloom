@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -147,6 +146,16 @@ details p{margin-top:.8rem;color:var(--ink-2);max-width:42rem;font-size:.97rem}
 .consent{display:flex;gap:.7rem;align-items:flex-start;font-size:.85rem;color:var(--ink-2);margin:0 0 1.2rem;cursor:pointer}
 .consent input{flex:none;width:18px;height:18px;margin-top:3px;accent-color:var(--brand)}
 .consent a{color:var(--brand)}
+.err{display:none;color:#B42318;font-size:.8rem;font-weight:500;margin-top:.35rem;line-height:1.35}
+.err.show{display:block}
+.fg input.invalid,.fg select.invalid,.fg textarea.invalid{border-color:#B42318;background:#FFF8F7}
+.fg input.invalid:focus,.fg select.invalid:focus,.fg textarea.invalid:focus{box-shadow:0 0 0 3px rgba(180,35,24,.14)}
+.fg input.valid{border-color:#2f8f5b}
+.count{text-align:right;font-size:.75rem;color:var(--ink-2);margin-top:.25rem}
+.count.warn{color:#B42318}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-error{display:none;background:#FDE8E6;border:1px solid #F4B4AE;color:#B42318;border-radius:10px;padding:.8rem 1rem;font-size:.88rem;font-weight:500;margin-bottom:1rem}
+.form-error.show{display:block}
 .btn-book{width:100%;padding:1.05rem;font-size:1rem}
 .btn-book:disabled{opacity:.7;cursor:wait}
 .form-note{font-size:.8rem;color:var(--ink-2);margin-top:.9rem;text-align:center}
@@ -396,17 +405,17 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
       <h3>Appointment Request</h3>
       <p>Fields marked * are required.</p>
       <div class="fr">
-        <div class="fg"><label for="fname">First Name *</label><input type="text" id="fname" placeholder="Ama" autocomplete="given-name"/></div>
-        <div class="fg"><label for="lname">Last Name *</label><input type="text" id="lname" placeholder="Asante" autocomplete="family-name"/></div>
+        <div class="fg"><label for="fname">First Name *</label><input type="text" id="fname" placeholder="Ama" autocomplete="given-name" maxlength="50" aria-describedby="err-fname"/><p class="err" id="err-fname" role="alert"></p></div>
+        <div class="fg"><label for="lname">Last Name *</label><input type="text" id="lname" placeholder="Asante" autocomplete="family-name" maxlength="50" aria-describedby="err-lname"/><p class="err" id="err-lname" role="alert"></p></div>
       </div>
       <div class="fr">
-        <div class="fg"><label for="phone">Phone / WhatsApp *</label><input type="tel" id="phone" placeholder="+233 25 754 6530" autocomplete="tel"/></div>
-        <div class="fg"><label for="email">Email (optional)</label><input type="email" id="email" placeholder="you@example.com" autocomplete="email"/></div>
+        <div class="fg"><label for="phone">Phone / WhatsApp *</label><input type="tel" id="phone" inputmode="tel" placeholder="024 123 4567" autocomplete="tel" maxlength="20" aria-describedby="err-phone"/><p class="err" id="err-phone" role="alert"></p></div>
+        <div class="fg"><label for="email">Email (optional)</label><input type="email" id="email" inputmode="email" placeholder="you@example.com" autocomplete="email" maxlength="100" aria-describedby="err-email"/><p class="err" id="err-email" role="alert"></p></div>
       </div>
       <div class="fr">
         <div class="fg">
           <label for="service">Service *</label>
-          <select id="service">
+          <select id="service" aria-describedby="err-service">
             <option value="">Select a Service…</option>
             <option>Dental Check-up &amp; Cleaning</option>
             <option>Teeth Whitening</option>
@@ -421,13 +430,18 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
             <option>Emergency Dental Care Referral</option>
             <option>Other / Not Sure</option>
           </select>
+          <p class="err" id="err-service" role="alert"></p>
         </div>
-        <div class="fg"><label for="date">Preferred Date *</label><input type="date" id="date"/></div>
+        <div class="fg"><label for="date">Preferred Date *</label><input type="date" id="date" aria-describedby="err-date"/><p class="err" id="err-date" role="alert"></p></div>
       </div>
       <span class="slots-label" id="slots-label">Preferred Time *</span>
       <div class="time-slots" id="time-slots" role="group" aria-labelledby="slots-label"></div>
-      <div class="fg"><label for="notes">Additional Notes</label><textarea id="notes" placeholder="Symptoms, concerns or special requests…"></textarea></div>
-      <label class="consent"><input type="checkbox" id="consent"/><span>I have read the <a href="privacyy.html" target="_blank" rel="noopener">Privacy Policy</a> and consent to BLOOM processing the information I provide, including any health details in my notes, to arrange my appointment. *</span></label>
+      <p class="err" id="err-time" role="alert" style="margin-top:-.8rem;margin-bottom:1rem"></p>
+      <div class="fg"><label for="notes">Additional Notes</label><textarea id="notes" maxlength="500" placeholder="Symptoms, concerns or special requests…" aria-describedby="err-notes count-notes"></textarea><div class="count" id="count-notes">0 / 500</div><p class="err" id="err-notes" role="alert"></p></div>
+      <div class="hp" aria-hidden="true"><label for="website">Leave this field empty</label><input type="text" id="website" name="hp_field" tabindex="-1" autocomplete="off"/></div>
+      <label class="consent"><input type="checkbox" id="consent" aria-describedby="err-consent"/><span>I have read the <a href="privacyy.html" target="_blank" rel="noopener">Privacy Policy</a> and consent to BLOOM processing the information I provide, including any health details in my notes, to arrange my appointment. *</span></label>
+      <p class="err" id="err-consent" role="alert" style="margin-top:-.8rem;margin-bottom:1rem"></p>
+      <p class="form-error" id="form-error" role="alert"></p>
       <button class="btn btn-primary btn-book" id="book-btn" onclick="submitBooking()">Request Appointment</button>
       <p class="form-note">This is a request. Your appointment is confirmed once we contact you.</p>
     </div>
@@ -506,54 +520,282 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
     });
   });
 
-  // ── DATE PICKER ───────────────────────────────────────────────
-  const today = new Date().toISOString().split('T')[0];
-  const dateEl = document.getElementById('date');
-  dateEl.min = today;
-  dateEl.value = today;
+  // ── HELPERS ───────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2, '0');
+  const isoLocal = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const todayStr = () => isoLocal(new Date());
+  function parseDate(s) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    if (!m) return null;
+    const d = new Date(+m[1], +m[2] - 1, +m[3]);
+    return (d.getFullYear() === +m[1] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[3]) ? d : null;
+  }
 
-  // ── TIME SLOTS (same slots as before) ─────────────────────────
+  // ── BOOKING RULES ─────────────────────────────────────────────
+  // Opening hours in minutes after midnight (0 = Sunday … 6 = Saturday). Edit here if your hours change.
+  const OPEN = 9 * 60, CLOSE = 17 * 60;
+  const HOURS = { 0: [12 * 60, 15 * 60], 1: [OPEN, CLOSE], 2: [OPEN, CLOSE], 3: [OPEN, CLOSE], 4: [OPEN, CLOSE], 5: [OPEN, CLOSE], 6: [10 * 60, 15 * 60] };
+  const SLOT_LEN = 30;          // minutes per slot
+  const MAX_DAYS_AHEAD = 180;   // how far ahead people may book
+
+  // ── TIME SLOTS ────────────────────────────────────────────────
   const slots = ['8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM'];
   const unavailable = [1, 5, 9, 13];
   let selectedSlot = null;
-  const container = document.getElementById('time-slots');
+  const container = $('time-slots');
 
-  slots.forEach((slot, i) => {
-    const el = document.createElement('button');
-    el.type = 'button';
-    el.className = 'time-slot';
-    el.textContent = slot;
-    if (unavailable.includes(i)) {
-      el.disabled = true;
-    } else {
-      el.addEventListener('click', () => {
-        document.querySelectorAll('.time-slot').forEach(s => { s.classList.remove('selected'); s.setAttribute('aria-pressed','false'); });
-        el.classList.add('selected');
-        el.setAttribute('aria-pressed','true');
-        selectedSlot = slot;
-      });
+  function slotMinutes(s) {
+    const m = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(s);
+    return ((+m[1] % 12) + (m[3] === 'PM' ? 12 : 0)) * 60 + +m[2];
+  }
+  // A slot is bookable only if: not already taken, inside opening hours for that weekday, and not in the past
+  function slotAvailable(dateStr, i) {
+    if (unavailable.includes(i)) return false;
+    const d = parseDate(dateStr);
+    if (!d) return false;
+    const h = HOURS[d.getDay()];
+    if (!h) return false;
+    const start = slotMinutes(slots[i]);
+    if (start < h[0] || start + SLOT_LEN > h[1]) return false;
+    if (dateStr === todayStr()) {
+      const now = new Date();
+      if (start <= now.getHours() * 60 + now.getMinutes()) return false;
     }
-    container.appendChild(el);
+    return true;
+  }
+
+  function setMsg(id, msg) {
+    const e = $(id);
+    e.textContent = msg || '';
+    e.classList.toggle('show', !!msg);
+  }
+
+  function renderSlots() {
+    const date = $('date').value;
+    if (selectedSlot && !slotAvailable(date, slots.indexOf(selectedSlot))) selectedSlot = null;
+    container.innerHTML = '';
+    let any = false;
+    slots.forEach((slot, i) => {
+      const ok = slotAvailable(date, i);
+      if (ok) any = true;
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'time-slot' + (slot === selectedSlot ? ' selected' : '');
+      el.textContent = slot;
+      el.disabled = !ok;
+      el.setAttribute('aria-pressed', slot === selectedSlot ? 'true' : 'false');
+      if (ok) {
+        el.addEventListener('click', () => {
+          container.querySelectorAll('.time-slot').forEach(s => { s.classList.remove('selected'); s.setAttribute('aria-pressed', 'false'); });
+          el.classList.add('selected');
+          el.setAttribute('aria-pressed', 'true');
+          selectedSlot = slot;
+          setMsg('err-time', '');
+        });
+      }
+      container.appendChild(el);
+    });
+    setMsg('err-time', parseDate(date) && !any ? 'No times are available on this date. Please choose another day.' : '');
+  }
+
+  // ── DATE PICKER ───────────────────────────────────────────────
+  const dateEl = $('date');
+  function initDate() {
+    const t = new Date();
+    dateEl.min = isoLocal(t);
+    const mx = new Date(t); mx.setDate(mx.getDate() + MAX_DAYS_AHEAD);
+    dateEl.max = isoLocal(mx);
+    dateEl.value = '';
+    for (let k = 0; k < 14; k++) {            // default to the first day that still has an open time
+      const d = new Date(t); d.setDate(d.getDate() + k);
+      const ds = isoLocal(d);
+      if (slots.some((_, i) => slotAvailable(ds, i))) { dateEl.value = ds; break; }
+    }
+    renderSlots();
+  }
+
+  // ── VALIDATORS (each returns { value } or { error }) ──────────
+  const NAME_RE = /^[\p{L}\p{M}][\p{L}\p{M}'’.\- ]*$/u;
+  function vName(raw, label) {
+    const s = raw.replace(/\s+/g, ' ').trim();
+    if (!s) return { error: `Please enter your ${label}.` };
+    if (s.includes('@')) return { error: `That looks like an email address. Please enter your ${label}.` };
+    if (/\d/.test(s)) return { error: `Your ${label} can't contain numbers.` };
+    if (s.length < 2 || (s.match(/\p{L}/gu) || []).length < 2) return { error: `Your ${label} needs at least 2 letters.` };
+    if (s.length > 50) return { error: `Your ${label} is too long (50 characters max).` };
+    if (!NAME_RE.test(s)) return { error: `Your ${label} can only contain letters, spaces, hyphens and apostrophes.` };
+    return { value: s };
+  }
+
+  const PHONE_CHARS = 'Phone numbers can only contain digits, spaces, + and -.';
+  const SAME_DIGIT = /^(\d)\1+$/;
+  function vPhone(raw) {
+    const s = raw.trim();
+    if (!s) return { error: 'Please enter your phone number.' };
+    if (s.includes('@')) return { error: 'That looks like an email address. Enter your phone number here and put your email in the Email field.' };
+    if (/[^\d\s+\-().]/.test(s)) return { error: PHONE_CHARS };
+    let d = s.replace(/[\s\-().]/g, '');
+    if (!/^\+?\d+$/.test(d)) return { error: PHONE_CHARS };
+    if (d.startsWith('00')) d = '+' + d.slice(2);
+    let national;
+    if (d.startsWith('+233')) national = d.slice(4);
+    else if (/^233\d{9}$/.test(d)) national = d.slice(3);
+    else if (d.startsWith('0')) national = d.slice(1);
+    else if (d.startsWith('+')) {                       // other countries
+      const digits = d.slice(1);
+      if (digits.length < 8 || digits.length > 15 || digits[0] === '0' || SAME_DIGIT.test(digits))
+        return { error: 'Please check this number. International numbers have 8–15 digits after the +.' };
+      return { value: '+' + digits };
+    } else {
+      return { error: 'Start with 0 (e.g. 024 123 4567) or with your country code (e.g. +233 24 123 4567).' };
+    }
+    if (national.length !== 9) return { error: 'Ghana numbers have 10 digits, e.g. 024 123 4567 (or +233 24 123 4567).' };
+    if (!/^[235]/.test(national) || SAME_DIGIT.test(national)) return { error: "That doesn't look like a valid Ghana number. Please check and try again." };
+    return { value: '+233' + national };
+  }
+
+  const EMAIL_RE = /^[A-Za-z0-9](?:[A-Za-z0-9._%+\-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
+  const DOMAIN_TYPOS = { 'gmial.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmai.com': 'gmail.com', 'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com', 'yaho.com': 'yahoo.com', 'yahooo.com': 'yahoo.com', 'hotmial.com': 'hotmail.com', 'hotmail.con': 'hotmail.com', 'outlok.com': 'outlook.com' };
+  const looksLikePhone = s => /^[+\d\s\-().]+$/.test(s) && (s.match(/\d/g) || []).length >= 6;
+  function vEmail(raw) {
+    const s = raw.trim();
+    if (!s) return { value: null };                      // optional
+    if (looksLikePhone(s)) return { error: 'That looks like a phone number. Enter it in the Phone field, or leave Email empty.' };
+    if (!s.includes('@')) return { error: 'Email addresses need an @, e.g. you@example.com.' };
+    if (/\s/.test(s)) return { error: "Email addresses can't contain spaces." };
+    if (s.length > 100) return { error: 'That email address is too long.' };
+    if (s.includes('..') || !EMAIL_RE.test(s)) return { error: 'Please enter a valid email address, e.g. you@example.com.' };
+    const [local, domain] = s.toLowerCase().split('@');
+    if (DOMAIN_TYPOS[domain]) return { error: `Did you mean ${local}@${DOMAIN_TYPOS[domain]}?` };
+    return { value: s.toLowerCase() };
+  }
+
+  function vService(v) {
+    const allowed = Array.from($('service').options).map(o => o.value).filter(Boolean);
+    if (!v) return { error: 'Please select a service.' };
+    if (!allowed.includes(v)) return { error: 'Please choose a service from the list.' };
+    return { value: v };
+  }
+
+  function vDate(v) {
+    if (!v) return { error: 'Please choose a date.' };
+    const d = parseDate(v);
+    if (!d) return { error: 'Please enter a valid date.' };
+    const t = parseDate(todayStr());
+    if (d < t) return { error: 'Please choose today or a future date.' };
+    const mx = new Date(t); mx.setDate(mx.getDate() + MAX_DAYS_AHEAD);
+    if (d > mx) return { error: `Bookings can be made up to ${MAX_DAYS_AHEAD} days ahead.` };
+    return { value: v };
+  }
+
+  function vNotes(raw) {
+    const s = raw.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
+    if (s.length > 500) return { error: 'Please keep notes to 500 characters or fewer.' };
+    if (/(https?:\/\/|www\.)/i.test(s)) return { error: 'Please remove links from your notes.' };
+    return { value: s || null };
+  }
+
+  const FIELDS = {
+    fname:   () => vName($('fname').value, 'first name'),
+    lname:   () => vName($('lname').value, 'last name'),
+    phone:   () => vPhone($('phone').value),
+    email:   () => vEmail($('email').value),
+    service: () => vService($('service').value),
+    date:    () => vDate($('date').value),
+    notes:   () => vNotes($('notes').value)
+  };
+  const touched = {};
+
+  function setErr(field, msg) {
+    setMsg('err-' + field, msg);
+    const el = $(field);
+    el.classList.toggle('invalid', !!msg);
+    el.classList.toggle('valid', !msg && !!touched[field] && el.tagName === 'INPUT' && el.value.trim() !== '');
+    if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+  }
+  function check(field) {
+    const r = FIELDS[field]();
+    setErr(field, r.error || '');
+    return r;
+  }
+  function checkTime() {
+    const d = $('date').value;
+    if (selectedSlot && slotAvailable(d, slots.indexOf(selectedSlot))) { setMsg('err-time', ''); return true; }
+    const any = slots.some((_, i) => slotAvailable(d, i));
+    setMsg('err-time', !parseDate(d) ? 'Choose a valid date first.' : any ? 'Please select a preferred time.' : 'No times are available on this date. Please choose another day.');
+    return false;
+  }
+  function showFormError(msg) {
+    const e = $('form-error');
+    e.textContent = msg || '';
+    e.classList.toggle('show', !!msg);
+  }
+
+  // Live feedback: obvious mix-ups are flagged immediately; everything else after the field is left
+  const instant = {
+    phone: v => /[A-Za-z@]/.test(v),
+    email: v => looksLikePhone(v.trim()),
+    fname: v => /[\d@]/.test(v),
+    lname: v => /[\d@]/.test(v)
+  };
+  Object.keys(FIELDS).forEach(id => {
+    const el = $(id);
+    el.addEventListener('blur', () => { touched[id] = true; check(id); });
+    el.addEventListener(id === 'service' || id === 'date' ? 'change' : 'input', () => {
+      if (id === 'service' || id === 'date') touched[id] = true;
+      if (touched[id] || (instant[id] && instant[id](el.value))) check(id);
+      if (id === 'date') renderSlots();
+    });
   });
+  $('notes').addEventListener('input', () => {
+    const n = $('notes').value.length;
+    $('count-notes').textContent = `${n} / 500`;
+    $('count-notes').classList.toggle('warn', n >= 450);
+  });
+  $('consent').addEventListener('change', () => { if ($('consent').checked) setMsg('err-consent', ''); });
+
+  initDate();
 
   // ── SUBMIT BOOKING → SUPABASE (same payload as before) ────────
   async function submitBooking() {
-    const fname   = document.getElementById('fname').value.trim();
-    const lname   = document.getElementById('lname').value.trim();
-    const phone   = document.getElementById('phone').value.trim();
-    const email   = document.getElementById('email').value.trim();
-    const service = document.getElementById('service').value;
-    const date    = document.getElementById('date').value;
-    const notes   = document.getElementById('notes').value.trim();
+    showFormError('');
+    if ($('website').value) return;                     // honeypot: real visitors never see this field
 
-    if (!fname)        { alert('Please enter your first name.'); return; }
-    if (!phone)        { alert('Please enter your phone number.'); return; }
-    if (!service)      { alert('Please select a service.'); return; }
-    if (!date)         { alert('Please choose a preferred date.'); return; }
-    if (!selectedSlot) { alert('Please select a preferred time slot.'); return; }
-    if (!document.getElementById('consent').checked) { alert('Please tick the consent box to continue. It confirms you have read our Privacy Policy.'); return; }
+    const bad = [];
+    const r = {};
+    ['fname', 'lname', 'phone', 'email', 'service', 'date'].forEach(id => {
+      touched[id] = true;
+      r[id] = check(id);
+      if (r[id].error) bad.push($(id));
+    });
+    if (!checkTime()) bad.push(container.querySelector('.time-slot:not(:disabled)') || $('date'));
+    r.notes = check('notes');
+    if (r.notes.error) bad.push($('notes'));
+    if (!$('consent').checked) {
+      setMsg('err-consent', 'Please tick the box to confirm you have read the Privacy Policy and consent.');
+      bad.push($('consent'));
+    }
+    if (bad.length) {
+      showFormError('Please correct the highlighted fields and try again.');
+      bad[0].focus();
+      return;
+    }
 
-    const btn = document.getElementById('book-btn');
+    const fname = r.fname.value, lname = r.lname.value, phone = r.phone.value;
+    const email = r.email.value, service = r.service.value, date = r.date.value, notes = r.notes.value;
+
+    // Stop accidental duplicates (double-clicks, resubmits) for the same person and slot
+    const sig = [phone, date, selectedSlot].join('|');
+    try {
+      const last = JSON.parse(sessionStorage.getItem('bloom_last') || 'null');
+      if (last && last.sig === sig && Date.now() - last.t < 10 * 60 * 1000) {
+        showFormError('You have already sent a request for this time. We will confirm by SMS or WhatsApp.');
+        return;
+      }
+    } catch (e) { /* storage unavailable: skip the check */ }
+
+    const btn = $('book-btn');
     btn.textContent = 'Submitting…';
     btn.disabled = true;
 
@@ -583,29 +825,32 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
         throw new Error(errData.message || `Server error: ${res.status}`);
       }
 
+      try { sessionStorage.setItem('bloom_last', JSON.stringify({ sig, t: Date.now() })); } catch (e) { /* ignore */ }
+
       const fmt = new Date(date + 'T12:00:00').toLocaleDateString('en-GH', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
-
-
-    
       // textContent (not innerHTML) so user input can never inject markup
-      document.getElementById('success-msg').textContent =
+      $('success-msg').textContent =
         `Thank you, ${fname}. We’ve received your request for ${service} on ${fmt} at ${selectedSlot}. We’ll confirm by SMS or WhatsApp on ${phone}.`;
-      document.getElementById('success-overlay').classList.add('show');
-      document.getElementById('success-close').focus();
+      $('success-overlay').classList.add('show');
+      $('success-close').focus();
 
-      ['fname','lname','phone','email','notes'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('service').value = '';
-      document.getElementById('consent').checked = false;
-      dateEl.value = today;
-      document.querySelectorAll('.time-slot').forEach(s => { s.classList.remove('selected'); s.setAttribute('aria-pressed','false'); });
+      // Reset the form
+      ['fname', 'lname', 'phone', 'email', 'notes'].forEach(id => $(id).value = '');
+      $('service').value = '';
+      $('consent').checked = false;
       selectedSlot = null;
-      
+      Object.keys(touched).forEach(k => delete touched[k]);
+      Object.keys(FIELDS).forEach(id => setErr(id, ''));
+      setMsg('err-consent', '');
+      $('count-notes').textContent = '0 / 500';
+      initDate();
+
     } catch (err) {
-      alert('Booking failed. Please try again.\n\nError: ' + err.message);
+      showFormError('Sorry, your request could not be sent. Please try again, or call us on +233 25 754 6530. (' + err.message + ')');
     } finally {
-      btn.textContent = 'Request appointment';
+      btn.textContent = 'Request Appointment';
       btn.disabled = false;
     }
   }
@@ -619,5 +864,3 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
 </script>
 </body>
 </html>
-
-</body></html>
