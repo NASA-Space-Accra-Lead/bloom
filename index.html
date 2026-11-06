@@ -211,7 +211,70 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
   .mobile-bar a:last-child{background:var(--brand);color:#fff}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ── Photo motion ─────────────────────────────── */
+.ph{position:relative;isolation:isolate;
+  background:linear-gradient(100deg,var(--blush) 30%,#fff7fa 50%,var(--blush) 70%) 0 0/220% 100%}
+html.js .ph:not(.loaded){animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{to{background-position:-220% 0}}
+html.js .ph img{opacity:0;transition:opacity .8s ease}
+html.js .ph.loaded img{opacity:1}
+
+/* reveal on scroll (only when JS is running) */
+html.js .rv{opacity:0;transform:translateY(28px) scale(.97);
+  transition:opacity .9s cubic-bezier(.2,.7,.2,1) calc(var(--i,0)*90ms),transform .9s cubic-bezier(.2,.7,.2,1) calc(var(--i,0)*90ms)}
+html.js .rv.in,html.js.rv-all .rv{opacity:1;transform:none}
+
+/* hero + about: slow zoom and gentle parallax */
+.hero-photo img,.about-photo img{scale:1.1;translate:0 var(--py,0px);will-change:translate,scale}
+.hero-photo img{animation:kenburns 20s ease-in-out infinite alternate}
+@keyframes kenburns{from{scale:1.08}to{scale:1.18}}
+.hero-photo{box-shadow:0 30px 60px -30px rgba(143,15,74,.45)}
+.hero-photo::after,.about-photo::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,transparent 60%,rgba(143,15,74,.14));z-index:1}
+
+/* gallery: hover zoom, sheen, zoom icon */
+.gal figure{cursor:zoom-in;transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s}
+.gal figure img{transition:opacity .8s ease,scale .8s cubic-bezier(.2,.7,.2,1),filter .5s}
+.gal figure::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);
+  translate:-120% 0;transition:translate .9s ease}
+.gal figure::after{content:"";position:absolute;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;z-index:2;pointer-events:none;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23B4155F' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='9' cy='9' r='5'/%3E%3Cpath d='m13 13 3.5 3.5M9 7v4M7 9h4'/%3E%3C/svg%3E") center/18px no-repeat;
+  opacity:0;transform:scale(.7);transition:opacity .3s,transform .3s;box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
+.gal figure:hover,.gal figure:focus-visible{box-shadow:0 22px 40px -22px rgba(143,15,74,.55)}
+.gal figure:hover img,.gal figure:focus-visible img{scale:1.09}
+.gal figure:hover::before,.gal figure:focus-visible::before{translate:120% 0}
+.gal figure:hover::after,.gal figure:focus-visible::after{opacity:1;transform:none}
+@media(hover:hover){.gal figure:hover{transform:translateY(-4px)}}
+
+/* family avatar */
+.family img{animation:bob 5s ease-in-out infinite;box-shadow:0 0 0 4px var(--blush),0 0 0 5px var(--line)}
+@keyframes bob{50%{transform:translateY(-5px)}}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:300;background:rgba(20,10,16,.88);display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .25s}
+.lb.show{display:flex}.lb.on{opacity:1}
+.lb img{max-width:min(92vw,900px);max-height:84vh;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5);transform:scale(.94);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.lb.on img{transform:none}
+.lb button{position:absolute;background:rgba(255,255,255,.14);border:none;color:#fff;width:46px;height:46px;border-radius:50%;font-size:1.5rem;line-height:1;cursor:pointer;transition:background .2s}
+.lb button:hover{background:rgba(255,255,255,.28)}
+.lb-x{top:18px;right:18px}.lb-p{left:18px;top:50%;margin-top:-23px}.lb-n{right:18px;top:50%;margin-top:-23px}
+.lb-c{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#ffffffcc;font-size:.88rem}
+@media(max-width:720px){.lb-p,.lb-n{top:auto;bottom:16px;margin:0}.lb-p{left:16px}.lb-n{right:16px}}
+
+@media(prefers-reduced-motion:reduce){
+  html.js .ph:not(.loaded),.hero-photo img,.family img{animation:none}
+  html.js .rv{opacity:1;transform:none;transition:none}
+  .gal figure,.gal figure img,.gal figure::before,.lb,.lb img{transition:none}
+  .hero-photo img,.about-photo img{scale:1.04;translate:none}
+  .gal figure:hover{transform:none}
+}
 </style>
+<script>
+document.documentElement.classList.add('js');
+window.__rvT=setTimeout(function(){document.documentElement.classList.add('rv-all')},4000);
+</script>
 </head>
 <body>
 
@@ -261,7 +324,7 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
         <li><svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10.5l4 4 8-9"/></svg>Welcoming to Every Age</li>
       </ul>
     </div>
-    <div class="hero-photo">
+    <div class="hero-photo ph">
       <img src="medium-shot-smiley-woman-posing.webp" alt="Smiling patient at BLOOM & Wellness Studio"/>
     </div>
   </div>
@@ -302,7 +365,7 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
 <!-- ABOUT -->
 <section id="about">
   <div class="wrap about-grid">
-    <div class="about-photo"><img src="IMG_4041.jpeg" alt="Patient smiling at BLOOM studio" loading="lazy"/></div>
+    <div class="about-photo ph rv"><img src="IMG_4041.jpeg" alt="Patient smiling at BLOOM studio" loading="lazy"/></div>
     <div class="about-copy">
       <p class="eyebrow">About BLOOM</p>
       <h2>Dentistry That Feels Less Like a Clinic.</h2>
@@ -339,17 +402,17 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
       <div><p class="eyebrow">Our Clients</p><h2>Smiles at BLOOM</h2></div>
       <a class="btn btn-outline" href="#appointment">Book Your Visit</a>
     </div>
-    <div class="gal">
-      <figure><img src="IMG_3940.jpeg" alt="Patient smiling after treatment" loading="lazy"/></figure>
-      <figure><img src="JE.webp" alt="Happy child at the studio" loading="lazy"/></figure>
-      <figure><img src="Man.jpg" alt="Smiling patient" loading="lazy"/></figure>
-      <figure><img src="JD.jpg" alt="Smiling patient" loading="lazy"/></figure>
-      <figure><img src="JB.jpeg" alt="Smiling patient" loading="lazy"/></figure>
-      <figure><img src="JA.jpg" alt="Smiling patient" loading="lazy"/></figure>
-      <figure><img src="JI.jpg" alt="Smiling patient" loading="lazy"/></figure>
-      <figure><img src="JJ.jpg" alt="Smiling patient" loading="lazy"/></figure>
+    <div class="gal" id="gal">
+      <figure class="ph rv" style="--i:0"><img src="IMG_3940.jpeg" alt="Patient smiling after treatment" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:1"><img src="JE.webp" alt="Happy child at the studio" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:2"><img src="Man.jpg" alt="Smiling patient" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:3"><img src="JD.jpg" alt="Smiling patient" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:0"><img src="JB.jpeg" alt="Smiling patient" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:1"><img src="JA.jpg" alt="Smiling patient" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:2"><img src="JI.jpg" alt="Smiling patient" loading="lazy"/></figure>
+      <figure class="ph rv" style="--i:3"><img src="JJ.jpg" alt="Smiling patient" loading="lazy"/></figure>
     </div>
-    <div class="family">
+    <div class="family rv">
       <div class="family-l">
         <img src="front-view-siblings-taking-selfie-home.webp" alt="Siblings smiling" loading="lazy"/>
         <div><h3>Care For The Whole Family</h3><p>From toddlers to grandparents, BLOOM is a safe, friendly space for every member of your family.</p></div>
@@ -861,6 +924,87 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
   document.getElementById('success-close').addEventListener('click', closeDialog);
   overlay.addEventListener('click', e => { if (e.target === overlay) closeDialog(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDialog(); });
+</script>
+<script>
+// ── Photo motion (progressive enhancement) ─────────────────────
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.documentElement;
+
+  // 1. shimmer until each image has loaded
+  document.querySelectorAll('.ph').forEach(box => {
+    const img = box.querySelector('img');
+    if (!img) return;
+    const done = () => box.classList.add('loaded');
+    if (img.complete) done(); else { img.addEventListener('load', done); img.addEventListener('error', done); }
+  });
+
+  // 2. reveal on scroll
+  const items = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(el => io.observe(el));
+  } else root.classList.add('rv-all');
+  clearTimeout(window.__rvT);
+
+  // 3. gentle parallax on hero + about photos
+  if (!reduce) {
+    const px = [...document.querySelectorAll('.hero-photo,.about-photo')].map(box => ({ box, img: box.querySelector('img') }));
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = innerHeight;
+      px.forEach(({ box, img }) => {
+        const r = box.getBoundingClientRect();
+        if (r.bottom < -50 || r.top > vh + 50) return;
+        const p = (r.top + r.height / 2 - vh / 2) / vh;       // -1 … 1
+        img.style.setProperty('--py', (p * -22).toFixed(1) + 'px');
+      });
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+
+  // 4. lightbox for the gallery
+  const figs = [...document.querySelectorAll('#gal figure')];
+  if (!figs.length) return;
+  const lb = document.createElement('div');
+  lb.className = 'lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Photo viewer');
+  lb.innerHTML = '<button class="lb-x" aria-label="Close">&times;</button><button class="lb-p" aria-label="Previous photo">&#8249;</button><img alt=""/><button class="lb-n" aria-label="Next photo">&#8250;</button><div class="lb-c"></div>';
+  document.body.appendChild(lb);
+  const big = lb.querySelector('img'), cap = lb.querySelector('.lb-c');
+  let cur = 0, opener = null;
+  const show = i => {
+    cur = (i + figs.length) % figs.length;
+    const im = figs[cur].querySelector('img');
+    big.src = im.currentSrc || im.src; big.alt = im.alt;
+    cap.textContent = im.alt + '  ·  ' + (cur + 1) + ' / ' + figs.length;
+  };
+  const open = i => { opener = document.activeElement; show(i); lb.classList.add('show'); requestAnimationFrame(() => lb.classList.add('on')); lb.querySelector('.lb-x').focus(); document.body.style.overflow = 'hidden'; };
+  const close = () => { lb.classList.remove('on'); setTimeout(() => lb.classList.remove('show'), reduce ? 0 : 250); document.body.style.overflow = ''; if (opener) opener.focus(); };
+  figs.forEach((f, i) => {
+    f.tabIndex = 0; f.setAttribute('role', 'button'); f.setAttribute('aria-label', 'View photo larger: ' + f.querySelector('img').alt);
+    f.addEventListener('click', () => open(i));
+    f.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); } });
+  });
+  lb.querySelector('.lb-x').onclick = close;
+  lb.querySelector('.lb-p').onclick = () => show(cur - 1);
+  lb.querySelector('.lb-n').onclick = () => show(cur + 1);
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('show')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+  // swipe on touch
+  let sx = null;
+  lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); sx = null; });
+})();
 </script>
 </body>
 </html>

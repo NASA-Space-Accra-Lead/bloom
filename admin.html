@@ -11,12 +11,16 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#1F1A1D; --ink-2:#5B5358; --ink-3:#8d8388;
+  --ink:#1F1A1D; --ink-2:#5B5358; --ink-3:#8d8388; --ink-4:#6f666b;
   --paper:#F6F3F1; --white:#fff; --blush:#F7ECF0; --line:#E7DEE2;
   --brand:#B4155F; --brand-dark:#8F0F4A;
   --green:#157347; --green-bg:#E4F4EB;
   --amber:#9A6200; --amber-bg:#FDF1D8;
   --red:#B42318; --red-bg:#FDE8E6;
+  /* chart palette (validated reference palette) */
+  --series:#2a78d6; --series-hover:#1c5cab;
+  --st-good:#0ca30c; --st-warn:#fab219; --st-crit:#d03b3b;
+  --grid:#e1e0d9; --axis:#c3c2b7;
   --radius:12px;
 }
 html{-webkit-text-size-adjust:100%}
@@ -27,15 +31,27 @@ button{font-family:inherit;cursor:pointer}
 
 /* Login */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.login-card{width:100%;max-width:400px;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:40px 36px;box-shadow:0 24px 48px -32px rgba(31,26,29,.3)}
+.login-card{width:100%;max-width:410px;background:var(--white);border:1px solid var(--line);border-radius:20px;padding:40px 36px;box-shadow:0 24px 48px -32px rgba(31,26,29,.3)}
 .login-card img{height:40px;width:auto;margin-bottom:28px}
 .login-card h1{font:500 1.9rem 'Newsreader',Georgia,serif;letter-spacing:-.01em;line-height:1.1;margin-bottom:6px}
-.login-card p{color:var(--ink-2);font-size:.92rem;margin-bottom:24px}
+.login-card .lead{color:var(--ink-2);font-size:.92rem;margin-bottom:22px}
+.field{margin-bottom:14px}
 .field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:6px}
 .field input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:1rem;color:var(--ink);background:var(--white)}
 .field input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(180,21,95,.12)}
-.login-error{display:none;color:var(--red);font-size:.85rem;margin-top:10px}
-.login-card .btn{width:100%;margin-top:16px;padding:13px}
+.field .hint{font-size:.78rem;color:var(--ink-4);margin-top:5px}
+.pw{position:relative}
+.pw input{padding-right:64px}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--brand);font-size:.78rem;font-weight:700;padding:6px 8px;border-radius:6px}
+.pw button:hover{background:var(--blush)}
+.msg{display:none;font-size:.85rem;margin:2px 0 4px;padding:10px 12px;border-radius:10px}
+.msg.show{display:block}
+.msg.err{background:var(--red-bg);color:var(--red)}
+.msg.ok{background:var(--green-bg);color:var(--green)}
+.msg.info{background:var(--amber-bg);color:var(--amber)}
+.login-card .btn{width:100%;margin-top:10px;padding:13px}
+.linkbtn{background:none;border:none;color:var(--brand);font-size:.85rem;font-weight:600;padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+.login-links{display:flex;justify-content:center;margin-top:8px}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid transparent;font-weight:600;font-size:.875rem;transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
@@ -55,12 +71,20 @@ button{font-family:inherit;cursor:pointer}
 .brand{display:flex;align-items:center;gap:14px;min-width:0}
 .brand img{height:32px;width:auto}
 .brand span{font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding-left:14px;border-left:1px solid var(--line);white-space:nowrap}
-.top-actions{display:flex;gap:8px}
-main{max-width:1320px;margin:0 auto;padding:32px 28px 64px}
-.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.top-actions{display:flex;gap:8px;align-items:center}
+.who-am-i{font-size:.8rem;color:var(--ink-4);margin-right:6px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabs{max-width:1320px;margin:0 auto;padding:0 28px;display:flex;gap:4px;overflow-x:auto}
+.tabs button{flex:none;background:none;border:none;border-bottom:3px solid transparent;padding:12px 16px 10px;font-size:.9rem;font-weight:600;color:var(--ink-2);display:inline-flex;gap:8px;align-items:center}
+.tabs button svg{width:16px;height:16px}
+.tabs button:hover{color:var(--ink)}
+.tabs button.active{color:var(--brand);border-bottom-color:var(--brand)}
+main{max-width:1320px;margin:0 auto;padding:28px 28px 64px}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
 .page-head h1{font:500 2rem 'Newsreader',Georgia,serif;letter-spacing:-.01em;line-height:1.1}
 .page-head p{color:var(--ink-2);font-size:.92rem;margin-top:4px}
 .head-actions{display:flex;gap:8px;position:relative}
+.view{display:none}
+.view.active{display:block}
 
 /* Export menu */
 .menu{position:absolute;right:0;top:calc(100% + 6px);min-width:260px;background:var(--white);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px -16px rgba(31,26,29,.35);padding:6px;display:none;z-index:30}
@@ -78,13 +102,13 @@ main{max-width:1320px;margin:0 auto;padding:32px 28px 64px}
 .stat.s-cancelled{border-top-color:var(--red)}
 .stat-label{font-size:.76rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .stat-num{font:500 2.3rem 'Newsreader',Georgia,serif;line-height:1.1;margin-top:6px}
+.stat-sub{font-size:.8rem;color:var(--ink-4);margin-top:2px}
 
 /* Panel */
 .panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
 .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
 .seg{display:flex;background:var(--paper);border-radius:10px;padding:3px;gap:2px;max-width:100%;overflow-x:auto}
-.seg button{flex:none;white-space:nowrap}
-.seg button{background:none;border:none;padding:7px 14px;border-radius:8px;font-size:.84rem;font-weight:600;color:var(--ink-2)}
+.seg button{flex:none;white-space:nowrap;background:none;border:none;padding:7px 14px;border-radius:8px;font-size:.84rem;font-weight:600;color:var(--ink-2)}
 .seg button.active{background:var(--white);color:var(--ink);box-shadow:0 1px 2px rgba(31,26,29,.12)}
 .seg button .n{color:var(--ink-3);font-weight:500;margin-left:4px}
 .search{position:relative;margin-left:auto;flex:1;max-width:320px;min-width:200px}
@@ -117,70 +141,159 @@ tbody tr:hover td{background:#FDFBFA}
 
 .state{padding:64px 24px;text-align:center;color:var(--ink-2)}
 .state h2{font:500 1.4rem 'Newsreader',serif;color:var(--ink);margin-bottom:6px}
+.state small{display:block;margin-top:10px;color:var(--ink-4);font-size:.82rem}
 .spinner{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .pager{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid var(--line);font-size:.85rem;color:var(--ink-2);flex-wrap:wrap}
 .pager div{display:flex;gap:8px}
 
+/* Insights */
+.filters-bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.filters-bar .lbl{font-size:.74rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-4);margin-right:-6px}
+.range-note{font-size:.82rem;color:var(--ink-4);margin-left:auto}
+.highlights{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:14px 20px;margin-bottom:18px;font-size:.92rem;color:var(--ink-2);display:flex;gap:6px 28px;flex-wrap:wrap}
+.highlights b{color:var(--ink)}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px 16px;min-width:0}
+.card.wide{grid-column:1/-1}
+.card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.card h2{font-size:1rem;font-weight:700;line-height:1.3}
+.card .csub{font-size:.8rem;color:var(--ink-4);margin-top:1px}
+.mini-seg{display:flex;background:var(--paper);border-radius:8px;padding:2px;flex:none}
+.mini-seg button{background:none;border:none;padding:4px 10px;border-radius:6px;font-size:.76rem;font-weight:600;color:var(--ink-2)}
+.mini-seg button.active{background:var(--white);color:var(--ink);box-shadow:0 1px 2px rgba(31,26,29,.12)}
+.empty-chart{padding:40px 0;text-align:center;color:var(--ink-4);font-size:.9rem}
+svg.chart{display:block;width:100%;overflow:visible}
+svg.chart text{font-family:'Figtree',system-ui,sans-serif}
+.bar{fill:var(--series);transform-box:fill-box;transform-origin:50% 100%;animation:grow .55s cubic-bezier(.2,.7,.2,1) both;transition:fill .15s}
+@keyframes grow{from{transform:scaleY(0)}}
+.col:hover .bar,.col:focus-within .bar{fill:var(--series-hover)}
+.hit{fill:transparent;outline:none}
+.hit:focus-visible{stroke:var(--brand);stroke-width:2}
+.hb{display:grid;gap:9px}
+.hb-row{display:grid;grid-template-columns:minmax(90px,38%) 1fr 34px;gap:10px;align-items:center;font-size:.86rem}
+.hb-row .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-track{height:14px;border-radius:4px;background:transparent}
+.hb-fill{height:100%;background:var(--series);border-radius:0 4px 4px 0;min-width:3px;transition:background .15s,width .5s cubic-bezier(.2,.7,.2,1)}
+.hb-row:hover .hb-fill{background:var(--series-hover)}
+.hb-row .vv{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.stack{display:flex;gap:2px;height:34px;margin:6px 0 16px}
+.stack i{display:block;min-width:6px;border-radius:5px}
+.legend{display:grid;gap:8px}
+.legend .lg{display:grid;grid-template-columns:20px 1fr auto auto;gap:10px;align-items:center;font-size:.9rem}
+.legend svg{width:18px;height:18px}
+.legend .cnt{font-weight:700;font-variant-numeric:tabular-nums}
+.legend .pc{color:var(--ink-4);font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
+.data-table{width:100%;font-size:.85rem}
+.data-table th{padding:8px 10px;background:none;border-bottom:1px solid var(--line)}
+.data-table td{padding:7px 10px;border-bottom:1px solid var(--line)}
+.data-table td.num,.data-table th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{max-height:260px;overflow:auto}
+#tip{position:fixed;z-index:500;pointer-events:none;background:var(--ink);color:#fff;border-radius:8px;padding:8px 11px;font-size:.8rem;line-height:1.4;max-width:240px;opacity:0;transition:opacity .12s;box-shadow:0 10px 24px -8px rgba(0,0,0,.4)}
+#tip.show{opacity:1}
+#tip b{display:block;font-size:.84rem}
+#tip span{color:#ffffffcc}
+
+/* Report */
+.report-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:14px 20px}
+.report-controls label.chk{display:flex;gap:8px;align-items:center;font-size:.88rem;font-weight:500}
+.report-controls .grow{flex:1}
+#report-sheet{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:40px 44px;max-width:900px;margin:0 auto}
+#report-sheet h1{font:500 1.8rem 'Newsreader',Georgia,serif;line-height:1.15}
+#report-sheet h3{font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:26px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+#report-sheet .meta{color:var(--ink-2);font-size:.88rem;margin-top:4px}
+#report-sheet .rlogo{height:34px;margin-bottom:18px}
+#report-sheet table{font-size:.86rem;page-break-inside:avoid}
+#report-sheet th{background:none;padding:7px 8px;border-bottom:1px solid var(--ink-3)}
+#report-sheet td{padding:6px 8px}
+#report-sheet .num{text-align:right;font-variant-numeric:tabular-nums}
+#report-sheet .foot{margin-top:30px;padding-top:10px;border-top:1px solid var(--line);font-size:.76rem;color:var(--ink-4)}
+#report-sheet .two{display:grid;grid-template-columns:1fr 1fr;gap:0 32px}
+
 /* Modal + toast */
-.overlay{position:fixed;inset:0;background:rgba(31,26,29,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
+.overlay{position:fixed;inset:0;background:rgba(31,26,29,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:100;overflow:auto}
 .overlay.show{display:flex}
-.modal{background:var(--white);border-radius:16px;padding:28px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(31,26,29,.5)}
+.modal{background:var(--white);border-radius:16px;padding:28px;max-width:440px;width:100%;box-shadow:0 30px 60px -20px rgba(31,26,29,.5)}
 .modal h3{font:500 1.5rem 'Newsreader',serif;margin-bottom:8px}
-.modal p{color:var(--ink-2);font-size:.92rem}
+.modal p{color:var(--ink-2);font-size:.92rem;margin-bottom:14px}
 .modal .detail{margin:14px 0 0;padding:12px 14px;background:var(--paper);border-radius:10px;font-size:.88rem}
 .modal .row{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}
-.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-size:.88rem;font-weight:500;opacity:0;pointer-events:none;transition:all .25s;z-index:200;max-width:90vw}
+.rules{list-style:none;font-size:.8rem;color:var(--ink-4);margin:-4px 0 6px;display:grid;gap:2px}
+.rules li::before{content:"○ ";}
+.rules li.ok{color:var(--green)}
+.rules li.ok::before{content:"● ";}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:10px;font-size:.88rem;font-weight:500;opacity:0;pointer-events:none;transition:all .25s;z-index:600;max-width:90vw}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast.error{background:var(--red)}
 
 @media(max-width:980px){
   .stats{grid-template-columns:repeat(2,1fr)}
   th.h-notes,td.c-notes{display:none}
+  .charts{grid-template-columns:1fr}
+  .who-am-i{display:none}
 }
 @media(max-width:720px){
-  .topbar .in,main{padding-left:16px;padding-right:16px}
+  .topbar .in,main,.tabs{padding-left:16px;padding-right:16px}
   .brand span{display:none}
   .top-actions .btn span{display:none}
   .search{max-width:none;margin-left:0;flex-basis:100%}
   .seg button{padding:7px 10px;font-size:.8rem}
-  table,thead,tbody,tr,td{display:block}
-  thead{display:none}
-  tbody tr{padding:14px 16px;border-bottom:1px solid var(--line)}
-  tbody tr:last-child{border-bottom:none}
-  td{border:none!important;padding:4px 0;background:none!important}
-  td.c-notes{display:block}
-  td[data-l]::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
-  td.c-who::before,td.c-act::before{display:none}
-  td.c-act{margin-top:10px}
+  .range-note{margin-left:0;flex-basis:100%}
+  #report-sheet{padding:24px 18px}
+  #report-sheet .two{grid-template-columns:1fr}
+  .hb-row{grid-template-columns:minmax(80px,40%) 1fr 30px}
+  .view-bookings table,.view-bookings thead,.view-bookings tbody,.view-bookings tr,.view-bookings td{display:block}
+  .view-bookings thead{display:none}
+  .view-bookings tbody tr{padding:14px 16px;border-bottom:1px solid var(--line)}
+  .view-bookings tbody tr:last-child{border-bottom:none}
+  .view-bookings td{border:none!important;padding:4px 0;background:none!important}
+  .view-bookings td.c-notes{display:block}
+  .view-bookings td[data-l]::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
+  .view-bookings td.c-who::before,.view-bookings td.c-act::before{display:none}
+  .view-bookings td.c-act{margin-top:10px}
   .notes{max-width:none}
 }
+@media(prefers-reduced-motion:reduce){.bar{animation:none}.hb-fill{transition:none}.spinner{animation-duration:2s}}
+.print-title{display:none;font:500 1.2rem 'Newsreader',serif;margin-bottom:12px}
+@page{margin:14mm}
 @media print{
-  .topbar,.head-actions,.toolbar,.pager,.acts,.toast,.overlay,th.h-act,td.c-act{display:none!important}
   body{background:#fff}
-  main{padding:0}
+  .topbar,.tabs,.head-actions,.toolbar,.pager,.acts,.toast,.overlay,#tip,th.h-act,td.c-act{display:none!important}
+  main{padding:0;max-width:none}
   .panel,.stat{border-color:#ccc}
   td{padding:8px 10px}
   .print-title{display:block!important}
+  body.pr-report .page-head,body.pr-report .filters-bar,body.pr-report .report-controls{display:none!important}
+  body.pr-report #report-sheet{border:none;padding:0;max-width:none;border-radius:0}
+  body.pr-report #report-sheet h3{break-after:avoid}
+  body.pr-report #report-sheet tr{break-inside:avoid}
+  body:not(.pr-report) .page-head{display:none}
 }
-.print-title{display:none;font:500 1.2rem 'Newsreader',serif;margin-bottom:12px}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="login-screen">
-  <form class="login-card" onsubmit="doLogin();return false">
+  <form class="login-card" id="login-form" novalidate>
     <img src="BLOOM%20PINK.png" alt="BLOOM & Wellness Studio"/>
-    <h1>Admin sign in</h1>
-    <p>Enter your admin password to manage bookings.</p>
+    <h1 id="login-title">Admin sign in</h1>
+    <p class="lead" id="login-lead">Sign in with your admin email and password to manage bookings.</p>
+    <div class="msg" id="login-msg" role="alert"></div>
     <div class="field">
-      <label for="password-input">Password</label>
-      <input type="password" id="password-input" autocomplete="current-password" autofocus/>
+      <label for="email-input">Email</label>
+      <input type="email" id="email-input" autocomplete="username" inputmode="email" autofocus/>
     </div>
-    <p class="login-error" id="login-error" role="alert">Incorrect password. Please try again.</p>
-    <button class="btn btn-primary" type="submit">Sign in</button>
+    <div class="field" id="pw-field">
+      <label for="password-input">Password</label>
+      <div class="pw">
+        <input type="password" id="password-input" autocomplete="current-password"/>
+        <button type="button" data-toggle="password-input" aria-label="Show password">Show</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" type="submit" id="login-btn">Sign in</button>
+    <div class="login-links"><button type="button" class="linkbtn" id="forgot-btn">Forgot your password?</button></div>
   </form>
 </div>
 
@@ -190,23 +303,32 @@ tbody tr:hover td{background:#FDFBFA}
     <div class="in">
       <div class="brand"><img src="BLOOM%20PINK.png" alt="BLOOM"/><span>Admin</span></div>
       <div class="top-actions">
+        <span class="who-am-i" id="who-am-i"></span>
         <button class="btn btn-ghost" onclick="loadBookings()" aria-label="Refresh">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 10a6.5 6.5 0 1 1-2-4.7M16.5 3.5v3.3h-3.3"/></svg><span>Refresh</span>
+        </button>
+        <button class="btn btn-ghost" onclick="openPw(false)" aria-label="Change password">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="3.2"/><path d="M9.3 9.7 16 3m-2 2 2 2m-4 0 1.5 1.5"/></svg><span>Password</span>
         </button>
         <button class="btn btn-ghost" onclick="doLogout()" aria-label="Sign out">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5H5a1.5 1.5 0 0 0-1.5 1.5v10A1.5 1.5 0 0 0 5 16.5h3M12.5 6.5 16 10l-3.5 3.5M16 10H8"/></svg><span>Sign out</span>
         </button>
       </div>
     </div>
+    <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+      <button role="tab" class="active" data-view="bookings"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="14" height="12" rx="2"/><path d="M3 8.5h14M7 3v3M13 3v3"/></svg>Bookings</button>
+      <button role="tab" data-view="insights"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V9m4.5 7V4m4.5 12v-5m4 5H3"/></svg>Insights</button>
+      <button role="tab" data-view="report"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h7l3 3v12H5z"/><path d="M12 2.5v3h3M7.5 10h5M7.5 13h5"/></svg>Reports</button>
+    </nav>
   </header>
 
   <main>
     <div class="page-head">
       <div>
-        <h1>Bookings</h1>
-        <p>Review, confirm and manage appointment requests.</p>
+        <h1 id="page-title">Bookings</h1>
+        <p id="page-desc">Review, confirm and manage appointment requests.</p>
       </div>
-      <div class="head-actions">
+      <div class="head-actions" id="export-wrap">
         <button class="btn btn-primary" id="export-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleMenu(event)">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5M4 14.5v1A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5v-1"/></svg>
           Export
@@ -220,37 +342,85 @@ tbody tr:hover td{background:#FDFBFA}
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat s-total"><div class="stat-label">Total</div><div class="stat-num" id="stat-total">–</div></div>
-      <div class="stat s-pending"><div class="stat-label">Pending</div><div class="stat-num" id="stat-pending">–</div></div>
-      <div class="stat s-confirmed"><div class="stat-label">Confirmed</div><div class="stat-num" id="stat-confirmed">–</div></div>
-      <div class="stat s-cancelled"><div class="stat-label">Cancelled</div><div class="stat-num" id="stat-cancelled">–</div></div>
+    <!-- BOOKINGS VIEW -->
+    <section class="view view-bookings active" id="view-bookings">
+      <div class="stats">
+        <div class="stat s-total"><div class="stat-label">Total</div><div class="stat-num" id="stat-total">–</div></div>
+        <div class="stat s-pending"><div class="stat-label">Pending</div><div class="stat-num" id="stat-pending">–</div></div>
+        <div class="stat s-confirmed"><div class="stat-label">Confirmed</div><div class="stat-num" id="stat-confirmed">–</div></div>
+        <div class="stat s-cancelled"><div class="stat-label">Cancelled</div><div class="stat-num" id="stat-cancelled">–</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="toolbar">
+          <div class="seg" id="filters" role="group" aria-label="Filter by status">
+            <button class="active" data-f="All" onclick="setFilter('All')">All<span class="n" id="n-All"></span></button>
+            <button data-f="Pending" onclick="setFilter('Pending')">Pending<span class="n" id="n-Pending"></span></button>
+            <button data-f="Confirmed" onclick="setFilter('Confirmed')">Confirmed<span class="n" id="n-Confirmed"></span></button>
+            <button data-f="Cancelled" onclick="setFilter('Cancelled')">Cancelled<span class="n" id="n-Cancelled"></span></button>
+          </div>
+          <select class="sort" id="sort" onchange="page=1;renderTable()" aria-label="Sort bookings">
+            <option value="created">Newest requests</option>
+            <option value="date-asc">Appointment date: soonest</option>
+            <option value="date-desc">Appointment date: latest</option>
+            <option value="name">Name A–Z</option>
+          </select>
+          <label class="search">
+            <span class="sr">Search bookings</span>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="m13.5 13.5 3 3"/></svg>
+            <input type="search" id="search-input" placeholder="Search name, phone or service" oninput="page=1;renderTable()"/>
+          </label>
+        </div>
+        <div class="print-title">BLOOM bookings</div>
+        <div id="table-body"><div class="state"><div class="spinner"></div>Loading bookings…</div></div>
+        <div class="pager" id="pager" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- shared period filter for Insights + Reports -->
+    <div class="filters-bar" id="filters-bar" style="display:none">
+      <span class="lbl">Period</span>
+      <div class="seg" id="period-seg" role="group" aria-label="Reporting period">
+        <button data-p="30">30 days</button>
+        <button data-p="90">90 days</button>
+        <button data-p="365">12 months</button>
+        <button data-p="all">All time</button>
+      </div>
+      <span class="lbl">Based on</span>
+      <div class="seg" id="basis-seg" role="group" aria-label="Date basis">
+        <button data-b="appt">Appointment date</button>
+        <button data-b="req">Request date</button>
+      </div>
+      <span class="range-note" id="range-note"></span>
     </div>
 
-    <div class="panel">
-      <div class="toolbar">
-        <div class="seg" id="filters" role="tablist" aria-label="Filter by status">
-          <button class="active" data-f="All" onclick="setFilter('All')">All<span class="n" id="n-All"></span></button>
-          <button data-f="Pending" onclick="setFilter('Pending')">Pending<span class="n" id="n-Pending"></span></button>
-          <button data-f="Confirmed" onclick="setFilter('Confirmed')">Confirmed<span class="n" id="n-Confirmed"></span></button>
-          <button data-f="Cancelled" onclick="setFilter('Cancelled')">Cancelled<span class="n" id="n-Cancelled"></span></button>
-        </div>
-        <select class="sort" id="sort" onchange="page=1;renderTable()" aria-label="Sort bookings">
-          <option value="created">Newest requests</option>
-          <option value="date-asc">Appointment date: soonest</option>
-          <option value="date-desc">Appointment date: latest</option>
-          <option value="name">Name A–Z</option>
-        </select>
-        <label class="search">
-          <span class="sr">Search bookings</span>
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="m13.5 13.5 3 3"/></svg>
-          <input type="search" id="search-input" placeholder="Search name, phone or service" oninput="page=1;renderTable()"/>
-        </label>
+    <!-- INSIGHTS VIEW -->
+    <section class="view" id="view-insights">
+      <div class="stats" id="kpis"></div>
+      <div class="highlights" id="highlights"></div>
+      <div class="charts" id="charts">
+        <div class="card wide" data-chart="trend"></div>
+        <div class="card" data-chart="status"></div>
+        <div class="card" data-chart="service"></div>
+        <div class="card" data-chart="weekday"></div>
+        <div class="card" data-chart="hour"></div>
       </div>
-      <div class="print-title">BLOOM bookings</div>
-      <div id="table-body"><div class="state"><div class="spinner"></div>Loading bookings…</div></div>
-      <div class="pager" id="pager" style="display:none"></div>
-    </div>
+    </section>
+
+    <!-- REPORT VIEW -->
+    <section class="view" id="view-report">
+      <div class="report-controls">
+        <label class="chk"><input type="checkbox" id="rep-list"/> Include booking list (patient names)</label>
+        <span class="grow"></span>
+        <button class="btn btn-ghost" onclick="downloadReportCSV()">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5M4 14.5v1A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5v-1"/></svg>Summary CSV
+        </button>
+        <button class="btn btn-primary" onclick="printReport()">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7V3h8v4M6 14H4V8h12v6h-2M6 12h8v5H6z"/></svg>Print / save as PDF
+        </button>
+      </div>
+      <article id="report-sheet" aria-label="Bookings report"></article>
+    </section>
   </main>
 </div>
 
@@ -267,76 +437,334 @@ tbody tr:hover td{background:#FDFBFA}
   </div>
 </div>
 
+<!-- CHANGE PASSWORD -->
+<div class="overlay" id="pw-overlay" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+  <form class="modal" id="pw-form" novalidate>
+    <h3 id="pw-title">Change password</h3>
+    <p id="pw-lead">Choose a new password for <strong id="pw-email"></strong>. You'll stay signed in.</p>
+    <div class="msg" id="pw-msg" role="alert"></div>
+    <div class="field" id="pw-cur-field">
+      <label for="pw-cur">Current password</label>
+      <div class="pw"><input type="password" id="pw-cur" autocomplete="current-password"/><button type="button" data-toggle="pw-cur" aria-label="Show password">Show</button></div>
+    </div>
+    <div class="field">
+      <label for="pw-new">New password</label>
+      <div class="pw"><input type="password" id="pw-new" autocomplete="new-password"/><button type="button" data-toggle="pw-new" aria-label="Show password">Show</button></div>
+    </div>
+    <ul class="rules" id="pw-rules">
+      <li data-r="len">At least 10 characters</li>
+      <li data-r="mix">A mix of letters and numbers or symbols</li>
+      <li data-r="diff">Different from the current password</li>
+    </ul>
+    <div class="field">
+      <label for="pw-rep">Confirm new password</label>
+      <div class="pw"><input type="password" id="pw-rep" autocomplete="new-password"/><button type="button" data-toggle="pw-rep" aria-label="Show password">Show</button></div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn btn-ghost" onclick="closePw()">Cancel</button>
+      <button type="submit" class="btn btn-primary" id="pw-save">Update password</button>
+    </div>
+  </form>
+</div>
+
+<div id="tip" role="tooltip"></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
-  // ── SUPABASE CONFIG (unchanged) ────────────────────────────────
-  const SUPABASE_URL   = "https://lcuzljzltifrpeoszjiu.supabase.co";
-  const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE";
-  const ADMIN_PASSWORD = "blm@2025";
+  // ── SUPABASE CONFIG (same project) ─────────────────────────────
+  // The admin password is NOT stored in this file. Sign-in goes through Supabase Auth,
+  // so the password can be changed from the dashboard (Password button) at any time.
+  const SUPABASE_URL = "https://lcuzljzltifrpeoszjiu.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdXpsanpsdGlmcnBlb3N6aml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NzMwNjcsImV4cCI6MjA5MDQ0OTA2N30.BQ-Gpnoyy9IJAWPPt2g9-jrCj6TE1baHkmMTkgkwFCE";
   // ──────────────────────────────────────────────────────────────
 
   const PAGE_SIZE = 25;
+  const IDLE_MS = 30 * 60 * 1000;
+  const SKEY = "bloom_session";
   let allBookings   = [];
   let currentFilter = "All";
   let page          = 1;
   let pageSize      = PAGE_SIZE;
   let pendingDelete = null;
+  let session       = null;
+  let recoveryMode  = false;
+  let loginMode     = "signin";   // signin | reset
 
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const sameId = (a, b) => String(a) === String(b);
 
-  const authHeaders = (extra = {}) => ({
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`,
-    ...extra
+  // ── AUTH (Supabase Auth, REST) ─────────────────────────────────
+  function saveSession(r, emailFallback) {
+    session = {
+      access:  r.access_token,
+      refresh: r.refresh_token,
+      exp:     Date.now() + (r.expires_in || 3600) * 1000,
+      email:   (r.user && r.user.email) || emailFallback || (session && session.email) || ""
+    };
+    try { sessionStorage.setItem(SKEY, JSON.stringify(session)); } catch {}
+  }
+  function clearSession() {
+    session = null;
+    try { sessionStorage.removeItem(SKEY); } catch {}
+  }
+  async function authCall(path, { method = "POST", body, token, query = "" } = {}) {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/${path}${query}`, {
+      method,
+      headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json", Authorization: `Bearer ${token || SUPABASE_KEY}` },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const data = await res.json().catch(() => ({}));
+    return { ok: res.ok, status: res.status, data };
+  }
+  const authMsg = d => d.error_description || d.msg || d.message || d.error || "Something went wrong";
+
+  let refreshing = null;
+  function refreshSession() {
+    if (!session) return Promise.reject(new Error("Not signed in"));
+    if (refreshing) return refreshing;
+    refreshing = authCall("token", { query: "?grant_type=refresh_token", body: { refresh_token: session.refresh } })
+      .then(r => {
+        if (!r.ok) { const e = new Error("expired"); e.expired = true; throw e; }
+        saveSession(r.data);
+      })
+      .finally(() => { refreshing = null; });
+    return refreshing;
+  }
+  // Every data request goes through here: attaches the signed-in token, refreshes when needed.
+  async function api(path, opts = {}) {
+    if (!session) throw new Error("Not signed in");
+    try { if (session.exp - Date.now() < 60000) await refreshSession(); }
+    catch (e) { if (e.expired) { doLogout("Your session expired. Please sign in again."); } throw e; }
+    const send = () => fetch(`${SUPABASE_URL}${path}`, { ...opts, headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access}`, ...(opts.headers || {}) } });
+    let res = await send();
+    if (res.status === 401) {
+      try { await refreshSession(); res = await send(); }
+      catch (e) { if (e.expired) doLogout("Your session expired. Please sign in again."); throw e; }
+    }
+    return res;
+  }
+
+  function loginMessage(text, kind = "err") {
+    const m = $("login-msg");
+    m.textContent = text || "";
+    m.className = "msg" + (text ? " show " + kind : "");
+  }
+  function setLoginMode(mode) {
+    loginMode = mode;
+    const reset = mode === "reset";
+    $("login-title").textContent = reset ? "Reset password" : "Admin sign in";
+    $("login-lead").textContent = reset ? "Enter your admin email and we'll send you a link to set a new password." : "Sign in with your admin email and password to manage bookings.";
+    $("pw-field").style.display = reset ? "none" : "";
+    $("login-btn").textContent = reset ? "Send reset link" : "Sign in";
+    $("forgot-btn").textContent = reset ? "Back to sign in" : "Forgot your password?";
+    loginMessage("");
+  }
+  $("forgot-btn").addEventListener("click", () => setLoginMode(loginMode === "reset" ? "signin" : "reset"));
+
+  $("login-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = $("email-input").value.trim();
+    const btn = $("login-btn");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { loginMessage("Enter a valid email address."); $("email-input").focus(); return; }
+
+    if (loginMode === "reset") {
+      btn.disabled = true;
+      try {
+        const redirect = encodeURIComponent(location.origin + location.pathname);
+        const r = await authCall("recover", { body: { email }, query: `?redirect_to=${redirect}` });
+        if (r.status === 429) loginMessage("Too many requests. Please wait a few minutes and try again.");
+        else loginMessage("If that email belongs to an admin account, a reset link is on its way. Check your inbox.", "ok");
+      } catch { loginMessage("Could not reach the server. Check your connection."); }
+      btn.disabled = false;
+      return;
+    }
+
+    const password = $("password-input").value;
+    if (!password) { loginMessage("Enter your password."); $("password-input").focus(); return; }
+    btn.disabled = true; btn.textContent = "Signing in…";
+    try {
+      const r = await authCall("token", { query: "?grant_type=password", body: { email, password } });
+      if (r.ok) {
+        saveSession(r.data, email);
+        $("password-input").value = "";
+        showDashboard();
+      } else if (r.status === 429) {
+        loginMessage("Too many attempts. Please wait a few minutes and try again.");
+      } else if (/confirm/i.test(authMsg(r.data))) {
+        loginMessage("This account's email hasn't been confirmed yet. Confirm it in Supabase, or use Forgot password.");
+      } else {
+        loginMessage("Incorrect email or password.");
+        $("password-input").value = ""; $("password-input").focus();
+      }
+    } catch { loginMessage("Could not reach the server. Check your connection."); }
+    btn.disabled = false; btn.textContent = "Sign in";
   });
 
-  // ── AUTH (same logic as before) ───────────────────────────────
   function showDashboard() {
     $("login-screen").style.display = "none";
     $("dashboard").style.display = "block";
+    $("who-am-i").textContent = session ? session.email : "";
+    startIdleWatch();
     loadBookings();
   }
-  function doLogin() {
-    const pwd = $("password-input").value;
-    if (pwd === ADMIN_PASSWORD) {
-      sessionStorage.setItem("bloom_auth", pwd);
-      showDashboard();
-    } else {
-      $("login-error").style.display = "block";
-      $("password-input").value = "";
-      $("password-input").focus();
-    }
-  }
-  function doLogout() {
-    sessionStorage.removeItem("bloom_auth");
+  async function doLogout(message) {
+    const tok = session && session.access;
+    clearSession();
+    if (tok) authCall("logout", { token: tok }).catch(() => {});   // revoke on the server too
     $("dashboard").style.display = "none";
     $("login-screen").style.display = "flex";
     $("password-input").value = "";
-    $("login-error").style.display = "none";
     allBookings = [];
+    closePw(); closeDelete();
+    setLoginMode("signin");
+    loginMessage(typeof message === "string" ? message : "", "info");
+    stopIdleWatch();
   }
-  window.onload = () => {
-    if (sessionStorage.getItem("bloom_auth") === ADMIN_PASSWORD) showDashboard();
-  };
 
-  // ── LOAD BOOKINGS (same request as before) ────────────────────
+  // Auto sign-out after 30 minutes without activity
+  let lastActive = Date.now(), idleTimer = null;
+  const bump = () => { lastActive = Date.now(); };
+  function startIdleWatch() {
+    lastActive = Date.now();
+    ["pointerdown", "keydown", "scroll", "touchstart"].forEach(ev => addEventListener(ev, bump, { passive: true }));
+    clearInterval(idleTimer);
+    idleTimer = setInterval(() => { if (session && Date.now() - lastActive > IDLE_MS) doLogout("You were signed out after 30 minutes of inactivity."); }, 30000);
+  }
+  function stopIdleWatch() {
+    clearInterval(idleTimer);
+    ["pointerdown", "keydown", "scroll", "touchstart"].forEach(ev => removeEventListener(ev, bump));
+  }
+
+  // Show / hide password buttons
+  document.addEventListener("click", e => {
+    const t = e.target.closest("[data-toggle]");
+    if (!t) return;
+    const inp = $(t.dataset.toggle);
+    const show = inp.type === "password";
+    inp.type = show ? "text" : "password";
+    t.textContent = show ? "Hide" : "Show";
+    t.setAttribute("aria-label", show ? "Hide password" : "Show password");
+  });
+
+  // ── CHANGE PASSWORD ────────────────────────────────────────────
+  function pwMessage(text, kind = "err") {
+    const m = $("pw-msg");
+    m.textContent = text || "";
+    m.className = "msg" + (text ? " show " + kind : "");
+  }
+  function openPw(recovery) {
+    recoveryMode = !!recovery;
+    $("pw-form").reset();
+    ["pw-cur", "pw-new", "pw-rep"].forEach(id => { $(id).type = "password"; });
+    document.querySelectorAll("#pw-form [data-toggle]").forEach(b => { b.textContent = "Show"; });
+    $("pw-title").textContent = recovery ? "Set a new password" : "Change password";
+    $("pw-lead").innerHTML = (recovery ? "Choose a new password for " : "Choose a new password for ") + "<strong>" + esc(session ? session.email : "") + "</strong>." + (recovery ? "" : " You'll stay signed in.");
+    $("pw-cur-field").style.display = recovery ? "none" : "";
+    document.querySelector('#pw-rules [data-r="diff"]').style.display = recovery ? "none" : "";
+    pwMessage(""); checkRules();
+    $("pw-overlay").classList.add("show");
+    (recovery ? $("pw-new") : $("pw-cur")).focus();
+  }
+  function closePw() { $("pw-overlay").classList.remove("show"); }
+  function checkRules() {
+    const n = $("pw-new").value, c = $("pw-cur").value;
+    const ok = {
+      len:  n.length >= 10,
+      mix:  /[a-zA-Z]/.test(n) && /[^a-zA-Z]/.test(n),
+      diff: recoveryMode || (n.length > 0 && n !== c)
+    };
+    document.querySelectorAll("#pw-rules li").forEach(li => li.classList.toggle("ok", !!ok[li.dataset.r]));
+    return ok;
+  }
+  ["pw-cur", "pw-new"].forEach(id => $(id).addEventListener("input", checkRules));
+
+  $("pw-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!session) return;
+    const cur = $("pw-cur").value, nw = $("pw-new").value, rep = $("pw-rep").value;
+    const ok = checkRules();
+    if (!recoveryMode && !cur) { pwMessage("Enter your current password."); $("pw-cur").focus(); return; }
+    if (!ok.len || !ok.mix) { pwMessage("Your new password doesn't meet the requirements below."); $("pw-new").focus(); return; }
+    if (!ok.diff) { pwMessage("The new password must be different from the current one."); $("pw-new").focus(); return; }
+    if (nw !== rep) { pwMessage("The two new passwords don't match."); $("pw-rep").focus(); return; }
+
+    const btn = $("pw-save");
+    btn.disabled = true; btn.textContent = "Updating…";
+    try {
+      // 1. Prove it's really the admin: re-check the current password (not needed after an email reset link)
+      if (!recoveryMode) {
+        const v = await authCall("token", { query: "?grant_type=password", body: { email: session.email, password: cur } });
+        if (!v.ok) {
+          pwMessage(v.status === 429 ? "Too many attempts. Please wait a few minutes." : "Your current password is incorrect.");
+          $("pw-cur").focus(); return;
+        }
+        saveSession(v.data, session.email);
+      }
+      // 2. Set the new password
+      const r = await authCall("user", { method: "PUT", token: session.access, body: { password: nw } });
+      if (!r.ok) {
+        const t = authMsg(r.data);
+        pwMessage(/different/i.test(t) ? "The new password must be different from the current one." : t);
+        return;
+      }
+      closePw();
+      toast("Password updated. Use it next time you sign in.");
+      recoveryMode = false;
+    } catch { pwMessage("Could not reach the server. Check your connection."); }
+    finally { btn.disabled = false; btn.textContent = "Update password"; }
+  });
+  $("pw-overlay").addEventListener("click", e => { if (e.target === $("pw-overlay")) closePw(); });
+
+  // ── BOOT: stored session, or arriving from a password-reset email ──
+  async function boot() {
+    setLoginMode("signin");
+    const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+    if (hash.get("error_description")) {
+      loginMessage(hash.get("error_code") === "otp_expired" ? "That reset link has expired. Request a new one with Forgot your password." : hash.get("error_description").replace(/\+/g, " "), "err");
+      history.replaceState(null, "", location.pathname + location.search);
+      return;
+    }
+    if (hash.get("access_token") && hash.get("type") === "recovery") {
+      history.replaceState(null, "", location.pathname + location.search);   // keep the token out of the address bar
+      const tmp = { access: hash.get("access_token"), refresh: hash.get("refresh_token"), exp: Date.now() + (+hash.get("expires_in") || 3600) * 1000, email: "" };
+      const u = await authCall("user", { method: "GET", token: tmp.access }).catch(() => null);
+      if (u && u.ok) {
+        tmp.email = u.data.email || "";
+        session = tmp; try { sessionStorage.setItem(SKEY, JSON.stringify(session)); } catch {}
+        showDashboard();
+        openPw(true);
+        return;
+      }
+      loginMessage("That reset link is no longer valid. Request a new one.", "err");
+      return;
+    }
+    try {
+      const s = JSON.parse(sessionStorage.getItem(SKEY) || "null");
+      if (s && s.access && s.refresh) { session = s; showDashboard(); }
+    } catch {}
+  }
+
+  // ── LOAD BOOKINGS ─────────────────────────────────────────────
   async function loadBookings() {
     $("table-body").innerHTML = '<div class="state"><div class="spinner"></div>Loading bookings…</div>';
     $("pager").style.display = "none";
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?order=created_at.desc`, { headers: authHeaders() });
+      const res = await api("/rest/v1/bookings?order=created_at.desc");
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || `Error ${res.status}`);
+        const e = new Error(err.message || `Error ${res.status}`);
+        e.status = res.status; throw e;
       }
       allBookings = await res.json();
       updateStats();
       renderTable();
+      renderActive();
     } catch (err) {
-      $("table-body").innerHTML = `<div class="state"><h2>Could not load bookings</h2>${esc(err.message)}</div>`;
+      if (!session) return;
+      const hint = (err.status === 401 || err.status === 403)
+        ? "<small>This account isn't allowed to read bookings yet. Run supabase-setup.sql in Supabase and make sure this email is listed in it.</small>" : "";
+      $("table-body").innerHTML = `<div class="state"><h2>Could not load bookings</h2>${esc(err.message)}${hint}</div>`;
     }
   }
 
@@ -408,7 +836,9 @@ tbody tr:hover td{background:#FDFBFA}
     if (page > pages) page = pages;
 
     if (!list.length) {
-      $("table-body").innerHTML = '<div class="state"><h2>No bookings found</h2>Try a different filter or search.</div>';
+      const hint = (!allBookings.length && currentFilter === "All" && !($("search-input").value || "").trim())
+        ? "<small>Expecting bookings? Make sure supabase-setup.sql has been run and this account's email is listed as an admin.</small>" : "";
+      $("table-body").innerHTML = '<div class="state"><h2>No bookings found</h2>Try a different filter or search.' + hint + '</div>';
       $("pager").style.display = "none";
       return;
     }
@@ -471,7 +901,7 @@ tbody tr:hover td{background:#FDFBFA}
     else updateStatus(btn.dataset.id, btn.dataset.s);
   });
 
-  // ── UPDATE STATUS (same PATCH as before) ──────────────────────
+  // ── UPDATE STATUS ─────────────────────────────────────────────
   async function updateStatus(id, status) {
     const booking = allBookings.find(b => sameId(b.id, id));
     const prev = booking ? booking.status : null;
@@ -479,9 +909,9 @@ tbody tr:hover td{background:#FDFBFA}
     updateStats(); renderTable();
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(id)}`, {
+      const res = await api(`/rest/v1/bookings?id=eq.${encodeURIComponent(id)}`, {
         method: "PATCH",
-        headers: authHeaders({ "Content-Type": "application/json", "Prefer": "return=representation" }),
+        headers: { "Content-Type": "application/json", "Prefer": "return=representation" },
         body: JSON.stringify({ status })
       });
       if (!res.ok) {
@@ -516,9 +946,9 @@ tbody tr:hover td{background:#FDFBFA}
     const btn = $("del-confirm");
     btn.disabled = true; btn.textContent = "Deleting…";
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(id)}`, {
+      const res = await api(`/rest/v1/bookings?id=eq.${encodeURIComponent(id)}`, {
         method: "DELETE",
-        headers: authHeaders({ "Prefer": "return=representation" })
+        headers: { "Prefer": "return=representation" }
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -537,7 +967,7 @@ tbody tr:hover td{background:#FDFBFA}
     }
   });
   $("del-overlay").addEventListener("click", e => { if (e.target === $("del-overlay")) closeDelete(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeDelete(); closeMenu(); } });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeDelete(); closeMenu(); closePw(); } });
 
   // ── EXPORT ────────────────────────────────────────────────────
   function toggleMenu(e) {
@@ -585,6 +1015,7 @@ tbody tr:hover td{background:#FDFBFA}
     window.print();
   }
   window.addEventListener("afterprint", () => {
+    document.body.classList.remove("pr-report");
     if (pageSize !== PAGE_SIZE) { pageSize = PAGE_SIZE; renderTable(); }
   });
 
@@ -597,6 +1028,334 @@ tbody tr:hover td{background:#FDFBFA}
     clearTimeout(tt);
     tt = setTimeout(() => t.classList.remove("show"), 3800);
   }
+
+  // ═════════════════════════════════════════════════════════════
+  //  INSIGHTS + REPORTS
+  // ═════════════════════════════════════════════════════════════
+  let view = "bookings", period = "30", basis = "appt";
+  const tableMode = {};            // chartId -> true when showing the data table
+  const chartData = {};            // chartId -> {title, sub, rows, cols}
+  const PERIOD_NAME = { "30": "Last 30 days", "90": "Last 90 days", "365": "Last 12 months", "all": "All time" };
+  const STATUSES = ["Confirmed", "Pending", "Cancelled"];
+  const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const DAYS_FULL = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const pad = n => String(n).padStart(2, "0");
+  const isoLocal = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const atNoon = iso => new Date(iso + "T12:00:00");
+  const addDays = (iso, n) => { const d = atNoon(iso); d.setDate(d.getDate() + n); return isoLocal(d); };
+  const diffDays = (a, b) => Math.round((atNoon(b) - atNoon(a)) / 864e5);
+  const monIdx = iso => (atNoon(iso).getDay() + 6) % 7;            // Mon = 0
+  const shortDay = iso => { const d = atNoon(iso); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+  const longDay  = iso => { const d = atNoon(iso); return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; };
+  const todayIso = () => isoLocal(new Date());
+  const pct = (n, d) => d ? Math.round(n / d * 100) : 0;
+  const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+
+  const dayOf = b => basis === "appt" ? (b.date || "") : (b.created_at && !isNaN(new Date(b.created_at)) ? isoLocal(new Date(b.created_at)) : "");
+  function periodStart() { return period === "all" ? "" : addDays(todayIso(), -(+period - 1)); }
+  function periodList() {
+    const s = periodStart();
+    return allBookings.filter(b => { const d = dayOf(b); return d && (!s || d >= s); });
+  }
+  function periodLabel() {
+    const s = periodStart();
+    return period === "all" ? "All time" : `${PERIOD_NAME[period]} (from ${longDay(s)})`;
+  }
+  const basisLabel = () => basis === "appt" ? "appointment date" : "request date";
+
+  function tally(list, keyFn) {
+    const m = new Map();
+    list.forEach(b => {
+      const k = keyFn(b); if (k == null || k === "") return;
+      if (!m.has(k)) m.set(k, { key: k, total: 0, Confirmed: 0, Pending: 0, Cancelled: 0 });
+      const r = m.get(k); r.total++; const s = statusOf(b); if (r[s] !== undefined) r[s]++;
+    });
+    return m;
+  }
+  const hourOf = b => { const m = /^(\d{1,2}):\d{2}\s*(AM|PM)$/i.exec(b.time || ""); return m ? ((+m[1] % 12) + (/pm/i.test(m[2]) ? 12 : 0)) : null; };
+  const hourLabel = h => `${h % 12 || 12} ${h >= 12 ? "PM" : "AM"}`;
+
+  function computeStats() {
+    const list = periodList();
+    const n = list.length;
+    const c = s => list.filter(b => statusOf(b) === s).length;
+    const byService = [...tally(list, b => b.service || "Not specified").values()].sort((a, b) => b.total - a.total || a.key.localeCompare(b.key));
+    const wd = tally(list, b => { const d = dayOf(b); return d ? monIdx(d) : null; });
+    const weekday = DAYS.map((nm, i) => wd.get(i) || { key: i, total: 0, Confirmed: 0, Pending: 0, Cancelled: 0 });
+    const hh = tally(list, hourOf);
+    let hour = [];
+    if (hh.size) {
+      const ks = [...hh.keys()], lo = Math.min(...ks), hi = Math.max(...ks);
+      for (let h = lo; h <= hi; h++) hour.push(hh.get(h) || { key: h, total: 0, Confirmed: 0, Pending: 0, Cancelled: 0 });
+    }
+    return { list, n, confirmed: c("Confirmed"), pending: c("Pending"), cancelled: c("Cancelled"), byService, weekday, hour, trend: trendBuckets(list) };
+  }
+
+  function trendBuckets(list) {
+    if (!list.length) return { unit: "day", items: [] };
+    const days = list.map(dayOf).sort();
+    const today = todayIso();
+    const first = period === "all" ? days[0] : periodStart();
+    const last = days[days.length - 1] > today ? days[days.length - 1] : today;
+    const span = diffDays(first, last) + 1;
+    const unit = span <= 45 ? "day" : span <= 200 ? "week" : "month";
+    const keyOf = iso => unit === "day" ? iso : unit === "week" ? addDays(iso, -monIdx(iso)) : iso.slice(0, 7);
+    const items = [];
+    const idx = new Map();
+    const push = k => { if (!idx.has(k)) { idx.set(k, items.length); items.push({ key: k, total: 0, Confirmed: 0, Pending: 0, Cancelled: 0 }); } };
+    let cur = first;
+    while (cur <= last) { push(keyOf(cur)); cur = addDays(cur, unit === "month" ? 28 : 1); if (unit === "month") { /* step by whole months below */ } }
+    // make sure every month between first and last exists (28-day stepping can skip none, but be explicit)
+    if (unit === "month") {
+      let y = +first.slice(0, 4), m = +first.slice(5, 7);
+      const ly = +last.slice(0, 4), lm = +last.slice(5, 7);
+      while (y < ly || (y === ly && m <= lm)) { push(`${y}-${pad(m)}`); m++; if (m > 12) { m = 1; y++; } }
+      items.sort((a, b) => a.key.localeCompare(b.key));
+      idx.clear(); items.forEach((it, i) => idx.set(it.key, i));
+    }
+    list.forEach(b => {
+      const k = keyOf(dayOf(b)); const i = idx.get(k); if (i == null) return;
+      const r = items[i]; r.total++; const s = statusOf(b); if (r[s] !== undefined) r[s]++;
+    });
+    items.forEach(it => {
+      if (unit === "day") { it.label = shortDay(it.key); it.full = longDay(it.key); }
+      else if (unit === "week") { it.label = shortDay(it.key); it.full = `Week of ${longDay(it.key)}`; }
+      else { const [y, m] = it.key.split("-"); it.label = `${MONTHS[+m - 1]} ${y.slice(2)}`; it.full = `${MONTHS[+m - 1]} ${y}`; }
+    });
+    return { unit, items };
+  }
+
+  // ── view switching ────────────────────────────────────────────
+  const VIEW_META = {
+    bookings: ["Bookings", "Review, confirm and manage appointment requests."],
+    insights: ["Insights", "See how bookings are trending and where demand is."],
+    report:   ["Reports", "Generate a summary you can print, save as PDF or download."]
+  };
+  function setView(v) {
+    view = v;
+    document.querySelectorAll(".tabs button").forEach(b => { const a = b.dataset.view === v; b.classList.toggle("active", a); b.setAttribute("aria-selected", a); });
+    document.querySelectorAll(".view").forEach(s => s.classList.toggle("active", s.id === "view-" + v));
+    $("page-title").textContent = VIEW_META[v][0];
+    $("page-desc").textContent = VIEW_META[v][1];
+    $("export-wrap").style.display = v === "bookings" ? "" : "none";
+    $("filters-bar").style.display = v === "bookings" ? "none" : "flex";
+    closeMenu(); renderActive();
+    window.scrollTo({ top: 0 });
+  }
+  document.querySelector(".tabs").addEventListener("click", e => { const b = e.target.closest("button[data-view]"); if (b) setView(b.dataset.view); });
+  $("period-seg").addEventListener("click", e => { const b = e.target.closest("button[data-p]"); if (b) { period = b.dataset.p; renderActive(); } });
+  $("basis-seg").addEventListener("click", e => { const b = e.target.closest("button[data-b]"); if (b) { basis = b.dataset.b; renderActive(); } });
+  $("rep-list").addEventListener("change", renderReport);
+
+  function renderActive() {
+    if (view === "bookings") return;
+    document.querySelectorAll("#period-seg button").forEach(b => b.classList.toggle("active", b.dataset.p === period));
+    document.querySelectorAll("#basis-seg button").forEach(b => b.classList.toggle("active", b.dataset.b === basis));
+    $("range-note").textContent = (period === "all" ? "All records" : periodLabel()) + (basis === "appt" ? " · includes upcoming appointments" : "");
+    if (view === "insights") renderInsights(); else renderReport();
+  }
+
+  // ── tooltip ───────────────────────────────────────────────────
+  const tip = $("tip");
+  function showTip(el, x, y) {
+    tip.innerHTML = `<b>${esc(el.dataset.t)}</b>${(el.dataset.s || "").split("|").filter(Boolean).map(l => `<span>${esc(l)}</span><br>`).join("")}`;
+    tip.classList.add("show");
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x + 14)) + "px";
+    tip.style.top  = Math.max(8, y - h - 12 < 8 ? y + 18 : y - h - 12) + "px";
+  }
+  document.addEventListener("mousemove", e => { const el = e.target.closest && e.target.closest("[data-t]"); if (el) showTip(el, e.clientX, e.clientY); else tip.classList.remove("show"); });
+  document.addEventListener("click", e => { const el = e.target.closest && e.target.closest("[data-t]"); if (el && matchMedia("(hover:none)").matches) showTip(el, e.clientX, e.clientY); else if (!el) tip.classList.remove("show"); });
+  document.addEventListener("focusin", e => { const el = e.target.closest && e.target.closest("[data-t]"); if (el) { const r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top); } });
+  document.addEventListener("focusout", () => tip.classList.remove("show"));
+  addEventListener("scroll", () => tip.classList.remove("show"), { passive: true });
+
+  // ── chart builders ────────────────────────────────────────────
+  const breakdown = r => `${r.Confirmed} confirmed|${r.Pending} pending|${r.Cancelled} cancelled`;
+
+  function vbar(items, ariaLabel, el) {
+    const W = Math.max(280, el.clientWidth || 600), H = 230, m = { l: 34, r: 6, t: 16, b: 28 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b, n = items.length;
+    const max = Math.max(1, ...items.map(i => i.total));
+    const ticks = Math.min(4, max), step = Math.ceil(max / ticks), top = step * ticks;
+    const slot = pw / n, gap = slot > 8 ? 2 : 1;
+    let bw = Math.max(1, slot - gap); if (bw > 56) bw = 56;
+    const every = Math.max(1, Math.ceil(n / Math.max(1, Math.floor(pw / 58))));
+    let g = "";
+    for (let k = 0; k <= ticks; k++) {
+      const y = m.t + ph - ph * k / ticks;
+      g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" stroke="${k ? "var(--grid)" : "var(--axis)"}" stroke-width="1"/>`;
+      g += `<text x="${m.l - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="var(--ink-4)">${k * step}</text>`;
+    }
+    const peak = items.findIndex(i => i.total === max);
+    items.forEach((it, i) => {
+      const x = m.l + i * slot + (slot - bw) / 2;
+      const h = ph * it.total / top, y = m.t + ph - h, r = Math.min(4, bw / 2, h);
+      const tipSub = it.sub || breakdown(it);
+      g += `<g class="col">`;
+      if (it.total > 0) g += `<path class="bar" d="M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + bw - r}Q${x + bw},${y} ${x + bw},${y + r}V${y + h}Z" style="animation-delay:${Math.min(i * 12, 300)}ms"/>`;
+      g += `<rect class="hit" x="${m.l + i * slot}" y="${m.t}" width="${slot}" height="${ph}" tabindex="0" data-t="${esc(it.full || it.label)}: ${plural(it.total, "booking")}" data-s="${esc(tipSub)}" aria-label="${esc((it.full || it.label) + ": " + plural(it.total, "booking"))}"/>`;
+      g += `</g>`;
+      if (i % every === 0) g += `<text x="${m.l + i * slot + slot / 2}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--ink-4)">${esc(it.label)}</text>`;
+      if (i === peak && it.total > 0) g += `<text x="${x + bw / 2}" y="${y - 5}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">${it.total}</text>`;
+    });
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}" height="${H}" role="img" aria-label="${esc(ariaLabel)}">${g}</svg>`;
+  }
+
+  function hbar(rows) {
+    const max = Math.max(1, ...rows.map(r => r.total));
+    return `<div class="hb">${rows.map(r =>
+      `<div class="hb-row" data-t="${esc(r.key)}: ${plural(r.total, "booking")}" data-s="${esc(breakdown(r))}">
+        <span class="nm">${esc(r.key)}</span>
+        <span class="hb-track"><span class="hb-fill" style="display:block;width:${(r.total / max * 100).toFixed(1)}%"></span></span>
+        <span class="vv">${r.total}</span></div>`).join("")}</div>`;
+  }
+
+  const STATUS_STYLE = {
+    Confirmed: { c: "var(--st-good)", g: '<path d="m5.5 10.5 3 3 6-6.5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' },
+    Pending:   { c: "var(--st-warn)", g: '<path d="M10 5.5V10l3 2" stroke="#0b0b0b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' },
+    Cancelled: { c: "var(--st-crit)", g: '<path d="m6.5 6.5 7 7m0-7-7 7" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>' }
+  };
+  function statusMix(S) {
+    const segs = STATUSES.map(s => ({ s, v: S[s.toLowerCase()] })).filter(x => x.v > 0);
+    const bar = `<div class="stack" role="img" aria-label="Status mix">${segs.map(x =>
+      `<i style="flex:${x.v};background:${STATUS_STYLE[x.s].c}" data-t="${x.s}: ${plural(x.v, "booking")}" data-s="${pct(x.v, S.n)}% of requests"></i>`).join("")}</div>`;
+    const legend = `<div class="legend">${STATUSES.map(s => {
+      const v = S[s.toLowerCase()];
+      return `<div class="lg"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="${STATUS_STYLE[s].c}"/>${STATUS_STYLE[s].g}</svg><span>${s}</span><span class="cnt">${v}</span><span class="pc">${pct(v, S.n)}%</span></div>`;
+    }).join("")}</div>`;
+    return bar + legend;
+  }
+
+  function dataTable(cols, rows) {
+    return `<div class="tablewrap"><table class="data-table"><thead><tr>${cols.map((c, i) => `<th class="${i ? "num" : ""}">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((v, i) => `<td class="${i ? "num" : ""}">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  }
+
+  function drawCard(id, title, sub, bodyFn, cols, rows) {
+    const card = document.querySelector(`.card[data-chart="${id}"]`);
+    const showT = !!tableMode[id];
+    card.innerHTML = `<div class="card-head"><div><h2>${esc(title)}</h2><div class="csub">${esc(sub)}</div></div>
+      <div class="mini-seg" role="group" aria-label="View ${esc(title)} as"><button data-m="chart" class="${showT ? "" : "active"}">Chart</button><button data-m="table" class="${showT ? "active" : ""}">Table</button></div></div>
+      <div class="body"></div>`;
+    const body = card.querySelector(".body");
+    if (!rows.length) body.innerHTML = '<div class="empty-chart">No bookings in this period.</div>';
+    else if (showT) body.innerHTML = dataTable(cols, rows);
+    else body.innerHTML = bodyFn(body);
+    card.querySelector(".mini-seg").onclick = e => { const b = e.target.closest("button"); if (b) { tableMode[id] = b.dataset.m === "table"; drawCard(id, title, sub, bodyFn, cols, rows); } };
+  }
+
+  function renderInsights() {
+    const S = computeStats();
+    const rate = (v) => `${pct(v, S.n)}% of requests`;
+    $("kpis").innerHTML = `
+      <div class="stat s-total"><div class="stat-label">Booking requests</div><div class="stat-num">${S.n}</div><div class="stat-sub">${esc(period === "all" ? "All time" : PERIOD_NAME[period])}</div></div>
+      <div class="stat s-confirmed"><div class="stat-label">Confirmed</div><div class="stat-num">${S.confirmed}</div><div class="stat-sub">${rate(S.confirmed)}</div></div>
+      <div class="stat s-cancelled"><div class="stat-label">Cancelled</div><div class="stat-num">${S.cancelled}</div><div class="stat-sub">${rate(S.cancelled)}</div></div>
+      <div class="stat s-pending"><div class="stat-label">Awaiting action</div><div class="stat-num">${S.pending}</div><div class="stat-sub">${S.pending ? "Still pending" : "All caught up"}</div></div>`;
+
+    const topSvc = S.byService[0];
+    const topDay = S.weekday.reduce((a, b) => b.total > a.total ? b : a, S.weekday[0]);
+    const topHr  = S.hour.reduce((a, b) => b.total > a.total ? b : a, S.hour[0] || { total: 0 });
+    $("highlights").innerHTML = S.n
+      ? `<span>Most booked: <b>${esc(topSvc.key)}</b> (${topSvc.total})</span><span>Busiest day: <b>${DAYS_FULL[topDay.key]}</b> (${topDay.total})</span>${topHr.total ? `<span>Peak time: <b>${hourLabel(topHr.key)}</b> (${topHr.total})</span>` : ""}`
+      : "No bookings in this period yet.";
+
+    const unitName = { day: "day", week: "week", month: "month" }[S.trend.unit];
+    drawCard("trend", "Bookings over time", `Requests per ${unitName}, by ${basisLabel()}`,
+      el => vbar(S.trend.items, `Bookings per ${unitName}`, el),
+      ["Period", "Bookings", "Confirmed", "Pending", "Cancelled"],
+      S.trend.items.map(i => [i.full, i.total, i.Confirmed, i.Pending, i.Cancelled]));
+
+    drawCard("status", "Status mix", "How requests were handled",
+      () => statusMix(S),
+      ["Status", "Bookings", "Share"],
+      S.n ? STATUSES.map(s => [s, S[s.toLowerCase()], pct(S[s.toLowerCase()], S.n) + "%"]) : []);
+
+    let svc = S.byService;
+    if (svc.length > 8) {
+      const rest = svc.slice(7), o = { key: "Other services", total: 0, Confirmed: 0, Pending: 0, Cancelled: 0 };
+      rest.forEach(r => STATUSES.concat("total").forEach(k => { o[k] += r[k]; }));
+      svc = svc.slice(0, 7).concat(o);
+    }
+    drawCard("service", "Bookings by service", "Most requested treatments",
+      () => hbar(svc),
+      ["Service", "Bookings", "Confirmed", "Pending", "Cancelled"],
+      S.byService.map(r => [r.key, r.total, r.Confirmed, r.Pending, r.Cancelled]));
+
+    drawCard("weekday", "Busiest days", `Bookings by weekday (${basisLabel()})`,
+      el => vbar(S.weekday.map((r, i) => ({ ...r, label: DAYS[i], full: DAYS_FULL[i] })), "Bookings by weekday", el),
+      ["Day", "Bookings", "Confirmed", "Pending", "Cancelled"],
+      S.n ? S.weekday.map((r, i) => [DAYS_FULL[i], r.total, r.Confirmed, r.Pending, r.Cancelled]) : []);
+
+    drawCard("hour", "Popular times", "Bookings by appointment start hour",
+      el => vbar(S.hour.map(r => ({ ...r, label: hourLabel(r.key), full: hourLabel(r.key) })), "Bookings by hour", el),
+      ["Hour", "Bookings", "Confirmed", "Pending", "Cancelled"],
+      S.hour.map(r => [hourLabel(r.key), r.total, r.Confirmed, r.Pending, r.Cancelled]));
+  }
+  let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (view === "insights") renderInsights(); }, 150); });
+
+  // ── REPORT ────────────────────────────────────────────────────
+  function reportRows(S) {
+    const rows = [];
+    rows.push(["Summary", "Booking requests", S.n, S.confirmed, S.pending, S.cancelled]);
+    STATUSES.forEach(s => rows.push(["Status", s, S[s.toLowerCase()], "", "", ""]));
+    S.byService.forEach(r => rows.push(["Service", r.key, r.total, r.Confirmed, r.Pending, r.Cancelled]));
+    S.weekday.forEach((r, i) => rows.push(["Weekday", DAYS_FULL[i], r.total, r.Confirmed, r.Pending, r.Cancelled]));
+    S.hour.forEach(r => rows.push(["Start hour", hourLabel(r.key), r.total, r.Confirmed, r.Pending, r.Cancelled]));
+    S.trend.items.forEach(r => rows.push([S.trend.unit[0].toUpperCase() + S.trend.unit.slice(1) + "ly trend", r.full, r.total, r.Confirmed, r.Pending, r.Cancelled]));
+    return rows;
+  }
+  function renderReport() {
+    const S = computeStats();
+    const tbl = (cols, rows) => `<table><thead><tr>${cols.map((c, i) => `<th class="${i ? "num" : ""}">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((v, i) => `<td class="${i ? "num" : ""}">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    const full = ["", "Bookings", "Confirmed", "Pending", "Cancelled"];
+    const now = new Date();
+    let html = `
+      <img class="rlogo" src="BLOOM%20PINK.png" alt="BLOOM & Wellness Studio"/>
+      <h1>Bookings report</h1>
+      <div class="meta">${esc(periodLabel())} · by ${basisLabel()}${basis === "appt" && period !== "all" ? ", including upcoming appointments" : ""}</div>
+      <div class="meta">Generated ${esc(now.toLocaleString("en-GH", { dateStyle: "medium", timeStyle: "short" }))}${session && session.email ? " by " + esc(session.email) : ""}</div>`;
+    if (!S.n) {
+      html += '<p style="margin-top:24px;color:var(--ink-2)">There are no bookings in this period.</p>';
+    } else {
+      html += `<h3>Summary</h3>` + tbl(["Measure", "Value"], [
+        ["Booking requests", S.n],
+        ["Confirmed", `${S.confirmed} (${pct(S.confirmed, S.n)}%)`],
+        ["Pending", `${S.pending} (${pct(S.pending, S.n)}%)`],
+        ["Cancelled", `${S.cancelled} (${pct(S.cancelled, S.n)}%)`],
+        ["Most booked service", `${S.byService[0].key} (${S.byService[0].total})`]
+      ]);
+      html += `<h3>By service</h3>` + tbl(["Service", ...full.slice(1)], S.byService.map(r => [r.key, r.total, r.Confirmed, r.Pending, r.Cancelled]));
+      html += `<div class="two"><div><h3>By weekday</h3>` + tbl(["Day", "Bookings"], S.weekday.map((r, i) => [DAYS_FULL[i], r.total])) + `</div>`;
+      html += `<div><h3>By start time</h3>` + tbl(["Hour", "Bookings"], S.hour.length ? S.hour.map(r => [hourLabel(r.key), r.total]) : [["–", 0]]) + `</div></div>`;
+      html += `<h3>Trend (per ${S.trend.unit})</h3>` + tbl(["Period", ...full.slice(1)], S.trend.items.map(r => [r.full, r.total, r.Confirmed, r.Pending, r.Cancelled]));
+      if ($("rep-list").checked) {
+        const rows = S.list.slice().sort((a, b) => (a.date || "").localeCompare(b.date || "") || (a.time || "").localeCompare(b.time || ""));
+        html += `<h3>Booking list (${rows.length})</h3>` + tbl(["Patient", "Service", "Appointment", "Status"], rows.map(b => [b.full_name || "–", b.service || "–", `${b.date ? longDay(b.date) : "–"} ${b.time || ""}`.trim(), statusOf(b)]));
+      }
+    }
+    html += `<div class="foot">Confidential. ${$("rep-list").checked ? "This report lists patient names, which are personal data under the Data Protection Act, 2012 (Act 843). Store and share it securely." : "Aggregated figures only; no patient details are included."}</div>`;
+    $("report-sheet").innerHTML = html;
+  }
+  function printReport() {
+    renderReport();
+    document.body.classList.add("pr-report");
+    window.print();
+    setTimeout(() => document.body.classList.remove("pr-report"), 500);
+  }
+  function downloadReportCSV() {
+    const S = computeStats();
+    if (!S.n) { toast("There are no bookings in this period", true); return; }
+    const lines = [["Section", "Label", "Bookings", "Confirmed", "Pending", "Cancelled"].join(",")]
+      .concat(reportRows(S).map(r => r.map(csvCell).join(",")));
+    download(`bloom-report-${period}-${basis}-${stamp()}.csv`, "﻿" + lines.join("\r\n"), "text/csv;charset=utf-8");
+    toast("Report downloaded");
+  }
+
+  boot();
+  addEventListener('hashchange', () => { if (/access_token|error_description/.test(location.hash)) boot(); });
 </script>
 </body>
 </html>
