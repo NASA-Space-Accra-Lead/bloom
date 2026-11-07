@@ -911,6 +911,9 @@ window.__rvT=setTimeout(function(){document.documentElement.classList.add('rv-al
       msg.append('Thank you, ', bold(fname), '!', br(), br(),
        'Your appointment for ', bold(service), ' on ', bold(fmt), ' at ', bold(selectedSlot), ' has been received.', br(), br(),
         'We’ll confirm via ', tel, ' within 5 minutes. See you soon!');
+      $('success-overlay').classList.add('show');
+      $('success-close').focus();
+
 
       // Reset the form
       ['fname', 'lname', 'phone', 'email', 'notes'].forEach(id => $(id).value = '');
