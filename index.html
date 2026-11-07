@@ -172,12 +172,17 @@ footer{background:var(--ink);color:#d9d1d5;padding:72px 0 32px}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:1.5rem;font-size:.82rem;color:#8d8388}
 
 /* Success dialog */
-.overlay{position:fixed;inset:0;background:rgba(31,26,29,.6);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem}
+/* Success dialog */
+.overlay{position:fixed;inset:0;background:rgba(10,6,12,.82);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem}
 .overlay.show{display:flex}
-.modal{background:var(--white);border-radius:22px;padding:2.6rem;max-width:440px;width:100%;text-align:center}
-.modal h3{font-size:1.9rem;margin-bottom:.8rem}
-.modal p{color:var(--ink-2)}
-.modal .btn{margin-top:1.6rem}
+.modal{background:#1a161c;border:1px solid rgba(214,51,132,.35);border-radius:36px;padding:3.4rem 2rem 2.8rem;max-width:480px;width:100%;text-align:center;box-shadow:0 0 80px -20px rgba(214,51,132,.45)}
+.modal h3{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:400;color:#fff;margin-bottom:1.4rem}
+.modal h3 em{font-style:italic;color:#e0489a}
+.modal p{font-family:'Figtree',system-ui,sans-serif;color:#a9a2ab;font-size:1.05rem;line-height:1.9}
+.modal p strong{color:#cfc9d1;font-weight:700}
+.modal p a{color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:5px}
+.modal .btn{margin-top:1.8rem;background:#c4267a;color:#fff;border-radius:999px;padding:1.05rem 3rem;font-size:1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 10px 30px -10px rgba(196,38,122,.7)}
+.modal .btn:hover{background:#d63384}
 
 /* Mobile bar */
 .mobile-bar{display:none}
@@ -553,9 +558,9 @@ window.__rvT=setTimeout(function(){document.documentElement.classList.add('rv-al
 
 <div class="overlay" id="success-overlay" role="dialog" aria-modal="true" aria-labelledby="success-title">
   <div class="modal">
-    <h3 id="success-title">Request Received</h3>
-    <p id="success-msg"></p>
-    <button class="btn btn-primary" id="success-close">Done</button>
+    <h3 id="success-title">You're all <em>set!</em></h3>
+<p id="success-msg"></p>
+<button class="btn btn-primary" id="success-close">Done ✓</button>
   </div>
 </div>
 
@@ -896,10 +901,16 @@ window.__rvT=setTimeout(function(){document.documentElement.classList.add('rv-al
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
       // textContent (not innerHTML) so user input can never inject markup
-      $('success-msg').textContent =
-        `Thank you, ${fname}. We’ve received your request for ${service} on ${fmt} at ${selectedSlot}. We’ll confirm by SMS or WhatsApp on ${phone}.`;
-      $('success-overlay').classList.add('show');
-      $('success-close').focus();
+     const msg = $('success-msg');
+      msg.textContent = '';
+     const bold = t => { const s = document.createElement('strong'); s.textContent = t; return s; };
+     const br = () => document.createElement('br');
+     const tel = document.createElement('a');
+      tel.href = 'tel:' + phone.replace(/[^\d+]/g, '');
+      tel.textContent = phone;
+      msg.append('Thank you, ', bold(fname), '!', br(), br(),
+       'Your appointment for ', bold(service), ' on ', bold(fmt), ' at ', bold(selectedSlot), ' has been received.', br(), br(),
+        'We’ll confirm via ', tel, ' within 5 minutes. See you soon!');
 
       // Reset the form
       ['fname', 'lname', 'phone', 'email', 'notes'].forEach(id => $(id).value = '');
