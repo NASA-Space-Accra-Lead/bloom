@@ -276,6 +276,21 @@ html.js .rv.in,html.js.rv-all .rv{opacity:1;transform:none}
   .hero-photo img,.about-photo img{scale:1.04;translate:none}
   .gal figure:hover{transform:none}
 }
+
+/* ── Promo popup ───────────────────────────── */
+.promo{position:fixed;inset:0;z-index:190;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(10,6,12,.78);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;transition:opacity .35s}
+.promo.show{display:flex}
+.promo.on{opacity:1}
+.promo:focus{outline:none}
+.promo-card{position:relative;display:flex;flex-direction:column;width:min(94vw,500px);max-height:92vh;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -20px rgba(0,0,0,.6);transform:translateY(18px) scale(.96);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.promo.on .promo-card{transform:none}
+.promo-card img{display:block;width:100%;height:auto;min-height:0;max-height:72vh;object-fit:contain;background:#17121a}
+.promo-body{padding:1.1rem 1.4rem 1.5rem;text-align:center;overflow:auto}
+.promo-body p{font-family:'Instrument Sans',system-ui,sans-serif;font-size:1.02rem;line-height:1.5;color:var(--ink-2);margin-bottom:.2rem}
+.promo-body .btn{margin-top:.9rem}
+.promo-x{position:absolute;top:10px;right:10px;z-index:2;width:42px;height:42px;border-radius:50%;border:none;background:rgba(15,10,18,.62);color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.promo-x:hover{background:rgba(15,10,18,.85)}
+@media(prefers-reduced-motion:reduce){.promo,.promo-card{transition:none}}
 </style>
 <script>
 document.documentElement.classList.add('js');
@@ -1020,6 +1035,125 @@ window.__rvT=setTimeout(function(){document.documentElement.classList.add('rv-al
   let sx = null;
   lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
   lb.addEventListener('touchend', e => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); sx = null; });
+})();
+</script>
+
+<script>
+// ── Promo flyer popup ──────────────────────────────────────────
+// Content comes from the admin dashboard (Promotions tab). Fails silently if there is nothing to show.
+(function () {
+  const KEY = 'bloom_promo_';
+  const store = {
+    get(k, sess) { try { return (sess ? sessionStorage : localStorage).getItem(k); } catch (e) { return null; } },
+    set(k, v, sess) { try { (sess ? sessionStorage : localStorage).setItem(k, v); } catch (e) { /* private mode */ } }
+  };
+  // Only allow safe link types (never javascript:)
+  const safeLink = u => {
+    u = String(u || '').trim();
+    return /^(#[A-Za-z][\w-]*|https:\/\/\S+|tel:\+?[\d\s-]+|mailto:\S+)$/i.test(u) ? u : null;
+  };
+  const day = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  const stampOf = p => String(p.updated_at || '');
+  function alreadySeen(p) {
+    const k = KEY + p.id;
+    if (p.frequency === 'session') return store.get(k, true) === stampOf(p);
+    const v = store.get(k); if (!v) return false;
+    const i = v.lastIndexOf('|'), st = v.slice(0, i), d = v.slice(i + 1);
+    if (st !== stampOf(p)) return false;                 // edited since: show again
+    return p.frequency === 'daily' ? d === day() : true; // once: never again
+  }
+  function markSeen(p) {
+    const k = KEY + p.id;
+    if (p.frequency === 'session') store.set(k, stampOf(p), true);
+    else store.set(k, stampOf(p) + '|' + day());
+  }
+
+  async function getPromo() {
+    const q = '?select=id,title,image_url,caption,button_label,button_link,frequency,delay_seconds,updated_at&order=created_at.desc&limit=1';
+    const res = await fetch(SUPABASE_URL + '/rest/v1/promotions' + q, { headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY } });
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows && rows[0] ? rows[0] : null;
+  }
+
+  function build(p, link) {
+    const root = document.createElement('div');
+    root.className = 'promo'; root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.setAttribute('aria-label', p.title || 'Special offer');
+    const card = document.createElement('div'); card.className = 'promo-card';
+    const x = document.createElement('button'); x.className = 'promo-x'; x.type = 'button'; x.setAttribute('aria-label', 'Close'); x.innerHTML = '&times;';
+    const img = document.createElement('img'); img.src = p.image_url; img.alt = p.title || '';
+    card.append(x, img);
+    let cta = null;
+    if (p.caption || (link && p.button_label)) {
+      const body = document.createElement('div'); body.className = 'promo-body';
+      if (p.caption) { const t = document.createElement('p'); t.textContent = p.caption; body.appendChild(t); }
+      if (link && p.button_label) {
+        cta = document.createElement('a'); cta.className = 'btn btn-primary'; cta.href = link; cta.textContent = p.button_label;
+        if (/^https:/i.test(link)) { cta.target = '_blank'; cta.rel = 'noopener'; }
+        body.appendChild(cta);
+      }
+      card.appendChild(body);
+    }
+    root.appendChild(card);
+    return { root, x, cta };
+  }
+
+  function show(p) {
+    const link = safeLink(p.button_link);
+    const { root, x, cta } = build(p, link);
+    document.body.appendChild(root);
+    const opener = document.activeElement;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const close = () => {
+      root.classList.remove('on'); document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+      setTimeout(() => root.remove(), reduce ? 0 : 350);
+      if (opener && opener.focus) opener.focus();
+    };
+    const onKey = e => {
+      if (e.key === 'Escape') { e.stopPropagation(); close(); }
+      if (e.key === 'Tab') {                                // keep focus inside the popup
+        const els = [x].concat(cta ? [cta] : []);
+        const i = els.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); els[els.length - 1].focus(); }
+        else if (!e.shiftKey && i === els.length - 1) { e.preventDefault(); els[0].focus(); }
+      }
+    };
+    x.addEventListener('click', close);
+    root.addEventListener('click', e => { if (e.target === root) close(); });
+    if (cta && link.charAt(0) === '#') cta.addEventListener('click', close);   // jump to the booking form
+    document.addEventListener('keydown', onKey);
+    root.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('on')));
+    root.tabIndex = -1; root.focus({ preventScroll: true });
+    markSeen(p);
+  }
+
+  async function init() {
+    let p;
+    try { p = await getPromo(); } catch (e) { return; }
+    if (!p || !/^https:\/\//i.test(p.image_url || '') || alreadySeen(p)) return;
+    // Preload so the popup never appears empty
+    const pre = new Image();
+    pre.onerror = () => {};
+    pre.onload = () => {
+      const wait = Math.max(0, Math.min(30, +p.delay_seconds || 0)) * 1000;
+      let tries = 0;
+      const attempt = () => {
+        // Don't interrupt someone who is filling in the booking form or has another dialog open
+        const a = document.activeElement;
+        const typing = a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
+        const busy = document.querySelector('.overlay.show, .lb.show');
+        if ((typing || busy) && tries++ < 5) return setTimeout(attempt, 4000);
+        if (typing || busy) return;
+        show(p);
+      };
+      setTimeout(attempt, wait);
+    };
+    pre.src = p.image_url;
+  }
+  if (document.readyState === 'complete') init(); else addEventListener('load', init);
 })();
 </script>
 </body>
