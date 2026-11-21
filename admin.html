@@ -270,6 +270,48 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
   body.pr-report #report-sheet tr{break-inside:avoid}
   body:not(.pr-report) .page-head{display:none}
 }
+
+/* Promotions */
+.pill.live{background:var(--green-bg);color:var(--green)}
+.pill.sched{background:var(--amber-bg);color:var(--amber)}
+.pill.ended{background:#EEE9EC;color:var(--ink-2)}
+.pill.off{background:#EEE9EC;color:var(--ink-4)}
+.promo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.pcard{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.pthumb{aspect-ratio:4/3;background:#17121a;display:block;width:100%;object-fit:contain}
+.pcard.dim .pthumb{opacity:.55}
+.pbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.pbody h2{font-size:1rem;font-weight:700;line-height:1.3;word-break:break-word}
+.pmeta{font-size:.82rem;color:var(--ink-4)}
+.pcard .acts{margin-top:auto;padding-top:10px}
+.promo-empty{background:var(--white);border:1px dashed var(--line);border-radius:var(--radius);padding:56px 24px;text-align:center;color:var(--ink-2)}
+.promo-empty h2{font:500 1.5rem 'Newsreader',serif;color:var(--ink);margin-bottom:6px}
+.promo-empty .btn{margin-top:16px}
+.modal.wide{max-width:560px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit;font-size:.95rem;color:var(--ink);background:var(--white)}
+.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(180,21,95,.12)}
+.field .hint.bad{color:var(--red)}
+.drop{display:flex;gap:14px;align-items:center;border:1.5px dashed var(--line);border-radius:12px;padding:12px;background:var(--paper)}
+.drop img{width:84px;height:84px;object-fit:cover;border-radius:8px;background:#17121a;flex:none}
+.drop .ph-empty{width:84px;height:84px;border-radius:8px;background:var(--blush);flex:none;display:flex;align-items:center;justify-content:center;color:var(--brand)}
+.drop .ph-empty svg{width:28px;height:28px}
+.drop .t{font-size:.84rem;color:var(--ink-2)}
+.drop input[type=file]{display:none}
+.chk-row{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;margin:4px 0 2px}
+.chk-row input{margin-top:4px;width:17px;height:17px;accent-color:var(--brand)}
+.modal.scroll{max-height:94vh;overflow:auto}
+/* live preview of the homepage popup */
+.pv-overlay{position:fixed;inset:0;z-index:300;background:rgba(10,6,12,.78);display:none;align-items:center;justify-content:center;padding:16px}
+.pv-overlay.show{display:flex}
+.pv-card{position:relative;display:flex;flex-direction:column;width:min(94vw,500px);max-height:92vh;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -20px rgba(0,0,0,.6)}
+.pv-card img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;background:#17121a;min-height:0}
+.pv-body{padding:1.1rem 1.4rem 1.5rem;text-align:center;overflow:auto}
+.pv-body p{color:var(--ink-2);font-size:1rem;margin-bottom:.2rem}
+.pv-body a{display:inline-block;margin-top:.9rem;background:var(--brand);color:#fff;border-radius:999px;padding:.8rem 1.8rem;font-weight:700;text-decoration:none;font-size:.95rem}
+.pv-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:none;background:rgba(15,10,18,.62);color:#fff;font-size:1.5rem;line-height:1}
+.pv-tag{position:absolute;left:12px;top:12px;background:var(--brand);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -319,6 +361,7 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
       <button role="tab" class="active" data-view="bookings"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="14" height="12" rx="2"/><path d="M3 8.5h14M7 3v3M13 3v3"/></svg>Bookings</button>
       <button role="tab" data-view="insights"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V9m4.5 7V4m4.5 12v-5m4 5H3"/></svg>Insights</button>
       <button role="tab" data-view="report"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h7l3 3v12H5z"/><path d="M12 2.5v3h3M7.5 10h5M7.5 13h5"/></svg>Reports</button>
+      <button role="tab" data-view="promos"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8v4l9 3.5v-11zM12.5 6.5c2.2 0 4 1.6 4 3.5s-1.8 3.5-4 3.5M6 12.5l1 4h2l-.8-3.2"/></svg>Promotions</button>
     </nav>
   </header>
 
@@ -327,6 +370,12 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
       <div>
         <h1 id="page-title">Bookings</h1>
         <p id="page-desc">Review, Confirm and Manage Appointment Requests.</p>
+      </div>
+      <div class="head-actions" id="promo-actions" style="display:none">
+        <button class="btn btn-primary" onclick="openPromoEditor()">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>
+          New promotion
+        </button>
       </div>
       <div class="head-actions" id="export-wrap">
         <button class="btn btn-primary" id="export-btn" aria-haspopup="true" aria-expanded="false" onclick="toggleMenu(event)">
@@ -421,6 +470,12 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
       </div>
       <article id="report-sheet" aria-label="Bookings report"></article>
     </section>
+
+    <!-- PROMOTIONS VIEW -->
+    <section class="view" id="view-promos">
+      <div class="msg info" id="promo-note" role="status"></div>
+      <div id="promo-list"><div class="state"><div class="spinner"></div>Loading promotions…</div></div>
+    </section>
   </main>
 </div>
 
@@ -465,6 +520,105 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
       <button type="submit" class="btn btn-primary" id="pw-save">Update Password</button>
     </div>
   </form>
+</div>
+
+<!-- PROMOTION EDITOR -->
+<div class="overlay" id="pe-overlay" role="dialog" aria-modal="true" aria-labelledby="pe-title">
+  <form class="modal wide scroll" id="pe-form" novalidate style="text-align:left">
+    <h3 id="pe-title">New promotion</h3>
+    <p>This appears as a popup on your homepage while it is switched on and within its dates.</p>
+    <div class="msg" id="pe-msg" role="alert"></div>
+
+    <div class="field">
+      <label for="pe-image">Flyer image</label>
+      <div class="drop">
+        <div id="pe-thumb"><div class="ph-empty"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="14" height="13" rx="2"/><circle cx="7.5" cy="8" r="1.4"/><path d="m3.5 14 4-3.5 3 2.5 2.5-2 3.5 3"/></svg></div></div>
+        <div>
+          <label class="btn btn-ghost" for="pe-image" style="margin-bottom:6px">Choose image</label>
+          <input type="file" id="pe-image" accept="image/jpeg,image/png,image/webp"/>
+          <div class="t" id="pe-imgnote">JPG, PNG or WebP. Portrait or square works best. It is resized automatically.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="pe-name">Name</label>
+      <input type="text" id="pe-name" maxlength="80" placeholder="e.g. Christmas 2026 smile offer"/>
+      <div class="hint">For your own reference. Also read aloud to screen-reader users as the image description.</div>
+    </div>
+    <div class="field">
+      <label for="pe-caption">Short message under the flyer <span style="font-weight:400;color:var(--ink-4)">(optional)</span></label>
+      <input type="text" id="pe-caption" maxlength="140" placeholder="e.g. 20% off whitening until 24 December"/>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="pe-action">Button</label>
+        <select id="pe-action">
+          <option value="none">No button</option>
+          <option value="book">Book an appointment</option>
+          <option value="whatsapp">Chat on WhatsApp</option>
+          <option value="call">Call the studio</option>
+          <option value="custom">Custom link…</option>
+        </select>
+      </div>
+      <div class="field" id="pe-label-wrap">
+        <label for="pe-label">Button text</label>
+        <input type="text" id="pe-label" maxlength="24" placeholder="Book now"/>
+      </div>
+    </div>
+    <div class="field" id="pe-link-wrap" style="display:none">
+      <label for="pe-link">Link</label>
+      <input type="text" id="pe-link" inputmode="url" placeholder="https://… or tel:+233… or #appointment"/>
+      <div class="hint">Must start with https://, tel:, mailto: or #.</div>
+    </div>
+
+    <div class="grid2">
+      <div class="field"><label for="pe-start">Starts on <span style="font-weight:400;color:var(--ink-4)">(optional)</span></label><input type="date" id="pe-start"/></div>
+      <div class="field"><label for="pe-end">Last day <span style="font-weight:400;color:var(--ink-4)">(optional)</span></label><input type="date" id="pe-end"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label for="pe-freq">How often visitors see it</label>
+        <select id="pe-freq">
+          <option value="once">Once per visitor</option>
+          <option value="daily">Once a day</option>
+          <option value="session">Every visit</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pe-delay">Appears after</label>
+        <select id="pe-delay">
+          <option value="0">Straight away</option><option value="2">2 seconds</option><option value="3">3 seconds</option><option value="5">5 seconds</option><option value="10">10 seconds</option>
+        </select>
+      </div>
+    </div>
+    <label class="chk-row"><input type="checkbox" id="pe-active" checked/> <span>Switched on. Shows on the homepage during the dates above.</span></label>
+
+    <div class="row">
+      <button type="button" class="btn btn-ghost" onclick="closePromoEditor()">Cancel</button>
+      <button type="button" class="btn btn-ghost" id="pe-preview">Preview</button>
+      <button type="submit" class="btn btn-primary" id="pe-save">Save promotion</button>
+    </div>
+  </form>
+</div>
+
+<!-- PROMOTION DELETE -->
+<div class="overlay" id="pd-overlay" role="dialog" aria-modal="true" aria-labelledby="pd-title">
+  <div class="modal">
+    <h3 id="pd-title">Delete this promotion?</h3>
+    <p>The flyer will stop showing and its image will be removed. This cannot be undone.</p>
+    <div class="detail" id="pd-detail"></div>
+    <div class="row">
+      <button class="btn btn-ghost" onclick="closePromoDelete()">Keep it</button>
+      <button class="btn btn-danger" id="pd-confirm">Delete promotion</button>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP PREVIEW -->
+<div class="pv-overlay" id="pv-overlay" role="dialog" aria-modal="true" aria-label="Popup preview">
+  <div class="pv-card" id="pv-card"></div>
 </div>
 
 <div id="tip" role="tooltip"></div>
@@ -615,8 +769,8 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
     $("dashboard").style.display = "none";
     $("login-screen").style.display = "flex";
     $("password-input").value = "";
-    allBookings = [];
-    closePw(); closeDelete();
+    allBookings = []; promos = [];
+    closePw(); closeDelete(); closePromoEditor(); closePromoDelete(); closePreview();
     setLoginMode("signin");
     loginMessage(typeof message === "string" ? message : "", "info");
     stopIdleWatch();
@@ -1131,7 +1285,8 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
   const VIEW_META = {
     bookings: ["Bookings", "Review, confirm and manage appointment requests."],
     insights: ["Insights", "See how bookings are trending and where demand is."],
-    report:   ["Reports", "Generate a summary you can print, save as PDF or download."]
+    report:   ["Reports", "Generate a summary you can print, save as PDF or download."],
+    promos:   ["Promotions", "Post flyers as a popup on your homepage for Christmas and other occasions."]
   };
   function setView(v) {
     view = v;
@@ -1140,8 +1295,10 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
     $("page-title").textContent = VIEW_META[v][0];
     $("page-desc").textContent = VIEW_META[v][1];
     $("export-wrap").style.display = v === "bookings" ? "" : "none";
-    $("filters-bar").style.display = v === "bookings" ? "none" : "flex";
+    $("promo-actions").style.display = v === "promos" ? "" : "none";
+    $("filters-bar").style.display = (v === "bookings" || v === "promos") ? "none" : "flex";
     closeMenu(); renderActive();
+    if (v === "promos") loadPromos();
     window.scrollTo({ top: 0 });
   }
   document.querySelector(".tabs").addEventListener("click", e => { const b = e.target.closest("button[data-view]"); if (b) setView(b.dataset.view); });
@@ -1151,6 +1308,7 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
 
   function renderActive() {
     if (view === "bookings") return;
+    if (view === "promos") return renderPromos();
     document.querySelectorAll("#period-seg button").forEach(b => b.classList.toggle("active", b.dataset.p === period));
     document.querySelectorAll("#basis-seg button").forEach(b => b.classList.toggle("active", b.dataset.b === basis));
     $("range-note").textContent = (period === "all" ? "All records" : periodLabel()) + (basis === "appt" ? " · includes upcoming appointments" : "");
@@ -1353,6 +1511,294 @@ svg.chart text{font-family:'Figtree',system-ui,sans-serif}
     download(`bloom-report-${period}-${basis}-${stamp()}.csv`, "﻿" + lines.join("\r\n"), "text/csv;charset=utf-8");
     toast("Report downloaded");
   }
+
+  // ═════════════════════════════════════════════════════════════
+  //  PROMOTIONS (homepage popup flyers)
+  // ═════════════════════════════════════════════════════════════
+  let promos = [], promosLoaded = false, promoError = "";
+  let editingPromo = null, pendingImage = null, deletingPromo = null;
+  const FREQ_NAME = { once: "Once per visitor", daily: "Once a day", session: "Every visit" };
+  const ACTIONS = {
+    book:     { label: "Book now",          link: "#appointment" },
+    whatsapp: { label: "Chat on WhatsApp",  link: "https://wa.me/233257546530" },
+    call:     { label: "Call us",           link: "tel:+233257546530" }
+  };
+  const safeLink = u => /^(#[A-Za-z][\w-]*|https:\/\/\S+|tel:\+?[\d\s-]+|mailto:\S+)$/i.test(String(u || "").trim());
+
+  function promoState(p) {
+    const t = todayIso();
+    if (!p.active) return "off";
+    if (p.starts_on && p.starts_on > t) return "sched";
+    if (p.ends_on && p.ends_on < t) return "ended";
+    return "live";
+  }
+  const STATE_LABEL = { live: "Live now", sched: "Scheduled", ended: "Ended", off: "Switched off" };
+  const dateRange = p => p.starts_on || p.ends_on
+    ? `${p.starts_on ? longDay(p.starts_on) : "Now"} → ${p.ends_on ? longDay(p.ends_on) : "no end date"}` : "No dates set (shows whenever switched on)";
+
+  async function loadPromos() {
+    promoError = "";
+    $("promo-list").innerHTML = '<div class="state"><div class="spinner"></div>Loading promotions…</div>';
+    try {
+      const res = await api("/rest/v1/promotions?order=created_at.desc");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const e = new Error(err.message || `Error ${res.status}`); e.status = res.status; e.code = err.code; throw e;
+      }
+      promos = await res.json(); promosLoaded = true;
+    } catch (e) {
+      if (!session) return;
+      promoError = (e.status === 404 || e.code === "PGRST205" || e.code === "42P01")
+        ? "setup" : e.message;
+    }
+    renderPromos();
+  }
+
+  function renderPromos() {
+    const list = $("promo-list"), note = $("promo-note");
+    note.className = "msg"; note.textContent = "";
+    if (promoError) {
+      list.innerHTML = `<div class="state"><h2>${promoError === "setup" ? "Promotions need a one-time setup" : "Could not load promotions"}</h2>${
+        promoError === "setup" ? "Run <b>supabase-promotions.sql</b> in the Supabase SQL Editor, then refresh this page." : esc(promoError)}</div>`;
+      return;
+    }
+    if (!promos.length) {
+      list.innerHTML = `<div class="promo-empty"><h2>No promotions yet</h2>Upload a flyer and it will pop up on your homepage during the dates you choose.<br><button class="btn btn-primary" onclick="openPromoEditor()">Create your first promotion</button></div>`;
+      return;
+    }
+    const live = promos.filter(p => promoState(p) === "live");
+    if (live.length > 1) {
+      note.className = "msg show info";
+      note.textContent = `${live.length} promotions are live at once. Visitors see only the newest one (“${live[0].title}”). Switch the others off or set their dates apart.`;
+    }
+    list.innerHTML = `<div class="promo-grid">${promos.map(p => {
+      const st = promoState(p), id = esc(p.id);
+      return `<article class="pcard ${st === "live" || st === "sched" ? "" : "dim"}">
+        <img class="pthumb" src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy"/>
+        <div class="pbody">
+          <span><span class="pill ${st}">${STATE_LABEL[st]}</span></span>
+          <h2>${esc(p.title)}</h2>
+          <div class="pmeta">${esc(dateRange(p))}</div>
+          <div class="pmeta">${esc(FREQ_NAME[p.frequency] || p.frequency)}${p.button_label ? " · Button: " + esc(p.button_label) : ""}</div>
+          <div class="acts">
+            <button class="act" data-pa="edit" data-id="${id}">Edit</button>
+            <button class="act" data-pa="preview" data-id="${id}">Preview</button>
+            <button class="act ${p.active ? "no" : "ok"}" data-pa="toggle" data-id="${id}">${p.active ? "Switch off" : "Switch on"}</button>
+            <button class="act del" data-pa="del" data-id="${id}">${ICON.del}Delete</button>
+          </div>
+        </div></article>`;
+    }).join("")}</div>`;
+  }
+  $("promo-list").addEventListener("click", e => {
+    const b = e.target.closest("button[data-pa]"); if (!b) return;
+    const p = promos.find(x => sameId(x.id, b.dataset.id)); if (!p) return;
+    if (b.dataset.pa === "edit") openPromoEditor(p);
+    if (b.dataset.pa === "preview") openPreview(p);
+    if (b.dataset.pa === "toggle") togglePromo(p);
+    if (b.dataset.pa === "del") openPromoDelete(p);
+  });
+
+  // ── preview (same look as the homepage popup) ────────────────
+  function openPreview(p) {
+    const card = $("pv-card");
+    card.innerHTML = `<span class="pv-tag">Preview</span><button class="pv-x" type="button" aria-label="Close preview">&times;</button><img alt=""/>`;
+    card.querySelector("img").src = p.image_url; card.querySelector("img").alt = p.title || "";
+    if (p.caption || (p.button_label && p.button_link)) {
+      const b = document.createElement("div"); b.className = "pv-body";
+      if (p.caption) { const t = document.createElement("p"); t.textContent = p.caption; b.appendChild(t); }
+      if (p.button_label && p.button_link) { const a = document.createElement("a"); a.href = "#"; a.textContent = p.button_label; a.onclick = e => e.preventDefault(); b.appendChild(a); }
+      card.appendChild(b);
+    }
+    card.querySelector(".pv-x").onclick = closePreview;
+    $("pv-overlay").classList.add("show");
+    card.querySelector(".pv-x").focus();
+  }
+  function closePreview() { $("pv-overlay").classList.remove("show"); }
+  $("pv-overlay").addEventListener("click", e => { if (e.target === $("pv-overlay")) closePreview(); });
+
+  // ── image prep: resize + compress in the browser ─────────────
+  async function prepareImage(file) {
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Please choose a JPG, PNG or WebP image.");
+    if (file.size > 20 * 1024 * 1024) throw new Error("That image is over 20 MB. Please choose a smaller one.");
+    const url = URL.createObjectURL(file);
+    try {
+      const img = new Image(); img.src = url; await img.decode();
+      const max = 1600, sc = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.round(img.naturalWidth * sc), h = Math.round(img.naturalHeight * sc);
+      const c = document.createElement("canvas"); c.width = w; c.height = h;
+      const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h);
+      const enc = (type, q) => new Promise(r => c.toBlob(r, type, q));
+      let blob = await enc("image/webp", .88), ext = "webp";
+      if (!blob || blob.type !== "image/webp") { blob = await enc("image/jpeg", .88); ext = "jpg"; }
+      for (let q = .75; blob && blob.size > 2.9 * 1024 * 1024 && q > .4; q -= .15) blob = await enc(blob.type, q);
+      if (!blob || blob.size > 3 * 1024 * 1024) throw new Error("Could not shrink that image enough. Try a smaller one.");
+      return { blob, ext, w, h };
+    } catch (e) {
+      if (e.message && /choose|shrink|MB/.test(e.message)) throw e;
+      throw new Error("That file couldn't be read as an image.");
+    } finally { URL.revokeObjectURL(url); }
+  }
+
+  // ── editor ────────────────────────────────────────────────────
+  function peMessage(t, kind = "err") { const m = $("pe-msg"); m.textContent = t || ""; m.className = "msg" + (t ? " show " + kind : ""); }
+  function setThumb(src) {
+    $("pe-thumb").innerHTML = src ? `<img alt="Selected flyer" src="${esc(src)}"/>` : '<div class="ph-empty"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="14" height="13" rx="2"/><circle cx="7.5" cy="8" r="1.4"/><path d="m3.5 14 4-3.5 3 2.5 2.5-2 3.5 3"/></svg></div>';
+  }
+  function syncAction() {
+    const a = $("pe-action").value;
+    $("pe-label-wrap").style.display = a === "none" ? "none" : "";
+    $("pe-link-wrap").style.display = a === "custom" ? "" : "none";
+    if (ACTIONS[a] && (!$("pe-label").value || Object.values(ACTIONS).some(x => x.label === $("pe-label").value))) $("pe-label").value = ACTIONS[a].label;
+  }
+  $("pe-action").addEventListener("change", syncAction);
+
+  function openPromoEditor(p) {
+    editingPromo = p || null; pendingImage = null;
+    $("pe-form").reset();
+    peMessage("");
+    $("pe-title").textContent = p ? "Edit promotion" : "New promotion";
+    $("pe-save").textContent = p ? "Save changes" : "Save promotion";
+    setThumb(p ? p.image_url : "");
+    $("pe-imgnote").textContent = p ? "Choose a new image to replace the current flyer." : "JPG, PNG or WebP. Portrait or square works best. It is resized automatically.";
+    if (p) {
+      $("pe-name").value = p.title || ""; $("pe-caption").value = p.caption || "";
+      const known = Object.entries(ACTIONS).find(([, v]) => v.link === p.button_link);
+      $("pe-action").value = !p.button_link ? "none" : known ? known[0] : "custom";
+      $("pe-label").value = p.button_label || ""; $("pe-link").value = known ? "" : (p.button_link || "");
+      $("pe-start").value = p.starts_on || ""; $("pe-end").value = p.ends_on || "";
+      $("pe-freq").value = p.frequency || "once"; $("pe-delay").value = String(p.delay_seconds ?? 3);
+      $("pe-active").checked = !!p.active;
+    } else {
+      $("pe-action").value = "book"; $("pe-label").value = ""; $("pe-delay").value = "3"; $("pe-active").checked = true;
+    }
+    syncAction();
+    $("pe-overlay").classList.add("show");
+    $("pe-name").focus();
+  }
+  function closePromoEditor() { $("pe-overlay").classList.remove("show"); pendingImage = null; }
+  $("pe-overlay").addEventListener("mousedown", e => { if (e.target === $("pe-overlay")) closePromoEditor(); });
+
+  let imageBusy = null;
+  $("pe-image").addEventListener("change", e => {
+    const f = e.target.files[0]; if (!f) return;
+    imageBusy = handleImage(f, e.target).finally(() => { imageBusy = null; });
+  });
+  async function handleImage(f, input) {
+    peMessage("");
+    try {
+      pendingImage = await prepareImage(f);
+      setThumb(URL.createObjectURL(pendingImage.blob));
+      $("pe-imgnote").textContent = `${f.name} · ${pendingImage.w}×${pendingImage.h}px · ${Math.round(pendingImage.blob.size / 1024)} KB after resizing`;
+      if (!$("pe-name").value) $("pe-name").value = f.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").slice(0, 80);
+    } catch (err) { pendingImage = null; peMessage(err.message); input.value = ""; }
+  }
+
+  function readEditor() {
+    const action = $("pe-action").value;
+    const link = action === "none" ? null : action === "custom" ? $("pe-link").value.trim() : ACTIONS[action].link;
+    return {
+      title: $("pe-name").value.trim(), caption: $("pe-caption").value.trim() || null,
+      button_label: action === "none" ? null : $("pe-label").value.trim(), button_link: link,
+      starts_on: $("pe-start").value || null, ends_on: $("pe-end").value || null,
+      frequency: $("pe-freq").value, delay_seconds: +$("pe-delay").value, active: $("pe-active").checked
+    };
+  }
+  function validatePromo(d) {
+    if (!editingPromo && !pendingImage) return "Please choose a flyer image.";
+    if (d.title.length < 2) return "Give the promotion a name (at least 2 characters).";
+    if (d.button_link !== null) {
+      if (!d.button_label) return "Enter the text for the button, or choose “No button”.";
+      if (!safeLink(d.button_link)) return "The link must start with https://, tel:, mailto: or #.";
+    }
+    if (d.starts_on && d.ends_on && d.ends_on < d.starts_on) return "The last day can't be before the start date.";
+    return "";
+  }
+  $("pe-preview").addEventListener("click", () => {
+    const d = readEditor();
+    const src = pendingImage ? $("pe-thumb").querySelector("img").src : (editingPromo && editingPromo.image_url);
+    if (!src) { peMessage("Choose a flyer image to preview."); return; }
+    openPreview({ ...d, image_url: src });
+  });
+
+  $("pe-form").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (imageBusy) await imageBusy;                     // wait for a just-chosen image to finish resizing
+    const d = readEditor(), bad = validatePromo(d);
+    if (bad) { peMessage(bad); return; }
+    const btn = $("pe-save"); btn.disabled = true; btn.textContent = "Saving…"; peMessage("");
+    let uploaded = null;
+    try {
+      let image_url = editingPromo && editingPromo.image_url, image_path = editingPromo && editingPromo.image_path;
+      const oldPath = pendingImage && editingPromo ? editingPromo.image_path : null;
+      if (pendingImage) {
+        const path = `flyers/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.${pendingImage.ext}`;
+        const up = await api(`/storage/v1/object/promos/${path}`, { method: "POST", headers: { "Content-Type": pendingImage.blob.type, "x-upsert": "false" }, body: pendingImage.blob });
+        if (!up.ok) {
+          const err = await up.json().catch(() => ({}));
+          throw new Error(/row-level|policy|unauthorized/i.test(err.message || err.error || "") ? "Image upload was blocked. Run supabase-promotions.sql in Supabase." : (err.message || `Image upload failed (${up.status})`));
+        }
+        uploaded = path; image_path = path; image_url = `${SUPABASE_URL}/storage/v1/object/public/promos/${path}`;
+      }
+      const payload = { ...d, image_url, image_path };
+      let res;
+      if (editingPromo) {
+        payload.updated_at = new Date().toISOString();   // makes visitors who dismissed the old version see the updated one
+        res = await api(`/rest/v1/promotions?id=eq.${encodeURIComponent(editingPromo.id)}`, { method: "PATCH", headers: { "Content-Type": "application/json", Prefer: "return=representation" }, body: JSON.stringify(payload) });
+      } else {
+        res = await api(`/rest/v1/promotions`, { method: "POST", headers: { "Content-Type": "application/json", Prefer: "return=representation" }, body: JSON.stringify(payload) });
+      }
+      if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || `Error ${res.status}`); }
+      const rows = await res.json().catch(() => []);
+      if (!rows.length) throw new Error("Nothing was saved. Run supabase-promotions.sql in Supabase.");
+      uploaded = null;                                    // saved: keep the new file
+      if (oldPath) api(`/storage/v1/object/promos/${oldPath}`, { method: "DELETE" }).catch(() => {});
+      const i = promos.findIndex(x => sameId(x.id, rows[0].id));
+      if (i >= 0) promos[i] = rows[0]; else promos.unshift(rows[0]);
+      closePromoEditor(); renderPromos();
+      toast(editingPromo ? "Promotion updated" : "Promotion saved");
+    } catch (err) {
+      if (uploaded) api(`/storage/v1/object/promos/${uploaded}`, { method: "DELETE" }).catch(() => {});   // don't leave orphan files
+      peMessage(err.message);
+    } finally { btn.disabled = false; btn.textContent = editingPromo ? "Save changes" : "Save promotion"; }
+  });
+
+  async function togglePromo(p) {
+    const next = !p.active, prev = p.active;
+    p.active = next; renderPromos();
+    try {
+      const res = await api(`/rest/v1/promotions?id=eq.${encodeURIComponent(p.id)}`, { method: "PATCH", headers: { "Content-Type": "application/json", Prefer: "return=representation" }, body: JSON.stringify({ active: next }) });
+      const rows = res.ok ? await res.json().catch(() => []) : [];
+      if (!rows.length) throw new Error(res.ok ? "Nothing was updated." : `Error ${res.status}`);
+      toast(next ? "Promotion switched on" : "Promotion switched off");
+    } catch (err) { p.active = prev; renderPromos(); toast("Update failed: " + err.message, true); }
+  }
+
+  function openPromoDelete(p) {
+    deletingPromo = p;
+    $("pd-detail").innerHTML = `<strong>${esc(p.title)}</strong><br>${esc(dateRange(p))}`;
+    $("pd-overlay").classList.add("show"); $("pd-confirm").focus();
+  }
+  function closePromoDelete() { deletingPromo = null; $("pd-overlay").classList.remove("show"); }
+  $("pd-overlay").addEventListener("click", e => { if (e.target === $("pd-overlay")) closePromoDelete(); });
+  $("pd-confirm").addEventListener("click", async () => {
+    const p = deletingPromo; if (!p) return;
+    const btn = $("pd-confirm"); btn.disabled = true; btn.textContent = "Deleting…";
+    try {
+      const res = await api(`/rest/v1/promotions?id=eq.${encodeURIComponent(p.id)}`, { method: "DELETE", headers: { Prefer: "return=representation" } });
+      if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || `Error ${res.status}`); }
+      const rows = await res.json().catch(() => []);
+      if (!rows.length) throw new Error("Nothing was deleted.");
+      if (p.image_path) api(`/storage/v1/object/promos/${p.image_path}`, { method: "DELETE" }).catch(() => {});
+      promos = promos.filter(x => !sameId(x.id, p.id)); renderPromos(); toast("Promotion deleted");
+    } catch (err) { toast("Delete failed: " + err.message, true); }
+    finally { btn.disabled = false; btn.textContent = "Delete promotion"; closePromoDelete(); }
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    if ($("pv-overlay").classList.contains("show")) closePreview();
+    else if ($("pd-overlay").classList.contains("show")) closePromoDelete();
+    else closePromoEditor();
+  });
 
   boot();
   addEventListener('hashchange', () => { if (/access_token|error_description/.test(location.hash)) boot(); });
